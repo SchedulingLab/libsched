@@ -85,18 +85,18 @@ namespace sched::shop {
       break;
     }
 
-    std::vector<JobShopInstance::Job> jobs;
+    std::vector<JobShopInstance::JobDesc> jobs;
 
     for (std::string line; std::getline(input, line); ) {
       std::istringstream data;
       data.str(line);
 
-      JobShopInstance::Job job;
+      JobShopInstance::JobDesc job;
       std::size_t machine;
       Time processing;
 
       while (data >> machine >> processing) {
-        JobShopInstance::Operation op = { MachineId{machine}, processing };
+        JobShopInstance::OperationDesc op = { MachineId{machine}, processing };
         job.operations.push_back(op);
       }
 

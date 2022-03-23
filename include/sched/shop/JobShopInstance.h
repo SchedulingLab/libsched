@@ -13,18 +13,18 @@
 namespace sched::shop {
 
   struct SCHED_API JobShopInstance : BasicInstance {
-    struct Operation {
+    struct OperationDesc {
       MachineId machine;
       Time processing;
     };
 
-    struct Job {
-      std::vector<Operation> operations;
+    struct JobDesc {
+      std::vector<OperationDesc> operations;
     };
 
     JobShopInstance() = default;
 
-    JobShopInstance(std::size_t machines, std::vector<Job> jobs)
+    JobShopInstance(std::size_t machines, std::vector<JobDesc> jobs)
     : m_machines(machines)
     , m_jobs(std::move(jobs))
     {
@@ -47,6 +47,14 @@ namespace sched::shop {
       return { get_job(op.job).operations[op.index].machine };
     }
 
+    bool has_assignment() const {
+      return true;
+    }
+
+    MachineId assigned_machine_for_operation([[maybe_unused]] OperationId op) const {
+      return get_job(op.job).operations[op.index].machine;
+    }
+
     Time processing_time(OperationId op, [[maybe_unused]] MachineId machine) const {
       auto &operation = get_job(op.job).operations[op.index];
 
@@ -58,7 +66,7 @@ namespace sched::shop {
     }
 
   private:
-    const Job& get_job(JobId id) const {
+    const JobDesc& get_job(JobId id) const {
       auto index = sched::to_index(id);
       assert(index < m_jobs.size());
       return m_jobs[index];
@@ -77,7 +85,7 @@ namespace sched::shop {
     }
 
     std::size_t m_machines;
-    std::vector<Job> m_jobs;
+    std::vector<JobDesc> m_jobs;
   };
 
 }

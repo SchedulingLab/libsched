@@ -35,6 +35,14 @@ namespace sched::shop {
       return { };
     }
 
+    constexpr bool has_assignment() const noexcept {
+      return false;
+    }
+
+    constexpr MachineId assigned_machine_for_operation([[maybe_unused]] OperationId op) const noexcept {
+      return NoMachine;
+    }
+
     constexpr Time processing_time([[maybe_unused]] OperationId op, [[maybe_unused]] MachineId machine) const noexcept {
       return 0;
     }

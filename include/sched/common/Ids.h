@@ -19,7 +19,8 @@ namespace sched {
     return static_cast<std::size_t>(id);
   }
 
-  constexpr MachineId AnyMachine = MachineId{std::numeric_limits<std::size_t>::max()};
+  constexpr MachineId AnyMachine = MachineId{std::numeric_limits<std::size_t>::max() - 1};
+  constexpr MachineId NoMachine = MachineId{std::numeric_limits<std::size_t>::max()};
 
   /*
    * JobId
