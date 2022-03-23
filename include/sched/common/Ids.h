@@ -64,6 +64,22 @@ namespace sched {
     return !(lhs == rhs);
   }
 
+  /*
+   * TransportId
+   */
+
+  enum TransportId : std::size_t {
+  };
+
+  constexpr
+  std::size_t to_index(TransportId id) {
+    return static_cast<std::size_t>(id);
+  }
+
+  /*
+   * literals for various ids
+   */
+
   namespace literals {
 
     constexpr
@@ -74,6 +90,11 @@ namespace sched {
     constexpr
     JobId operator "" _j(unsigned long long val) {
       return static_cast<JobId>(val);
+    }
+
+    constexpr
+    TransportId operator "" _t(unsigned long long val) {
+      return static_cast<TransportId>(val);
     }
 
   }

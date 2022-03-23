@@ -47,15 +47,15 @@ namespace sched::shop {
       return 0;
     }
 
-    constexpr std::size_t transport_count() const noexcept {
+    constexpr std::size_t transportation_count() const noexcept {
       return 0;
     }
 
-    constexpr Time transport_time_empty([[maybe_unused]] MachineId from, [[maybe_unused]] MachineId to) const noexcept {
+    constexpr Time transportation_time_empty([[maybe_unused]] MachineId from, [[maybe_unused]] MachineId to) const noexcept {
       return 0;
     }
 
-    constexpr Time transport_time_loaded([[maybe_unused]] MachineId from, [[maybe_unused]] MachineId to) const noexcept {
+    constexpr Time transportation_time_loaded([[maybe_unused]] MachineId from, [[maybe_unused]] MachineId to) const noexcept {
       return 0;
     }
 

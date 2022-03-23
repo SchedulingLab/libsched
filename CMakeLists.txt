@@ -68,6 +68,7 @@ add_library(sched0
   library/shop/Enumerator.cc
   library/shop/Export.cc
   library/shop/FlexibleJobShopInstance.cc
+  library/shop/FlexibleJobShopWithTransportationInstance.cc
   library/shop/Import.cc
   library/shop/InputConversion.cc
   library/shop/InputFmt.cc
