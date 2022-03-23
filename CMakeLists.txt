@@ -42,6 +42,7 @@ add_library(sched0
   # common
   library/common/GenericSchedule.cc
   library/common/Ids.cc
+  library/common/IdsFmt.cc
   library/common/Instance.cc
   library/common/MakespanCriterion.cc
   library/common/Random.cc

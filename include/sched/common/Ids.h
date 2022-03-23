@@ -21,8 +21,6 @@ namespace sched {
 
   constexpr MachineId AnyMachine = MachineId{std::numeric_limits<std::size_t>::max()};
 
-  std::ostream& operator<<(std::ostream& os, MachineId id);
-
   /*
    * JobId
    */
@@ -36,8 +34,6 @@ namespace sched {
   }
 
   constexpr JobId NoJob = JobId{std::numeric_limits<std::size_t>::max()};
-
-  std::ostream& operator<<(std::ostream& os, JobId id);
 
   /*
    * OperationId
@@ -66,8 +62,6 @@ namespace sched {
   bool operator!=(const OperationId& lhs, const OperationId& rhs) {
     return !(lhs == rhs);
   }
-
-  std::ostream& operator<<(std::ostream& os, OperationId id);
 
   namespace literals {
 
