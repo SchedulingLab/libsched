@@ -1,5 +1,5 @@
-#ifndef SCHED_FLEXIBLE_JOBSHOP_WITH_TRANSPORTATION_INSTANCE_H
-#define SCHED_FLEXIBLE_JOBSHOP_WITH_TRANSPORTATION_INSTANCE_H
+#ifndef SCHED_SHOP_GENERAL_FLEXIBLE_JOBSHOP_INSTANCE_H
+#define SCHED_SHOP_GENERAL_FLEXIBLE_JOBSHOP_INSTANCE_H
 
 #include <cassert>
 #include <limits>
@@ -14,7 +14,7 @@
 
 namespace sched::shop {
 
-  struct SCHED_API FlexibleJobShopWithTransportationInstance : BasicInstance {
+  struct SCHED_API GeneralFlexibleJobShopInstance : BasicInstance {
     struct FlexibleOperationDesc {
       MachineId machine;
       Time processing;
@@ -28,20 +28,14 @@ namespace sched::shop {
       std::vector<OperationDesc> operations;
     };
 
-    struct TransportationDesc {
-      MachineId origin;
-      MachineId target;
-      Transportation transportation;
-      Time duration;
-    };
+    GeneralFlexibleJobShopInstance() = default;
 
-    FlexibleJobShopWithTransportationInstance() = default;
-
-    FlexibleJobShopWithTransportationInstance(std::size_t machines, std::vector<JobDesc> jobs, std::size_t transportation_resources, std::vector<TransportationDesc> delays)
+    GeneralFlexibleJobShopInstance(std::size_t machines, std::vector<JobDesc> jobs, std::size_t transportation_resources, std::vector<Time> delays_empty, std::vector<Time> delays_loaded)
     : m_machines(machines)
     , m_jobs(std::move(jobs))
     , m_transportation_resources(transportation_resources)
-    , m_delays(std::move(delays))
+    , m_delays_empty(std::move(delays_empty))
+    , m_delays_loaded(std::move(delays_loaded))
     {
       assert(is_valid());
     }
@@ -84,11 +78,15 @@ namespace sched::shop {
     }
 
     Time transportation_time_empty(MachineId origin, MachineId target) const noexcept {
-      return transportation_time(origin, target, Transportation::Empty);
+      std::size_t index = sched::to_index(origin) * m_transportation_resources + sched::to_index(target);
+      assert(index < m_delays_empty.size());
+      return m_delays_empty[index];
     }
 
     Time transportation_time_loaded(MachineId origin, MachineId target) const noexcept {
-      return transportation_time(origin, target, Transportation::Loaded);
+      std::size_t index = sched::to_index(origin) * m_transportation_resources + sched::to_index(target);
+      assert(index < m_delays_loaded.size());
+      return m_delays_loaded[index];
     }
 
   private:
@@ -96,20 +94,6 @@ namespace sched::shop {
       auto index = sched::to_index(id);
       assert(index < m_jobs.size());
       return m_jobs[index];
-    }
-
-    Time transportation_time(MachineId origin, MachineId target, Transportation transportation) const noexcept {
-      if (origin == target) {
-        return 0;
-      }
-
-      for (auto & delay : m_delays) {
-        if (delay.origin == origin && delay.target == target && delay.transportation == transportation) {
-          return delay.duration;
-        }
-      }
-
-      return TimeMax;
     }
 
     bool is_valid() const noexcept {
@@ -123,14 +107,12 @@ namespace sched::shop {
         }
       }
 
-      for (auto & delay : m_delays) {
-        if (sched::to_index(delay.origin) >= m_machines) {
-          return false;
-        }
+      if (m_delays_empty.size() != m_transportation_resources * m_transportation_resources) {
+        return false;
+      }
 
-        if (sched::to_index(delay.target) >= m_machines) {
-          return false;
-        }
+      if (m_delays_loaded.size() != m_transportation_resources * m_transportation_resources) {
+        return false;
       }
 
       return true;
@@ -139,10 +121,9 @@ namespace sched::shop {
     std::size_t m_machines;
     std::vector<JobDesc> m_jobs;
     std::size_t m_transportation_resources;
-    std::vector<TransportationDesc> m_delays;
+    std::vector<Time> m_delays_empty;
+    std::vector<Time> m_delays_loaded;
   };
-
-  using FjstInstance = FlexibleJobShopWithTransportationInstance;
 
 }
 
