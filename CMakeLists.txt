@@ -70,6 +70,7 @@ add_library(sched0
   library/shop/FlexibleJobShopInstance.cc
   library/shop/Import.cc
   library/shop/InputConversion.cc
+  library/shop/InputFmt.cc
   library/shop/InsertNeighborhood.cc
   library/shop/JobListEngine.cc
   library/shop/JobListInput.cc
