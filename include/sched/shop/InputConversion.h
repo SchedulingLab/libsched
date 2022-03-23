@@ -1,0 +1,48 @@
+#ifndef SCHED_SHOP_INPUT_CONVERSION_H
+#define SCHED_SHOP_INPUT_CONVERSION_H
+
+#include <cassert>
+
+#include "JobListInput.h"
+#include "MachineListInput.h"
+#include "OperationListInput.h"
+
+namespace sched::shop {
+
+  template<typename Instance>
+  OperationListInput to_operation_list(const JobListInput& job_list, const Instance& instance) {
+    OperationListInput operation_list;
+    std::vector<std::size_t> job_state(instance.job_count(), 0);
+
+    for (auto & job : job_list) {
+      OperationId operation;
+      operation.job = job;
+      operation.index = job_state[sched::to_index(job)]++;
+      operation_list.push_back(operation);
+    }
+
+    return operation_list;
+  }
+
+  template<typename Instance>
+  MachineListInput to_machine_list(const OperationListInput& operation_list, const Instance& instance) {
+    MachineListInput machine_list(instance.machine_count());
+
+    for (auto operation : operation_list) {
+      auto machines = instance.machines_for_operation(operation);
+      assert(machines.size() == 1);
+      machine_list[sched::to_index(machines.front())].push_back(operation);
+    }
+
+    return machine_list;
+  }
+
+  template<typename Instance>
+  MachineListInput to_machine_list(const JobListInput& job_list, const Instance& instance) {
+    auto operation_list = to_operation_list(job_list, instance);
+    return to_machine_list(operation_list, instance);
+  }
+
+}
+
+#endif // SCHED_SHOP_INPUT_CONVERSION_H
