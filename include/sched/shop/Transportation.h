@@ -3,7 +3,7 @@
 
 namespace sched::shop {
 
-  enum class Transportation {
+  enum class TransportationKind {
     Empty,
     Loaded,
   };

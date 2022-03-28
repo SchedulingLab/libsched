@@ -6,6 +6,7 @@
 #include <sched/common/Api.h>
 
 #include "JobShopInstance.h"
+#include "GeneralFlexibleJobShopInstance.h"
 
 namespace sched::shop {
 
@@ -36,6 +37,8 @@ namespace sched::shop {
     static std::vector<BenchmarkInstance> load_benchmarks(const std::filesystem::path& filename);
 
     static JobShopInstance load_job_shop(const std::filesystem::path& filename);
+
+    static GeneralFlexibleJobShopInstance load_gfjssp(const std::filesystem::path& filename);
 
   };
 

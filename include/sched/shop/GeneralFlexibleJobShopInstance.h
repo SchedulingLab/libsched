@@ -78,13 +78,13 @@ namespace sched::shop {
     }
 
     Time transportation_time_empty(MachineId origin, MachineId target) const noexcept {
-      std::size_t index = sched::to_index(origin) * m_transportation_resources + sched::to_index(target);
+      std::size_t index = sched::to_index(origin) * m_machines + sched::to_index(target);
       assert(index < m_delays_empty.size());
       return m_delays_empty[index];
     }
 
     Time transportation_time_loaded(MachineId origin, MachineId target) const noexcept {
-      std::size_t index = sched::to_index(origin) * m_transportation_resources + sched::to_index(target);
+      std::size_t index = sched::to_index(origin) * m_machines + sched::to_index(target);
       assert(index < m_delays_loaded.size());
       return m_delays_loaded[index];
     }
@@ -107,11 +107,11 @@ namespace sched::shop {
         }
       }
 
-      if (m_delays_empty.size() != m_transportation_resources * m_transportation_resources) {
+      if (m_delays_empty.size() != m_machines * m_machines) {
         return false;
       }
 
-      if (m_delays_loaded.size() != m_transportation_resources * m_transportation_resources) {
+      if (m_delays_loaded.size() != m_machines * m_machines) {
         return false;
       }
 

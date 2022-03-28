@@ -65,14 +65,14 @@ namespace sched {
   }
 
   /*
-   * TransportId
+   * TransportationId
    */
 
-  enum TransportId : std::size_t {
+  enum TransportationId : std::size_t {
   };
 
   constexpr
-  std::size_t to_index(TransportId id) {
+  std::size_t to_index(TransportationId id) {
     return static_cast<std::size_t>(id);
   }
 
@@ -93,8 +93,8 @@ namespace sched {
     }
 
     constexpr
-    TransportId operator "" _t(unsigned long long val) {
-      return static_cast<TransportId>(val);
+    TransportationId operator "" _t(unsigned long long val) {
+      return static_cast<TransportationId>(val);
     }
 
   }

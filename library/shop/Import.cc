@@ -109,5 +109,77 @@ namespace sched::shop {
     return JobShopInstance(machine_count, std::move(jobs));
   }
 
+  GeneralFlexibleJobShopInstance Import::load_gfjssp(const std::filesystem::path& filename) {
+    std::ifstream input(filename);
+
+    if (!input) {
+      throw std::runtime_error("File not found: " + filename.string());
+    }
+
+    std::size_t machine_count;
+    std::size_t job_count;
+
+    for (std::string line; std::getline(input, line); ) {
+      if (line[0] == '#') {
+        continue;
+      }
+
+      std::istringstream first;
+      first.str(line);
+      first >> job_count >> machine_count;
+      break;
+    }
+
+    std::vector<GeneralFlexibleJobShopInstance::JobDesc> jobs;
+
+    for (std::size_t i = 0; i < job_count; ++i) {
+      std::string line;
+
+      if (!std::getline(input, line)) {
+        throw std::runtime_error("Missing data for job #" + std::to_string(i));
+      }
+
+      std::istringstream data;
+      data.str(line);
+
+      GeneralFlexibleJobShopInstance::JobDesc job;
+      std::size_t operation_machine_count;
+
+      while (data >> operation_machine_count) {
+        GeneralFlexibleJobShopInstance::OperationDesc operation;
+        std::size_t machine;
+        Time processing;
+
+        for (std::size_t j = 0; j < operation_machine_count; ++j) {
+          data >> machine >> processing;
+          operation.choices.push_back({ MachineId{machine}, processing });
+        }
+
+        job.operations.push_back(std::move(operation));
+      }
+
+      jobs.push_back(std::move(job));
+    }
+
+    std::size_t transportation_resources;
+
+    input >> transportation_resources;
+
+    std::vector<Time> delays;
+
+    for (std::string line; std::getline(input, line); ) {
+      std::istringstream data;
+      data.str(line);
+
+      Time duration;
+
+      while (data >> duration) {
+        delays.push_back(duration);
+      }
+    }
+
+    return GeneralFlexibleJobShopInstance(machine_count, std::move(jobs), transportation_resources, delays, delays);
+  }
+
 }
 
