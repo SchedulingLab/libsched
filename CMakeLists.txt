@@ -41,6 +41,7 @@ find_package(nlohmann_json REQUIRED)
 add_library(sched0
   # common
   library/common/GenericSchedule.cc
+  library/common/Graph.cc
   library/common/Ids.cc
   library/common/IdsFmt.cc
   library/common/Instance.cc

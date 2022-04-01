@@ -72,6 +72,42 @@ namespace sched {
     return { container.size() };
   }
 
+
+  template<class T>
+  class IteratorRange {
+  public:
+    using Iterator = T;
+
+    IteratorRange(Iterator beg, Iterator end)
+    : m_beg(beg), m_end(end)
+    {
+    }
+
+    Iterator begin() {
+      return m_beg;
+    }
+
+    Iterator end() {
+      return m_end;
+    }
+
+  private:
+    T m_beg;
+    T m_end;
+  };
+
+  template<class T>
+  inline
+  IteratorRange<typename T::iterator> make_iterator_range(T& cont) {
+    return IteratorRange<typename T::iterator>(cont.begin(), cont.end());
+  }
+
+  template<class T>
+  inline
+  IteratorRange<typename T::const_iterator> make_iterator_range(const T& cont) {
+    return IteratorRange<typename T::const_iterator>(cont.begin(), cont.end());
+  }
+
 }
 
 #endif // SCHED_RANGE_H
