@@ -7,6 +7,7 @@
 
 #include <sched/common/Api.h>
 #include <sched/common/Instance.h>
+#include <sched/common/MakespanCriterion.h>
 
 #include "FirstFitDecreasing.h"
 #include "LptAlgorithm.h"
@@ -22,11 +23,9 @@ namespace sched::para {
       LptAlgorithm lpt;
 
       ParallelSchedule fallback = lpt(instance);
-      Time makespan = 0;
 
-      for (auto & task : fallback) {
-        makespan = std::max(makespan, task.completion);
-      }
+      MakespanCriterion criterion;
+      Time makespan = criterion(instance, fallback);
 
       std::vector<ParallelJob> jobs;
       Time sum = 0;

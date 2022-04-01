@@ -29,13 +29,18 @@ namespace sched::para {
         max = std::max(max, processing_time);
       }
 
-      Time average = sum /= instance.machine_count();
-      Time lower = std::max(average, max);
-      Time upper = std::max(2 * average, max);
-
       std::sort(jobs.begin(), jobs.end(), [](const ParallelJob& lhs, const ParallelJob& rhs) {
         return lhs.processing_time > rhs.processing_time;
       });
+
+      return apply(instance, jobs, sum, max);
+    }
+
+    template<typename Instance, int Iterations = 7>
+    ParallelSchedule apply(const Instance& instance, const std::vector<ParallelJob>& jobs, Time sum, Time max) {
+      Time average = sum / instance.machine_count();
+      Time lower = std::max(average, max);
+      Time upper = std::max(2 * average, max);
 
       std::vector<std::vector<ParallelJob>> result;
 
@@ -80,6 +85,8 @@ namespace sched::para {
 
       return schedule;
     }
+
+
 
   };
 

@@ -54,6 +54,7 @@ add_library(sched0
   library/para/FirstFitDecreasing.cc
   library/para/GenericParallelGenerator.cc
   library/para/LdmAlgorithm.cc
+  library/para/ListfitAlgorithm.cc
   library/para/LptAlgorithm.cc
   library/para/MultifitAlgorithm.cc
   library/para/NonUniformParallelGenerator.cc
