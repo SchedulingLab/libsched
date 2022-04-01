@@ -15,6 +15,7 @@ namespace sched {
   VertexId Graph::add_vertex() {
     auto id = VertexId{ m_next_vertex_id++ };
     m_vertices.push_back({ id });
+    m_in_edges.push_back({ });
     m_out_edges.push_back({ });
     return id;
   }
@@ -30,6 +31,7 @@ namespace sched {
   EdgeId Graph::add_edge(VertexId source, VertexId target) {
     auto id = EdgeId{ m_next_edge_id++ };
     m_edges.push_back({ id, source, target });
+    m_in_edges[to_index(target)].insert(id);
     m_out_edges[to_index(source)].insert(id);
     return id;
   }
@@ -50,6 +52,10 @@ namespace sched {
     return m_edges[to_index(e)].target;
   }
 
+  auto Graph::in_edges(VertexId v) const -> InEdgeRange {
+    return make_iterator_range(m_in_edges[to_index(v)]);
+  }
+
   auto Graph::out_edges(VertexId v) const -> OutEdgeRange {
     return make_iterator_range(m_out_edges[to_index(v)]);
   }
@@ -59,6 +65,7 @@ namespace sched {
     m_next_edge_id = 0;
     m_vertices.clear();
     m_edges.clear();
+    m_in_edges.clear();
     m_out_edges.clear();
   }
 

@@ -53,9 +53,15 @@ namespace sched {
     VertexId source(EdgeId e) const;
     VertexId target(EdgeId e) const;
 
+    // in edges
+
+    using InEdgeRange = IteratorRange<std::set<EdgeId>::const_iterator>;
+
+    InEdgeRange in_edges(VertexId v) const;
+
     // out edges
 
-    using OutEdgeRange = IteratorRange<std::multiset<EdgeId>::const_iterator>;
+    using OutEdgeRange = IteratorRange<std::set<EdgeId>::const_iterator>;
 
     OutEdgeRange out_edges(VertexId v) const;
 
@@ -68,7 +74,8 @@ namespace sched {
     std::size_t m_next_edge_id;
     std::vector<Vertex> m_vertices;
     std::vector<Edge> m_edges;
-    std::vector<std::multiset<EdgeId>> m_out_edges;
+    std::vector<std::set<EdgeId>> m_in_edges;
+    std::vector<std::set<EdgeId>> m_out_edges;
   };
 
 
