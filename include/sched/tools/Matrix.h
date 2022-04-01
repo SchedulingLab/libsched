@@ -11,11 +11,11 @@ namespace sched {
   public:
     Matrix(std::size_t lines, std::size_t columns, double val = 0.0);
 
-    std::size_t get_lines() const {
+    std::size_t line_count() const {
       return m_lines;
     }
 
-    std::size_t get_columns() const {
+    std::size_t column_count() const {
       return m_columns;
     }
 

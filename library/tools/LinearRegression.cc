@@ -11,8 +11,8 @@ namespace sched {
   namespace {
 
     Matrix inverse(const Matrix& mat) {
-      assert(mat.get_lines() == 3);
-      assert(mat.get_columns() == 3);
+      assert(mat.line_count() == 3);
+      assert(mat.column_count() == 3);
 
       Matrix res(3, 3);
 
@@ -33,11 +33,11 @@ namespace sched {
     }
 
     double norm2(const Matrix& mat) {
-      assert(mat.get_columns() == 1);
+      assert(mat.column_count() == 1);
 
       KahanSum sum;
 
-      for (std::size_t i = 0; i < mat.get_lines(); ++i) {
+      for (std::size_t i = 0; i < mat.line_count(); ++i) {
         sum.add(mat(i, 0) * mat(i, 0));
       }
 
@@ -66,8 +66,8 @@ namespace sched {
     Matrix x_trans = x.transpose();
     Matrix mat = (inverse(x_trans * x) * x_trans) * y;
 
-    assert(mat.get_lines() == 3);
-    assert(mat.get_columns() == 1);
+    assert(mat.line_count() == 3);
+    assert(mat.column_count() == 1);
 
     // determination of R^2
 

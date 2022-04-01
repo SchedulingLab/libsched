@@ -14,11 +14,11 @@ namespace sched {
   }
 
   Matrix& Matrix::operator+=(const Matrix& other) {
-    assert(get_lines() == other.get_lines());
-    assert(get_columns() == other.get_columns());
+    assert(line_count() == other.line_count());
+    assert(column_count() == other.column_count());
 
-    for (std::size_t li = 0; li < get_lines(); ++li) {
-      for (std::size_t co = 0; co < get_columns(); ++co) {
+    for (std::size_t li = 0; li < line_count(); ++li) {
+      for (std::size_t co = 0; co < column_count(); ++co) {
         value_at(li, co) += other(li, co);
       }
     }
@@ -27,11 +27,11 @@ namespace sched {
   }
 
   Matrix& Matrix::operator-=(const Matrix& other) {
-    assert(get_lines() == other.get_lines());
-    assert(get_columns() == other.get_columns());
+    assert(line_count() == other.line_count());
+    assert(column_count() == other.column_count());
 
-    for (std::size_t li = 0; li < get_lines(); ++li) {
-      for (std::size_t co = 0; co < get_columns(); ++co) {
+    for (std::size_t li = 0; li < line_count(); ++li) {
+      for (std::size_t co = 0; co < column_count(); ++co) {
         value_at(li, co) -= other(li, co);
       }
     }
@@ -100,8 +100,8 @@ namespace sched {
   Matrix operator*(double lhs, const Matrix& rhs) {
     Matrix res(rhs);
 
-    for (std::size_t li = 0; li < res.get_lines(); ++li) {
-      for (std::size_t co = 0; co < res.get_columns(); ++co) {
+    for (std::size_t li = 0; li < res.line_count(); ++li) {
+      for (std::size_t co = 0; co < res.column_count(); ++co) {
         res(li, co) *= lhs;
       }
     }
@@ -110,16 +110,16 @@ namespace sched {
   }
 
   Matrix operator*(const Matrix& lhs, const Matrix& rhs) {
-    Matrix res(lhs.get_lines(), rhs.get_columns());
+    Matrix res(lhs.line_count(), rhs.column_count());
 
-    if (lhs.get_columns() != rhs.get_lines()) {
+    if (lhs.column_count() != rhs.line_count()) {
       throw std::runtime_error("matrix size mismatch.");
     }
 
-    std::size_t n = lhs.get_columns();
+    std::size_t n = lhs.column_count();
 
-    for (std::size_t li = 0; li < res.get_lines(); ++li) {
-      for (std::size_t co = 0; co < res.get_columns(); ++co) {
+    for (std::size_t li = 0; li < res.line_count(); ++li) {
+      for (std::size_t co = 0; co < res.column_count(); ++co) {
         KahanSum sum;
 
         for (std::size_t k = 0; k < n; ++k) {
