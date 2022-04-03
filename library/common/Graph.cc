@@ -41,17 +41,17 @@ namespace sched {
     assert(is_valid(v));
     m_vertices[to_index(v)].id = NoVertex;
 
-    for (auto id : m_out_edges[to_index(v)]) {
-      erase_edge(m_edges[to_index(id)]);
-    }
-
-    m_out_edges[to_index(v)].clear();
-
     for (auto id : m_in_edges[to_index(v)]) {
       erase_edge(m_edges[to_index(id)]);
     }
 
     m_in_edges[to_index(v)].clear();
+
+    for (auto id : m_out_edges[to_index(v)]) {
+      erase_edge(m_edges[to_index(id)]);
+    }
+
+    m_out_edges[to_index(v)].clear();
   }
 
   EdgeId Graph::add_edge(VertexId source, VertexId target) {
@@ -77,9 +77,12 @@ namespace sched {
 
   void Graph::remove_edge(EdgeId e) {
     assert(is_valid(e));
+    [[maybe_unused]] std::size_t erased;
     Edge& edge = m_edges[to_index(e)];
-    m_out_edges[to_index(edge.source)].erase(e);
-    m_in_edges[to_index(edge.target)].erase(e);
+    erased = m_in_edges[to_index(edge.target)].erase(e);
+    assert(erased == 1);
+    erased = m_out_edges[to_index(edge.source)].erase(e);
+    assert(erased == 1);
     erase_edge(edge);
   }
 
