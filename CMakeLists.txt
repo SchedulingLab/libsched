@@ -48,6 +48,7 @@ add_library(sched0
   library/common/MakespanCriterion.cc
   library/common/Random.cc
   library/common/Range.cc
+  library/common/RawId.cc
   library/common/Time.cc
 
   # para

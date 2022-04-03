@@ -1,28 +1,45 @@
 #ifndef SCHED_COMMON_GRAPH_H
 #define SCHED_COMMON_GRAPH_H
 
-#include "Range.h"
-
 #include <set>
 #include <vector>
 
+#include "Range.h"
+#include "RawId.h"
+
 namespace sched {
+
+  /*
+   * VertexId
+   */
 
   enum class VertexId : std::size_t { };
   using VertexRange = Range<VertexId>;
+
+  constexpr VertexId NoVertex = VertexId{RawNoId};
 
   constexpr
   std::size_t to_index(VertexId id) {
     return static_cast<std::size_t>(id);
   }
 
+  /*
+   * EdgeId
+   */
+
   enum class EdgeId : std::size_t { };
   using EdgeRange = Range<EdgeId>;
+
+  constexpr EdgeId NoEdge = EdgeId{RawNoId};
 
   constexpr
   std::size_t to_index(EdgeId id) {
     return static_cast<std::size_t>(id);
   }
+
+  /*
+   * Graph
+   */
 
   class Graph {
   public:
@@ -43,12 +60,16 @@ namespace sched {
     VertexId add_vertex();
     VertexRange vertices() const;
     std::size_t vertex_count() const;
+    bool is_valid(VertexId v) const;
+    void remove_vertex(VertexId v);
 
     // edges
 
     EdgeId add_edge(VertexId source, VertexId target);
     EdgeRange edges() const;
     std::size_t edge_count() const;
+    bool is_valid(EdgeId e) const;
+    void remove_edge(EdgeId e);
 
     VertexId source(EdgeId e) const;
     VertexId target(EdgeId e) const;
@@ -70,8 +91,13 @@ namespace sched {
     void clear();
 
   private:
+    void erase_edge(Edge& edge);
+
+  private:
     std::size_t m_next_vertex_id;
     std::size_t m_next_edge_id;
+    std::size_t m_vertex_count;
+    std::size_t m_edge_count;
     std::vector<Vertex> m_vertices;
     std::vector<Edge> m_edges;
     std::vector<std::set<EdgeId>> m_in_edges;

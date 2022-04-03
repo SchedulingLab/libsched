@@ -5,6 +5,8 @@
 #include <iosfwd>
 #include <limits>
 
+#include "RawId.h"
+
 namespace sched {
 
   /*
@@ -19,8 +21,8 @@ namespace sched {
     return static_cast<std::size_t>(id);
   }
 
-  constexpr MachineId AnyMachine = MachineId{std::numeric_limits<std::size_t>::max() - 1};
-  constexpr MachineId NoMachine = MachineId{std::numeric_limits<std::size_t>::max()};
+  constexpr MachineId AnyMachine = MachineId{RawAnyId};
+  constexpr MachineId NoMachine = MachineId{RawNoId};
 
   /*
    * JobId
@@ -34,7 +36,7 @@ namespace sched {
     return static_cast<std::size_t>(id);
   }
 
-  constexpr JobId NoJob = JobId{std::numeric_limits<std::size_t>::max()};
+  constexpr JobId NoJob = JobId{RawNoId};
 
   /*
    * OperationId
