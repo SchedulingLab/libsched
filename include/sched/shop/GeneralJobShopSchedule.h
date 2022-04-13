@@ -29,6 +29,12 @@ namespace sched::shop {
       m_transportation_tasks.push_back(transportation_task);
     }
 
+    using ConstTransportationTaskRange = IteratorRange<std::vector<TransportationTask>::const_iterator>;
+
+    ConstTransportationTaskRange transportation_tasks() const {
+      return make_iterator_range(m_transportation_tasks);
+    }
+
   private:
     std::vector<TransportationTask> m_transportation_tasks;
   };

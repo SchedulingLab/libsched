@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "Range.h"
+
 namespace sched {
 
   template<typename Task>
@@ -12,10 +14,17 @@ namespace sched {
       m_tasks.push_back(task);
     }
 
-    auto begin() { return m_tasks.begin(); }
-    auto begin() const { return m_tasks.begin(); }
-    auto end() { return m_tasks.end(); }
-    auto end() const { return m_tasks.end(); }
+    using TaskRange = IteratorRange<typename std::vector<Task>::iterator>;
+
+    TaskRange tasks() {
+      return make_iterator_range(m_tasks);
+    }
+
+    using ConstTaskRange = IteratorRange<typename std::vector<Task>::const_iterator>;
+
+    ConstTaskRange tasks() const {
+      return make_iterator_range(m_tasks);
+    }
 
     bool operator<(const GenericSchedule& other) {
       return m_tasks < other.m_tasks;

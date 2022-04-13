@@ -17,7 +17,7 @@ namespace sched::shop {
 
     Image img(machines * MachineHeight);
 
-    for (auto task : schedule) {
+    for (auto task : schedule.tasks()) {
       for (std::size_t col = task.start * TimeWidth; col < task.completion * TimeWidth; ++col) {
         for (std::size_t row = 0; row < MachineHeight; ++row) {
           img.set_color(to_index(task.machine) * MachineHeight + row, col, to_color(task.operation.job));

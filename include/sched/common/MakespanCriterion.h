@@ -12,11 +12,11 @@ namespace sched {
     using Fitness = Time;
 
     template<typename Instance, typename Schedule>
-    Fitness operator()([[maybe_unused]] const Instance& instance, const Schedule& sched) {
+    Fitness operator()([[maybe_unused]] const Instance& instance, const Schedule& schedule) {
       Time completion = 0;
 
-      for (auto & work : sched) {
-        completion = std::max(completion, work.completion);
+      for (auto & task : schedule.tasks()) {
+        completion = std::max(completion, task.completion);
       }
 
       return completion;
