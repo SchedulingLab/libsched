@@ -10,8 +10,6 @@ project(SCHED
 include(GNUInstallDirs)
 include(GenerateExportHeader)
 
-set(CMAKE_CXX_VISIBILITY_PRESET hidden)
-set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(UNIX)
@@ -34,6 +32,7 @@ endif()
 find_package(Threads REQUIRED)
 find_package(fmt REQUIRED)
 find_package(nlohmann_json REQUIRED)
+find_package(lqp REQUIRED)
 
 
 # library
@@ -62,6 +61,7 @@ add_library(sched0
   library/para/NonUniformParallelGenerator.cc
   library/para/ParallelInstance.cc
   library/para/ParallelJob.cc
+  library/para/ParallelOptimalAlgorithm.cc
   library/para/ParallelSchedule.cc
   library/para/SlackAlgorithm.cc
 
@@ -134,6 +134,8 @@ set_target_properties(sched0
     EXPORT_NAME "sched"
     CXX_STANDARD 17
     CXX_EXTENSIONS OFF
+    CXX_VISIBILITY_PRESET hidden
+    VISIBILITY_INLINES_HIDDEN ON
     VERSION ${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION_MAJOR}
 )
@@ -141,9 +143,10 @@ set_target_properties(sched0
 target_include_directories(sched0
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/sched/common>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/sched/common>
+  PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
 )
 
 target_link_libraries(sched0
@@ -152,6 +155,7 @@ target_link_libraries(sched0
   PUBLIC
     Threads::Threads
     fmt::fmt-header-only
+    lqp::lqp
 )
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
