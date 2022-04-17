@@ -39,6 +39,8 @@ namespace sched::para {
         max = std::max(max, processing_time);
       }
 
+      [[maybe_unused]] std::size_t job_count = instance.job_count();
+      assert(job_count == jobs.size());
       jobs_a = std::move(jobs);
 
       auto sort_by_spt = [](std::vector<ParallelJob>& jobs) {
@@ -78,8 +80,9 @@ namespace sched::para {
           }
 
           jobs.clear();
-          jobs.insert(jobs.end(), jobs_a.begin(), jobs_a.end());
           jobs.insert(jobs.end(), jobs_b.begin(), jobs_b.end());
+          jobs.insert(jobs.end(), jobs_a.begin(), jobs_a.end());
+          assert(jobs.size() == job_count);
 
           ParallelSchedule multifit_schedule = multifit.apply(instance, jobs, sum, max);
           Time multifit_makespan = criterion(instance, multifit_schedule);
@@ -94,6 +97,7 @@ namespace sched::para {
         }
 
         jobs_a = std::move(jobs_b);
+        assert(jobs_a.size() == job_count);
       }
 
       return schedule;

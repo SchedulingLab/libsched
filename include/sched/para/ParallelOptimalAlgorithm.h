@@ -82,6 +82,7 @@ namespace sched::para {
       lqp::SolverConfig config;
       config.use_mip = true;
       config.presolve = true;
+      config.verbose = false;
 
       auto result = solver->solve(problem, config);
       assert(result.has_solution());
