@@ -5,6 +5,7 @@ include("${SCHED_CMAKE_DIR}/schedTargets.cmake")
 
 find_dependency(Threads)
 find_dependency(fmt)
+find_dependency(lqp)
 
 if(NOT BUILD_SHARED_LIBS)
   find_dependency(nlohmann_json)
