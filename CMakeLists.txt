@@ -80,6 +80,7 @@ add_library(sched0
   library/shop/InsertNeighborhood.cc
   library/shop/JobListEngine.cc
   library/shop/JobListInput.cc
+  library/shop/JobShopCriticalPath.cc
   library/shop/JobShopSchedule.cc
   library/shop/JobShopInstance.cc
   library/shop/MachineListEngine.cc
