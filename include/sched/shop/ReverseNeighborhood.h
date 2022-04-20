@@ -8,9 +8,12 @@
 #include <sched/common/Random.h>
 #include <sched/common/Range.h>
 
+#include "BasicNeighborhood.h"
+
 namespace sched::shop {
 
-  struct SCHED_API ReverseNeighborhood {
+  struct SCHED_API ReverseNeighborhood : BasicNeighborhood {
+
     template<typename Input, typename Schedule>
     Input operator()(const Input& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
       assert(!input.empty());
@@ -35,6 +38,11 @@ namespace sched::shop {
       } while (neighbor == input);
 
       return neighbor;
+    }
+
+    template<typename Input, typename Schedule>
+    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
+      return BasicNeighborhood::generate_many(*this, input, schedule, random, count);
     }
 
     template<typename Input>
@@ -71,6 +79,7 @@ namespace sched::shop {
 
       return true;
     }
+
   };
 
 

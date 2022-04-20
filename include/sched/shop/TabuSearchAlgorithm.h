@@ -66,9 +66,9 @@ namespace sched::shop {
         decltype(current_schedule) candidate_schedule;
         decltype(current_fitness) candidate_fitness;
 
-        for (std::size_t i = 0; i < neighbors_count; ++i) {
-          auto neighbor_input = neighborhood(current_input, current_schedule, random);
+        auto neighbors = neighborhood.generate_many(current_input, current_schedule, random, neighbors_count);
 
+        for (auto & neighbor_input : neighbors) {
           auto maybe_schedule = engine(instance, neighbor_input);
 
           if (!maybe_schedule) {

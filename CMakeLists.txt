@@ -68,6 +68,7 @@ add_library(sched0
   # shop
   library/shop/AutocorrelationAnalysis.cc
   library/shop/BasicInstance.cc
+  library/shop/BasicNeighborhood.cc
   library/shop/Enumerator.cc
   library/shop/Export.cc
   library/shop/FlexibleJobShopInstance.cc
@@ -86,7 +87,6 @@ add_library(sched0
   library/shop/MachineListEngine.cc
   library/shop/MachineListInput.cc
   library/shop/NeutralityRateAnalysis.cc
-  library/shop/NullNeighborhood.cc
   library/shop/OperationListEngine.cc
   library/shop/OperationListImprovedNeighborhood.cc
   library/shop/OperationListInput.cc

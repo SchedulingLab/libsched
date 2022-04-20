@@ -7,9 +7,11 @@
 #include <sched/common/Random.h>
 #include <sched/common/Range.h>
 
+#include "BasicNeighborhood.h"
+
 namespace sched::shop {
 
-  struct SCHED_API SwapNeighborhood {
+  struct SCHED_API SwapNeighborhood : BasicNeighborhood {
 
     template<typename Input, typename Schedule>
     Input operator()(const Input& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
@@ -28,6 +30,11 @@ namespace sched::shop {
       return neighbor;
     }
 
+    template<typename Input, typename Schedule>
+    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
+      return BasicNeighborhood::generate_many(*this, input, schedule, random, count);
+    }
+
     template<typename Input>
     bool are_neighbors(const Input& input0, const Input& input1) {
       assert(input0.size() == input1.size());
@@ -41,6 +48,7 @@ namespace sched::shop {
 
       return diff == 2;
     }
+
   };
 
 
