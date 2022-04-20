@@ -9,23 +9,41 @@ namespace sched::shop {
 
   struct SCHED_API OperationSwapNeighborhood {
 
-    OperationListInput operator()(const OperationListInput& input, Random& random);
+    template<typename Schedule>
+    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
+      return compute(input, random);
+    }
+
     bool are_neighbors(const OperationListInput& input0, const OperationListInput& input1);
 
+  private:
+    OperationListInput compute(const OperationListInput& input, Random& random);
   };
 
   struct SCHED_API OperationInsertNeighborhood {
 
-    OperationListInput operator()(const OperationListInput& input, Random& random);
+    template<typename Schedule>
+    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
+      return compute(input, random);
+    }
+
     bool are_neighbors(const OperationListInput& input0, const OperationListInput& input1);
 
+  private:
+    OperationListInput compute(const OperationListInput& input, Random& random);
   };
 
   struct SCHED_API OperationReverseNeighborhood {
 
-    OperationListInput operator()(const OperationListInput& input, Random& random);
+    template<typename Schedule>
+    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
+      return compute(input, random);
+    }
+
     bool are_neighbors(const OperationListInput& input0, const OperationListInput& input1);
 
+  private:
+    OperationListInput compute(const OperationListInput& input, Random& random);
   };
 
 }

@@ -12,7 +12,6 @@
 #include <sched/tools/Log.h>
 
 #include "InputTraits.h"
-#include "JobShopSchedule.h"
 
 namespace sched::shop {
 
@@ -34,10 +33,11 @@ namespace sched::shop {
       const std::size_t tabu_duration = static_cast<std::size_t>((n + m / 2.0) * std::exp(- 1.0 * n / (5.0 * m)) + o / 2.0 * std::exp(-(5.0 * m) / n));
 
       Input best_input = start;
-      JobShopSchedule schedule = *engine(instance, best_input);
-      auto best_fitness = criterion(instance, schedule);
+      auto best_schedule = *engine(instance, best_input);
+      auto best_fitness = criterion(instance, best_schedule);
 
       Input current_input = best_input;
+      auto current_schedule = best_schedule;
       auto current_fitness = best_fitness;
 
       std::size_t iteration = 0;
@@ -63,10 +63,11 @@ namespace sched::shop {
 
       while ((std::chrono::steady_clock::now() - start_time) < duration) {
         std::optional<Input> candidate;
-        typename Criterion::Fitness candidate_fitness;
+        decltype(current_schedule) candidate_schedule;
+        decltype(current_fitness) candidate_fitness;
 
         for (std::size_t i = 0; i < neighbors_count; ++i) {
-          auto neighbor_input = neighborhood(current_input, random);
+          auto neighbor_input = neighborhood(current_input, current_schedule, random);
 
           auto maybe_schedule = engine(instance, neighbor_input);
 
@@ -74,7 +75,8 @@ namespace sched::shop {
             continue;
           }
 
-          auto neighbor_fitness = criterion(instance, *maybe_schedule);
+          auto neighbor_schedule = *maybe_schedule;
+          auto neighbor_fitness = criterion(instance, neighbor_schedule);
 
           if (!candidate || criterion.is_strictly_better(candidate_fitness, neighbor_fitness)) {
 
@@ -83,6 +85,7 @@ namespace sched::shop {
             }
 
             candidate = neighbor_input;
+            candidate_schedule = neighbor_schedule;
             candidate_fitness = neighbor_fitness;
           }
         }
@@ -93,17 +96,19 @@ namespace sched::shop {
 
         if (candidate) {
           current_input = *candidate;
+          current_schedule = candidate_schedule;
           current_fitness = candidate_fitness;
           tabu_list.push_back({ std::move(*candidate), iteration });
         } else {
           tabu_list.clear();
           current_input = InputTraits<Input>::generate_feasible(instance, random);
-          schedule = *engine(instance, best_input);
-          current_fitness = criterion(instance, schedule);
+          current_schedule = *engine(instance, current_input);
+          current_fitness = criterion(instance, current_schedule);
         }
 
         if (criterion.is_strictly_better(best_fitness, current_fitness)) {
           best_input = current_input;
+          best_schedule = current_schedule;
           best_fitness = current_fitness;
         }
 

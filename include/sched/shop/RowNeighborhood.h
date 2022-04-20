@@ -2,14 +2,15 @@
 #define SCHED_SHOP_ROW_NEIGHBORHOOD_H
 
 #include <sched/common/Random.h>
+#include <sched/common/Range.h>
 
 namespace sched::shop {
 
   template<typename BaseNeighborhood>
   struct RowNeighborhood {
 
-    template<typename Input>
-    Input operator()(const Input& input, Random& random) {
+    template<typename Input, typename Schedule>
+    Input operator()(const Input& input, const Schedule& schedule, Random& random) {
       assert(!input.empty());
       std::size_t rows = input.size() - 1;
       Input neighbor;
@@ -22,7 +23,7 @@ namespace sched::shop {
           continue;
         }
 
-        row = base_neighborhood(row, random);
+        row = base_neighborhood(row, schedule, random);
       } while (neighbor == input);
 
       return neighbor;

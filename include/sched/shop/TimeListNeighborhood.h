@@ -13,7 +13,8 @@ namespace sched::shop {
 
   struct SCHED_API TimeListNeighborhood {
 
-    TimeListInput operator()(const TimeListInput& input, Random& random) {
+    template<typename Schedule>
+    TimeListInput operator()(const TimeListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
       TimeListInput neighbor = input;
       std::bernoulli_distribution dist_change(0.15);
 
@@ -36,6 +37,5 @@ namespace sched::shop {
   };
 
 }
-
 
 #endif // SCHED_SHOP_TIME_LIST_NEIGHBORHOOD_H

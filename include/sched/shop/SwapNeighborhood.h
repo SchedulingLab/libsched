@@ -11,8 +11,8 @@ namespace sched::shop {
 
   struct SCHED_API SwapNeighborhood {
 
-    template<typename Input>
-    Input operator()(const Input& input, Random& random) {
+    template<typename Input, typename Schedule>
+    Input operator()(const Input& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
       assert(!input.empty());
 
       std::size_t max = input.size() - 1;

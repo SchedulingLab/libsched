@@ -35,7 +35,7 @@ namespace sched::shop {
 
   // OperationSwapNeighborhood
 
-  OperationListInput OperationSwapNeighborhood::operator()(const OperationListInput& input, Random& random) {
+  OperationListInput OperationSwapNeighborhood::compute(const OperationListInput& input, Random& random) {
     assert(!input.empty());
 
     std::size_t max = input.size() - 1;
@@ -59,7 +59,7 @@ namespace sched::shop {
 
   // OperationInsertNeighborhood
 
-  OperationListInput OperationInsertNeighborhood::operator()(const OperationListInput& input, Random& random) {
+  OperationListInput OperationInsertNeighborhood::compute(const OperationListInput& input, Random& random) {
     assert(!input.empty());
 
     std::size_t max = input.size() - 1;
@@ -101,7 +101,7 @@ namespace sched::shop {
 
   // OperationReverseNeighborhood
 
-  OperationListInput OperationReverseNeighborhood::operator()(const OperationListInput& input, Random& random) {
+  OperationListInput OperationReverseNeighborhood::compute(const OperationListInput& input, Random& random) {
     assert(!input.empty());
 
     std::size_t max = input.size() - 1;

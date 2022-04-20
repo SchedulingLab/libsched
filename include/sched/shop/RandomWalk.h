@@ -22,26 +22,28 @@ namespace sched::shop {
       // find a first feasible solution
       Input current = start;
 
-      assert(engine(instance, current));
+      auto maybe_schedule = engine(instance, current);
+      assert(maybe_schedule);
+      auto schedule = *maybe_schedule;
 
       std::vector<Fitness> fitness;
-      JobShopSchedule schedule = *engine(instance, current);
       fitness.push_back(criterion(instance, schedule));
 
       for (std::size_t i = 0; i < count; ++i) {
         Input next;
+        decltype(maybe_schedule) maybe_next_schedule;
 
 //         std::cout << '.' << std::flush;
 
         do {
-          next = neighborhood(current, random);
-        } while (!engine(instance, next));
+          next = neighborhood(current, schedule, random);
+          maybe_next_schedule = engine(instance, next);
+        } while (!maybe_next_schedule);
 
         assert(neighborhood.are_neighbors(current, next));
 
         current = next;
-
-        schedule = *engine(instance, current);
+        schedule = *maybe_next_schedule;
         fitness.push_back(criterion(instance, schedule));
       }
 

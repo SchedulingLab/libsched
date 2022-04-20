@@ -94,6 +94,7 @@ add_library(sched0
   library/shop/RandomNeighborSample.cc
   library/shop/RandomWalk.cc
   library/shop/ReverseNeighborhood.cc
+  library/shop/RowNeighborhood.cc
   library/shop/SimpleDescent.cc
   library/shop/SwapNeighborhoord.cc
   library/shop/TabuSearchAlgorithm.cc

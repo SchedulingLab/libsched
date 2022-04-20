@@ -16,12 +16,14 @@ namespace sched::shop {
 
     template<typename Instance>
     std::vector<Input> operator()(const Instance& instance, const Input& start, Random& random, std::size_t count = 1000) {
-      assert(engine(instance, start));
+      auto maybe_schedule = engine(instance, start);
+      assert(maybe_schedule);
+      auto schedule = *maybe_schedule;
 
       std::vector<Input> result;
 
       while (result.size() < count) {
-        Input neighbor = neighborhood(start, random);;
+        Input neighbor = neighborhood(start, schedule, random);;
         assert(neighborhood.are_neighbors(start, neighbor));
 
         if (engine(instance, neighbor)) {
