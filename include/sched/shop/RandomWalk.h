@@ -33,8 +33,6 @@ namespace sched::shop {
         Input next;
         decltype(maybe_schedule) maybe_next_schedule;
 
-//         std::cout << '.' << std::flush;
-
         do {
           next = neighborhood(current, schedule, random);
           maybe_next_schedule = engine(instance, next);

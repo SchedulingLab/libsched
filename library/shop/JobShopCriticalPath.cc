@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <tuple>
 
 namespace sched::shop {
 
@@ -10,7 +11,8 @@ namespace sched::shop {
     std::vector<JobShopTask> tasks(task_range.begin(), task_range.end());
 
     std::sort(tasks.begin(), tasks.end(), [](const JobShopTask& lhs, const JobShopTask& rhs) {
-      return lhs.completion > rhs.completion;
+      // also check jobs and operations to handle operations with processing time of 0 (like orb07)
+      return std::tie(lhs.completion, lhs.operation.job, lhs.operation.index) > std::tie(rhs.completion, rhs.operation.job, rhs.operation.index);
     });
 
     const std::size_t n = tasks.size();
@@ -27,7 +29,8 @@ namespace sched::shop {
         ++j;
       }
 
-      if (j != n && tasks[j].completion == tasks[i].start) {
+      if (j < n && tasks[j].completion == tasks[i].start) {
+        assert(tasks[j].machine == tasks[i].machine);
         result.push_back(tasks[j]);
         i = j;
         continue;
@@ -37,11 +40,13 @@ namespace sched::shop {
 
       std::size_t k = i + 1;
 
-      while (k < n && tasks[k].operation.job != tasks[k].operation.job) {
+      while (k < n && tasks[k].operation.job != tasks[i].operation.job) {
         ++k;
       }
 
-      assert(k < n && tasks[k].completion == tasks[i].start);
+      assert(k < n);
+      assert(tasks[k].operation.job == tasks[i].operation.job);
+      assert(tasks[k].completion == tasks[i].start);
       result.push_back(tasks[k]);
       i = k;
     }
