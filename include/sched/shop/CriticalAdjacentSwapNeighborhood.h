@@ -18,6 +18,13 @@ namespace sched::shop {
 
   };
 
+  struct SCHED_API MachineCriticalAdjacentSwapNeighborhood : BasicNeighborhood {
+
+    MachineListInput operator()(const MachineListInput& input, const JobShopSchedule& schedule, Random& random);
+    std::vector<MachineListInput> generate_many(const MachineListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count);
+    bool are_neighbors(const MachineListInput& input0, const MachineListInput& input1);
+
+  };
 
 }
 
