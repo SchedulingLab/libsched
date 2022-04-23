@@ -67,6 +67,7 @@ add_library(sched0
 
   # shop
   library/shop/AutocorrelationAnalysis.cc
+  library/shop/AdjacentSwapNeighborhood.cc
   library/shop/BasicInstance.cc
   library/shop/BasicNeighborhood.cc
   library/shop/CriticalAdjacentSwapNeighborhood.cc

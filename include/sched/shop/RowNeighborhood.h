@@ -79,6 +79,9 @@ namespace sched::shop {
   struct ReverseNeighborhood;
   using ReverseInRowNeighborhood = RowNeighborhood<ReverseNeighborhood>;
 
+  struct AdjacentSwapNeighborhood;
+  using AdjacentSwapInRowNeighborhood = RowNeighborhood<AdjacentSwapNeighborhood>;
+
 }
 
 #endif // SCHED_SHOP_ROW_NEIGHBORHOOD_H

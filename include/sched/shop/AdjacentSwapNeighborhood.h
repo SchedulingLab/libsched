@@ -1,5 +1,5 @@
-#ifndef SCHED_SWAP_NEIHGBORHOOD_H
-#define SCHED_SWAP_NEIHGBORHOOD_H
+#ifndef SCHED_SHOP_ADJACENT_SWAP_NEIGHBORHOOD_H
+#define SCHED_SHOP_ADJACENT_SWAP_NEIGHBORHOOD_H
 
 #include <cassert>
 
@@ -11,22 +11,17 @@
 
 namespace sched::shop {
 
-  struct SCHED_API SwapNeighborhood : BasicNeighborhood {
+  struct SCHED_API AdjacentSwapNeighborhood : BasicNeighborhood {
 
     template<typename Input, typename Schedule>
     Input operator()(const Input& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
       assert(!input.empty());
 
       std::size_t max = input.size() - 1;
-      std::size_t index0, index1;
-
-      do {
-        index0 = random.compute_uniform_integer(std::size_t{0}, max);
-        index1 = random.compute_uniform_integer(std::size_t{0}, max);
-      } while (index0 == index1 || input[index0] == input[index1]);
+      std::size_t index = random.compute_uniform_integer(std::size_t{0}, max - 1);
 
       Input neighbor = input;
-      std::swap(neighbor[index0], neighbor[index1]);
+      std::swap(neighbor[index], neighbor[index + 1]);
       return neighbor;
     }
 
@@ -46,12 +41,12 @@ namespace sched::shop {
         }
       }
 
+      // TODO: also check that the indices are at distance 1
       return diff == 2;
     }
 
   };
 
-
 }
 
-#endif // SCHED_SWAP_NEIHGBORHOOD_H
+#endif // SCHED_SHOP_ADJACENT_SWAP_NEIGHBORHOOD_H
