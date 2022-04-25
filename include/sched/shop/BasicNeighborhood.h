@@ -10,19 +10,6 @@ namespace sched::shop {
 
   struct SCHED_API BasicNeighborhood {
 
-    template<typename Input, typename Schedule>
-    Input operator()(const Input& input, [[maybe_unused]] const Schedule& schedule, [[maybe_unused]] Random& random) {
-      return input;
-    }
-
-    template<typename Input>
-    bool are_neighbors(const Input& input0, const Input& input1) {
-      return false;
-    }
-
-
-  protected:
-
     template<typename Neighborhood, typename Input, typename Schedule>
     static std::vector<Input> generate_many(Neighborhood& neighborhood, const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
       std::vector<Input> result;

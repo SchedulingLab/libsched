@@ -31,7 +31,14 @@ namespace sched::shop {
           ft0_x_ftl.add(x0 * xl);
         }
 
-        results.push_back(std::abs(ft0_x_ftl.get_mean() - ft0.get_mean() * ftl.get_mean()) / ft0.get_variance());
+        double var0 = ft0.get_variance();
+
+        if (var0 < std::numeric_limits<double>::epsilon()) {
+          // all the values are the same
+          results.push_back(1.0);
+        } else {
+          results.push_back(std::abs(ft0_x_ftl.get_mean() - ft0.get_mean() * ftl.get_mean()) / var0);
+        }
       }
 
       return results;
