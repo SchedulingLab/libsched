@@ -8,6 +8,7 @@
 #include <sched/common/Api.h>
 #include <sched/common/Instance.h>
 
+#include "EarliestFinishTime.h"
 #include "ParallelJob.h"
 #include "ParallelSchedule.h"
 
@@ -65,23 +66,8 @@ namespace sched::para {
         }
       }
 
-      std::vector<Time> machines(machine_count, 0);
-      ParallelSchedule schedule;
-
-      for (auto job : jobs) {
-        auto it = std::min_element(machines.begin(), machines.end());
-
-        ParallelTask task;
-        task.job = job.id;
-        task.machine = MachineId{static_cast<std::size_t>(machines.begin() - it)};
-        task.start = *it;
-        task.completion = task.start + job.processing_time;
-        schedule.append(task);
-
-        *it += job.processing_time;
-      }
-
-      return schedule;
+      EarliestFinishTime eft;
+      return eft(instance, jobs);
     }
 
   };
