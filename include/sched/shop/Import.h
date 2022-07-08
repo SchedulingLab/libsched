@@ -30,13 +30,22 @@ namespace sched::shop {
     std::filesystem::path path;
   };
 
+  struct SCHED_API GeneralFlexibalJobShopBenchmark {
+    std::string name;
+    int jobs;
+    int machines;
+    int transportations;
+    std::filesystem::path path;
+  };
 
   class SCHED_API Import {
   public:
 
-    static std::vector<JobShopBenchmark> load_benchmarks(const std::filesystem::path& filename);
+    static std::vector<JobShopBenchmark> load_jssp_benchmarks(const std::filesystem::path& filename);
 
-    static JobShopInstance load_job_shop(const std::filesystem::path& filename);
+    static JobShopInstance load_jssp(const std::filesystem::path& filename);
+
+    static std::vector<GeneralFlexibalJobShopBenchmark> load_gfjssp_benchmarks(const std::filesystem::path& filename);
 
     static GeneralFlexibleJobShopInstance load_gfjssp(const std::filesystem::path& filename);
 

@@ -78,12 +78,20 @@ namespace sched::shop {
     }
 
     Time transportation_time_empty(MachineId origin, MachineId target) const noexcept {
+      if (origin == NoMachine) {
+        return Time{0};
+      }
+
       std::size_t index = sched::to_index(origin) * m_machines + sched::to_index(target);
       assert(index < m_delays_empty.size());
       return m_delays_empty[index];
     }
 
     Time transportation_time_loaded(MachineId origin, MachineId target) const noexcept {
+      if (origin == NoMachine) {
+        return Time{0};
+      }
+
       std::size_t index = sched::to_index(origin) * m_machines + sched::to_index(target);
       assert(index < m_delays_loaded.size());
       return m_delays_loaded[index];

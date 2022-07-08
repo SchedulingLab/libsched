@@ -8,6 +8,10 @@
 
 namespace sched::shop {
 
+  /*
+   * jssp
+   */
+
   NLOHMANN_JSON_SERIALIZE_ENUM(BenchmarkGenerator, {
     { BenchmarkGenerator::Const, "gen-const" },
     { BenchmarkGenerator::Uniform99, "gen-uniform-99" },
@@ -17,7 +21,7 @@ namespace sched::shop {
   })
 
 
-  void from_json(const nlohmann::json& j, JobShopBenchmark& benchmark) {
+  static void from_json(const nlohmann::json& j, JobShopBenchmark& benchmark) {
     assert(!j.is_null());
     j.at("name").get_to(benchmark.name);
     j.at("jobs").get_to(benchmark.jobs);
@@ -51,8 +55,7 @@ namespace sched::shop {
     benchmark.path = path_string;
   }
 
-
-  std::vector<JobShopBenchmark> Import::load_benchmarks(const std::filesystem::path& filename) {
+  std::vector<JobShopBenchmark> Import::load_jssp_benchmarks(const std::filesystem::path& filename) {
     std::vector<JobShopBenchmark> benchmarks;
 
     std::ifstream stream(filename);
@@ -64,7 +67,7 @@ namespace sched::shop {
     return benchmarks;
   }
 
-  JobShopInstance Import::load_job_shop(const std::filesystem::path& filename) {
+  JobShopInstance Import::load_jssp(const std::filesystem::path& filename) {
     std::ifstream input(filename);
 
     if (!input) {
@@ -107,6 +110,34 @@ namespace sched::shop {
     assert(jobs.size() == job_count);
 
     return JobShopInstance(machine_count, std::move(jobs));
+  }
+
+  /*
+   * gfjssp
+   */
+
+  static void from_json(const nlohmann::json& j, GeneralFlexibalJobShopBenchmark& benchmark) {
+    assert(!j.is_null());
+    j.at("name").get_to(benchmark.name);
+    j.at("jobs").get_to(benchmark.jobs);
+    j.at("machines").get_to(benchmark.machines);
+    j.at("transportations").get_to(benchmark.transportations);
+
+    std::string path_string;
+    j.at("path").get_to(path_string);
+    benchmark.path = path_string;
+  }
+
+  std::vector<GeneralFlexibalJobShopBenchmark> Import::load_gfjssp_benchmarks(const std::filesystem::path& filename) {
+    std::vector<GeneralFlexibalJobShopBenchmark> benchmarks;
+
+    std::ifstream stream(filename);
+    nlohmann::json root;
+    stream >> root;
+
+    assert(root.is_array());
+    root.get_to(benchmarks);
+    return benchmarks;
   }
 
   GeneralFlexibleJobShopInstance Import::load_gfjssp(const std::filesystem::path& filename) {
