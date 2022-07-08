@@ -17,51 +17,51 @@ namespace sched::shop {
   })
 
 
-  void from_json(const nlohmann::json& j, BenchmarkInstance& instance) {
+  void from_json(const nlohmann::json& j, JobShopBenchmark& benchmark) {
     assert(!j.is_null());
-    j.at("name").get_to(instance.name);
-    j.at("jobs").get_to(instance.jobs);
-    j.at("machines").get_to(instance.machines);
+    j.at("name").get_to(benchmark.name);
+    j.at("jobs").get_to(benchmark.jobs);
+    j.at("machines").get_to(benchmark.machines);
 
     if (j.at("optimum").is_null()) {
-      instance.optimum = 0;
+      benchmark.optimum = 0;
       auto & bounds = j.at("bounds");
 
       if (bounds.is_null()) {
-        instance.upper_bound = 0;
-        instance.lower_bound = 0;
+        benchmark.upper_bound = 0;
+        benchmark.lower_bound = 0;
       } else {
-        j.at("bounds").at("upper").get_to(instance.upper_bound);
-        j.at("bounds").at("lower").get_to(instance.lower_bound);
+        j.at("bounds").at("upper").get_to(benchmark.upper_bound);
+        j.at("bounds").at("lower").get_to(benchmark.lower_bound);
       }
     } else {
-      j.at("optimum").get_to(instance.optimum);
-      instance.upper_bound = instance.optimum;
-      instance.lower_bound = instance.optimum;
+      j.at("optimum").get_to(benchmark.optimum);
+      benchmark.upper_bound = benchmark.optimum;
+      benchmark.lower_bound = benchmark.optimum;
     }
 
     if (j.contains("generator")) {
-      j.at("generator").get_to(instance.generator);
+      j.at("generator").get_to(benchmark.generator);
     } else {
-      instance.generator = BenchmarkGenerator::Unknown;
+      benchmark.generator = BenchmarkGenerator::Unknown;
     }
 
     std::string path_string;
     j.at("path").get_to(path_string);
-    instance.path = path_string;
+    benchmark.path = path_string;
   }
 
 
-  std::vector<BenchmarkInstance> Import::load_benchmarks(const std::filesystem::path& filename) {
-    std::vector<BenchmarkInstance> instances;
+  std::vector<JobShopBenchmark> Import::load_benchmarks(const std::filesystem::path& filename) {
+    std::vector<JobShopBenchmark> benchmarks;
 
     std::ifstream stream(filename);
     nlohmann::json root;
     stream >> root;
 
     assert(root.is_array());
-    root.get_to(instances);
-    return instances;
+    root.get_to(benchmarks);
+    return benchmarks;
   }
 
   JobShopInstance Import::load_job_shop(const std::filesystem::path& filename) {

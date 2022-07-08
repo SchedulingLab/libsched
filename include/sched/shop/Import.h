@@ -19,7 +19,7 @@ namespace sched::shop {
     NegativeBinomial,
   };
 
-  struct SCHED_API BenchmarkInstance {
+  struct SCHED_API JobShopBenchmark {
     std::string name;
     int jobs;
     int machines;
@@ -34,7 +34,7 @@ namespace sched::shop {
   class SCHED_API Import {
   public:
 
-    static std::vector<BenchmarkInstance> load_benchmarks(const std::filesystem::path& filename);
+    static std::vector<JobShopBenchmark> load_benchmarks(const std::filesystem::path& filename);
 
     static JobShopInstance load_job_shop(const std::filesystem::path& filename);
 
