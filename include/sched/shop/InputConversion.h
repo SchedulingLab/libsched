@@ -2,6 +2,7 @@
 #define SCHED_SHOP_INPUT_CONVERSION_H
 
 #include <cassert>
+#include <optional>
 
 #include "JobListInput.h"
 #include "MachineListInput.h"
@@ -22,6 +23,25 @@ namespace sched::shop {
     }
 
     return operation_list;
+  }
+
+  template<typename Instance>
+  std::optional<JobListInput> to_job_list(const OperationListInput& operation_list, const Instance& instance) {
+    JobListInput job_list;
+    std::vector<std::size_t> job_state(instance.job_count(), 0);
+
+    for (auto op : operation_list) {
+      std::size_t & index = job_state[to_index(op.job)];
+
+      if (op.index != index) {
+        return std::nullopt;
+      }
+
+      ++index;
+      job_list.push_back(op.job);
+    }
+
+    return job_list;
   }
 
   template<typename Instance>

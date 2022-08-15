@@ -6,9 +6,6 @@
 
 #include <sched/common/Random.h>
 #include <sched/common/Time.h>
-#include <sched/tools/Statistics.h>
-
-#include "JobShopSchedule.h"
 
 namespace sched::shop {
 

@@ -44,9 +44,13 @@ namespace sched::shop {
         ++k;
       }
 
+      if (k == n) {
+        break;
+      }
+
       assert(k < n);
       assert(tasks[k].operation.job == tasks[i].operation.job);
-      assert(tasks[k].completion == tasks[i].start);
+//       assert(tasks[k].completion == tasks[i].start);
       result.push_back(tasks[k]);
       i = k;
     }

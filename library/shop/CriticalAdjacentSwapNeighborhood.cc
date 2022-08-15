@@ -10,6 +10,8 @@
 #include <sched/shop/RowNeighborhood.h>
 #include <sched/shop/SwapNeighborhood.h>
 
+#include <sched/tools/Log.h>
+
 namespace sched::shop {
 
   namespace {
@@ -46,26 +48,20 @@ namespace sched::shop {
 
       auto max = tasks.size() - 1;
 
-      std::size_t index;
-      bool found = false;
       std::size_t iterations = 0;
       const std::size_t max_iterations = tasks.size() / 5 + 1;
 
       do {
-        index = random.compute_uniform_integer(std::size_t{0}, max - 1);
+        std::size_t index = random.compute_uniform_integer(std::size_t{0}, max - 1);
 
         if (tasks[index].machine == tasks[index + 1].machine) {
-          found = true;
+          return index;
         }
 
         ++iterations;
-      } while (!found && iterations < max_iterations);
+      } while (iterations < max_iterations);
 
-      if (!found) {
-        return std::nullopt;
-      }
-
-      return index;
+      return std::nullopt;
     }
 
     std::vector<std::size_t> compute_all_swappable_tasks(const std::vector<JobShopTask>& tasks) {
@@ -181,7 +177,7 @@ namespace sched::shop {
       auto it1 = std::find(operations.begin(), operations.end(), critical_path[index + 1].operation);
       assert(it1 != operations.end());
 
-      assert(std::abs(it0 - it1) == 1);
+//       assert(std::abs(it0 - it1) == 1);
       std::iter_swap(it0, it1);
       return neighbor;
     }

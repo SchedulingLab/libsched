@@ -82,6 +82,8 @@ namespace sched::shop {
         return Time{0};
       }
 
+      assert(sched::to_index(origin) < m_machines);
+      assert(sched::to_index(target) < m_machines);
       std::size_t index = sched::to_index(origin) * m_machines + sched::to_index(target);
       assert(index < m_delays_empty.size());
       return m_delays_empty[index];
@@ -92,6 +94,8 @@ namespace sched::shop {
         return Time{0};
       }
 
+      assert(sched::to_index(origin) < m_machines);
+      assert(sched::to_index(target) < m_machines);
       std::size_t index = sched::to_index(origin) * m_machines + sched::to_index(target);
       assert(index < m_delays_loaded.size());
       return m_delays_loaded[index];

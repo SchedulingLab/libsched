@@ -33,6 +33,8 @@ namespace sched {
           input.push(work);
         }
 
+        input.close();
+
         std::vector<std::thread> threads;
         std::atomic_size_t index = 1;
 
@@ -52,8 +54,6 @@ namespace sched {
             }
           });
         }
-
-        input.close();
 
         for (auto & thread : threads) {
           thread.join();
