@@ -77,6 +77,7 @@ add_library(sched0
   library/shop/GeneralFlexibleJobShopInstance.cc
   library/shop/GeneralJobListEngine.cc
   library/shop/GeneralJobShopSchedule.cc
+  library/shop/GeneralOperationListEngine.cc
   library/shop/Import.cc
   library/shop/InputConversion.cc
   library/shop/InputFmt.cc
