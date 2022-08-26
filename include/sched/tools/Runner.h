@@ -1,6 +1,7 @@
 #ifndef SCHED_TOOLS_RUNNER_H
 #define SCHED_TOOLS_RUNNER_H
 
+#include <cstdlib>
 #include <atomic>
 #include <functional>
 #include <thread>
@@ -24,7 +25,7 @@ namespace sched {
     void run(Executor executor) const {
       int concurrency = std::thread::hardware_concurrency() - 1;
 
-      if (concurrency > 1) {
+      if (concurrency > 1 && std::getenv("SCHED_SINGLE") == nullptr) {
         Log::println("Running in parallel using {} threads...", concurrency);
 
         ConcurrentQueue<Work> input;
