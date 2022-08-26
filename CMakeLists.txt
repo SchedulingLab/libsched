@@ -39,6 +39,7 @@ find_package(lqp REQUIRED)
 
 add_library(sched0
   # common
+  library/common/Fixed.cc
   library/common/GenericSchedule.cc
   library/common/Graph.cc
   library/common/Ids.cc
@@ -112,6 +113,7 @@ add_library(sched0
   library/tools/LinearRegression.cc
   library/tools/Log.cc
   library/tools/Matrix.cc
+  library/tools/Runner.cc
   library/tools/Statistics.cc
 )
 
