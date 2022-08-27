@@ -67,8 +67,10 @@ add_library(sched0
   library/para/SlackAlgorithm.cc
 
   # shop
-  library/shop/AutocorrelationAnalysis.cc
   library/shop/AdjacentSwapNeighborhood.cc
+  library/shop/AssignedInstance.cc
+  library/shop/AssignedEngine.cc
+  library/shop/AutocorrelationAnalysis.cc
   library/shop/BasicInstance.cc
   library/shop/BasicNeighborhood.cc
   library/shop/CriticalAdjacentSwapNeighborhood.cc
@@ -100,6 +102,7 @@ add_library(sched0
   library/shop/ReverseNeighborhood.cc
   library/shop/RowNeighborhood.cc
   library/shop/SimpleDescent.cc
+  library/shop/SplitInput.cc
   library/shop/SwapNeighborhoord.cc
   library/shop/TabuSearchAlgorithm.cc
   library/shop/TimeListEngine.cc

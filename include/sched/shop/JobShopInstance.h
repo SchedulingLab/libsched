@@ -13,6 +13,8 @@
 namespace sched::shop {
 
   struct SCHED_API JobShopInstance : BasicInstance {
+    static constexpr bool flexible = false;
+
     struct OperationDesc {
       MachineId machine;
       Time processing;
@@ -41,14 +43,6 @@ namespace sched::shop {
 
     std::size_t operation_count(JobId job) const {
       return get_job(job).operations.size();
-    }
-
-    std::vector<MachineId> machines_for_operation(OperationId op) const {
-      return { get_job(op.job).operations[op.index].machine };
-    }
-
-    bool has_assignment() const {
-      return true;
     }
 
     MachineId assigned_machine_for_operation([[maybe_unused]] OperationId op) const {

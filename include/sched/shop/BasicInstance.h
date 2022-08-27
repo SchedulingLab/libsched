@@ -10,6 +10,7 @@
 namespace sched::shop {
 
   struct SCHED_API BasicInstance {
+    static constexpr bool flexible = false;
 
     constexpr std::size_t machine_count() const noexcept {
       return 0;
@@ -33,10 +34,6 @@ namespace sched::shop {
 
     std::vector<MachineId> machines_for_operation([[maybe_unused]] OperationId op) const {
       return { };
-    }
-
-    constexpr bool has_assignment() const noexcept {
-      return false;
     }
 
     constexpr MachineId assigned_machine_for_operation([[maybe_unused]] OperationId op) const noexcept {

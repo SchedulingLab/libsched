@@ -15,6 +15,8 @@
 namespace sched::shop {
 
   struct SCHED_API GeneralFlexibleJobShopInstance : BasicInstance {
+    static constexpr bool flexible = true;
+
     struct FlexibleOperationDesc {
       MachineId machine;
       Time processing;
