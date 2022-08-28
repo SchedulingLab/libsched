@@ -54,7 +54,7 @@ namespace sched::shop {
       do {
         std::size_t index = random.compute_uniform_integer(std::size_t{0}, max - 1);
 
-        if (tasks[index].machine == tasks[index + 1].machine) {
+        if (tasks[index].machine == tasks[index + 1].machine && tasks[index].operation.job != tasks[index + 1].operation.job) {
           return index;
         }
 
@@ -72,7 +72,7 @@ namespace sched::shop {
       }
 
       for (std::size_t i = 0; i < tasks.size() - 1; ++i) {
-        if (tasks[i].machine == tasks[i + 1].machine) {
+        if (tasks[i].machine == tasks[i + 1].machine && tasks[index].operation.job != tasks[index + 1].operation.job) {
           result.push_back(i);
         }
       }
