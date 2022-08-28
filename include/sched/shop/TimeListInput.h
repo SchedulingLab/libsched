@@ -42,9 +42,19 @@ namespace sched::shop {
 
         for (std::size_t i = 0; i < operations; ++i) {
           const OperationId operation = { job, i };
-          const auto machines = instance.machines_for_operation(operation);
 
-          for (auto & machine : machines) {
+          if constexpr (Instance::flexible) {
+            const auto machines = instance.machines_for_operation(operation);
+
+            for (auto & machine : machines) {
+              Time processing_time = instance.processing_time(operation, machine);
+
+              if (processing_time > max_time) {
+                max_time = processing_time;
+              }
+            }
+          } else {
+            const auto machine = instance.assigned_machine_for_operation(operation);
             Time processing_time = instance.processing_time(operation, machine);
 
             if (processing_time > max_time) {

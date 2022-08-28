@@ -37,6 +37,7 @@ namespace sched::shop {
 
     template<typename Instance>
     static MachineListInput generate_input(const Instance& instance) {
+      static_assert(!Instance::flexible, "MachineListInput does not work with flexible instances.");
       MachineListInput input(instance.machine_count());
 
       for (auto job : sched::jobs(instance)) {
@@ -44,9 +45,8 @@ namespace sched::shop {
 
         for (std::size_t i = 0; i < operation_count; ++i) {
           OperationId op = { job, i };
-          auto machines = instance.machines_for_operation(op);
-          assert(machines.size() == 1);
-          input[sched::to_index(machines.front())].push_back(op);
+          auto machine = instance.assigned_machine_for_operation(op);
+          input[sched::to_index(machine)].push_back(op);
         }
       }
 
@@ -55,6 +55,7 @@ namespace sched::shop {
 
     template<typename Instance>
     static MachineListInput generate_random(const Instance& instance, Random& random) {
+      static_assert(!Instance::flexible, "MachineListInput does not work with flexible instances.");
       MachineListInput input = generate_input(instance);
 
       for (auto& machine : input) {
@@ -66,6 +67,7 @@ namespace sched::shop {
 
     template<typename Instance>
     static MachineListInput generate_feasible(const Instance& instance, Random& random) {
+      static_assert(!Instance::flexible, "MachineListInput does not work with flexible instances.");
       std::vector<JobId> jobs;
 
       for (auto job : sched::jobs(instance)) {
@@ -85,9 +87,8 @@ namespace sched::shop {
       for (auto job : jobs) {
         std::size_t index = operations[sched::to_index(job)]++;
         OperationId operation = { job, index };
-        auto machines = instance.machines_for_operation(operation);
-        assert(machines.size() == 1);
-        input[sched::to_index(machines.front())].push_back(operation);
+        auto machine = instance.assigned_machine_for_operation(operation);
+        input[sched::to_index(machine)].push_back(operation);
       }
 
       return input;

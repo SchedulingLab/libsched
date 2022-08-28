@@ -57,32 +57,46 @@ namespace sched::shop {
         OperationState operation_state = queue.top();
         queue.pop();
 
-        auto available = instance.machines_for_operation(operation_state.operation);
+        const OperationId op = operation_state.operation;
+        JobShopTask task;
 
-        std::vector<std::tuple<MachineId, JobShopTask>> tasks;
+        if constexpr (Instance::flexible) {
+          auto available = instance.machines_for_operation(op);
+          assert(!available.empty());
 
-        std::transform(available.begin(), available.end(), std::back_inserter(tasks), [&](MachineId machine) {
-          Time processing_time = instance.processing_time(operation_state.operation, machine);
+          std::vector<JobShopTask> tasks;
 
-          JobShopTask task;
-          task.operation = operation_state.operation;
+          std::transform(available.begin(), available.end(), std::back_inserter(tasks), [&](MachineId machine) {
+            Time processing_time = instance.processing_time(op, machine);
+
+            JobShopTask task;
+            task.operation = op;
+            task.machine = machine;
+            task.start = std::max({ operation_state.min_time, machines[to_index(machine)] });
+            task.completion = task.start + processing_time;
+
+            return task;
+          });
+
+          task = *std::min_element(tasks.begin(), tasks.end(), [](const auto& lhs, const auto& rhs) {
+            return lhs.completion < rhs.completion;
+          });
+        } else {
+          MachineId machine = instance.assigned_machine_for_operation(op);
+          Time processing_time = instance.processing_time(op, machine);
+
+          task.operation = op;
           task.machine = machine;
           task.start = std::max({ operation_state.min_time, machines[to_index(machine)] });
           task.completion = task.start + processing_time;
+        }
 
-          return std::make_tuple(machine, task);
-        });
-
-        auto [ machine, task ] = *std::min_element(tasks.begin(), tasks.end(), [](const auto& lhs, const auto& rhs) {
-          return std::get<1>(lhs).completion < std::get<1>(rhs).completion;
-        });
-
-        machines[to_index(machine)] = task.completion;
+        machines[to_index(task.machine)] = task.completion;
         schedule.append(task);
 
-        if (operation_state.operation.index + 1 < instance.operation_count(operation_state.operation.job)) {
+        if (op.index + 1 < instance.operation_count(op.job)) {
           ++operation_state.operation.index;
-          operation_state.min_time = task.completion + mapping[operation_state.operation];
+          operation_state.min_time = task.completion + mapping[op];
           queue.push(operation_state);
         }
       }
