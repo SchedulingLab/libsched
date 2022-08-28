@@ -9,12 +9,11 @@
 #include <sched/common/Ids.h>
 #include <sched/common/Time.h>
 
-#include "BasicInstance.h"
 #include "Transportation.h"
 
 namespace sched::shop {
 
-  struct SCHED_API GeneralFlexibleJobShopInstance : BasicInstance {
+  struct SCHED_API GeneralFlexibleJobShopInstance {
     static constexpr bool flexible = true;
 
     struct FlexibleOperationDesc {
@@ -62,6 +61,14 @@ namespace sched::shop {
       }
 
       return machines;
+    }
+
+    constexpr Time release_date([[maybe_unused]] JobId job) const noexcept {
+      return 0;
+    }
+
+    constexpr Time due_date([[maybe_unused]] JobId job) const noexcept {
+      return TimeMax;
     }
 
     Time processing_time(OperationId op, [[maybe_unused]] MachineId machine) const {

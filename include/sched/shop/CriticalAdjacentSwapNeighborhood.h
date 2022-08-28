@@ -3,14 +3,14 @@
 
 #include <sched/common/Api.h>
 
-#include "BasicNeighborhood.h"
 #include "JobShopSchedule.h"
 #include "MachineListInput.h"
+#include "NeighborhoodHelper.h"
 #include "OperationListInput.h"
 
 namespace sched::shop {
 
-  struct SCHED_API OperationCriticalAdjacentSwapNeighborhood : BasicNeighborhood {
+  struct SCHED_API OperationCriticalAdjacentSwapNeighborhood {
 
     OperationListInput operator()(const OperationListInput& input, const JobShopSchedule& schedule, Random& random);
     std::vector<OperationListInput> generate_many(const OperationListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count);
@@ -18,7 +18,7 @@ namespace sched::shop {
 
   };
 
-  struct SCHED_API MachineCriticalAdjacentSwapNeighborhood : BasicNeighborhood {
+  struct SCHED_API MachineCriticalAdjacentSwapNeighborhood {
 
     MachineListInput operator()(const MachineListInput& input, const JobShopSchedule& schedule, Random& random);
     std::vector<MachineListInput> generate_many(const MachineListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count);

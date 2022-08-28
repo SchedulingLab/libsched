@@ -1,5 +1,5 @@
-#ifndef SCHED_BASIC_NEIGHBORHOOD_H
-#define SCHED_BASIC_NEIGHBORHOOD_H
+#ifndef SCHED_NEIGHBORHOOD_HELPER_H
+#define SCHED_NEIGHBORHOOD_HELPER_H
 
 #include <vector>
 
@@ -8,7 +8,7 @@
 
 namespace sched::shop {
 
-  struct SCHED_API BasicNeighborhood {
+  struct SCHED_API NeighborhoodHelper {
 
     template<typename Neighborhood, typename Input, typename Schedule>
     static std::vector<Input> generate_many(Neighborhood& neighborhood, const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
@@ -25,4 +25,4 @@ namespace sched::shop {
 
 }
 
-#endif // SCHED_BASIC_NEIGHBORHOOD_H
+#endif // SCHED_NEIGHBORHOOD_HELPER_H

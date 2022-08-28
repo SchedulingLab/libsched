@@ -71,8 +71,6 @@ add_library(sched0
   library/shop/AssignedInstance.cc
   library/shop/AssignedEngine.cc
   library/shop/AutocorrelationAnalysis.cc
-  library/shop/BasicInstance.cc
-  library/shop/BasicNeighborhood.cc
   library/shop/CriticalAdjacentSwapNeighborhood.cc
   library/shop/Enumerator.cc
   library/shop/Export.cc
@@ -92,6 +90,7 @@ add_library(sched0
   library/shop/JobShopInstance.cc
   library/shop/MachineListEngine.cc
   library/shop/MachineListInput.cc
+  library/shop/NeighborhoodHelper.cc
   library/shop/NeutralityRateAnalysis.cc
   library/shop/OperationListEngine.cc
   library/shop/OperationListImprovedNeighborhood.cc
@@ -103,6 +102,7 @@ add_library(sched0
   library/shop/RowNeighborhood.cc
   library/shop/SimpleDescent.cc
   library/shop/SplitInput.cc
+  library/shop/SplitNeighborhood.cc
   library/shop/SwapNeighborhoord.cc
   library/shop/TabuSearchAlgorithm.cc
   library/shop/TimeListEngine.cc

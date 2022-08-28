@@ -4,12 +4,12 @@
 #include <sched/common/Random.h>
 #include <sched/common/Range.h>
 
-#include "BasicNeighborhood.h"
+#include "NeighborhoodHelper.h"
 
 namespace sched::shop {
 
   template<typename BaseNeighborhood>
-  struct RowNeighborhood : BasicNeighborhood {
+  struct RowNeighborhood {
 
     template<typename Input, typename Schedule>
     Input operator()(const Input& input, const Schedule& schedule, Random& random) {
@@ -33,7 +33,7 @@ namespace sched::shop {
 
     template<typename Input, typename Schedule>
     std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
-      return BasicNeighborhood::generate_many(*this, input, schedule, random, count);
+      return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
     template<typename Input>

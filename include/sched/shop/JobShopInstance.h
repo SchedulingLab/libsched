@@ -8,11 +8,9 @@
 #include <sched/common/Ids.h>
 #include <sched/common/Time.h>
 
-#include "BasicInstance.h"
-
 namespace sched::shop {
 
-  struct SCHED_API JobShopInstance : BasicInstance {
+  struct SCHED_API JobShopInstance {
     static constexpr bool flexible = false;
 
     struct OperationDesc {
@@ -43,6 +41,14 @@ namespace sched::shop {
 
     std::size_t operation_count(JobId job) const {
       return get_job(job).operations.size();
+    }
+
+    constexpr Time release_date([[maybe_unused]] JobId job) const noexcept {
+      return 0;
+    }
+
+    constexpr Time due_date([[maybe_unused]] JobId job) const noexcept {
+      return TimeMax;
     }
 
     MachineId assigned_machine_for_operation([[maybe_unused]] OperationId op) const {

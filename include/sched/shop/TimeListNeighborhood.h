@@ -7,12 +7,12 @@
 #include <sched/common/Api.h>
 #include <sched/common/Random.h>
 
-#include "BasicNeighborhood.h"
+#include "NeighborhoodHelper.h"
 #include "TimeListInput.h"
 
 namespace sched::shop {
 
-  struct SCHED_API TimeListNeighborhood : BasicNeighborhood {
+  struct SCHED_API TimeListNeighborhood {
 
     template<typename Schedule>
     TimeListInput operator()(const TimeListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
@@ -35,7 +35,7 @@ namespace sched::shop {
 
     template<typename Input, typename Schedule>
     std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
-      return BasicNeighborhood::generate_many(*this, input, schedule, random, count);
+      return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
     bool are_neighbors([[maybe_unused]] const TimeListInput& input0, [[maybe_unused]] const TimeListInput& input1) {
