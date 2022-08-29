@@ -116,7 +116,7 @@ namespace sched::shop {
    * gfjssp
    */
 
-  static void from_json(const nlohmann::json& j, GeneralFlexibalJobShopBenchmark& benchmark) {
+  static void from_json(const nlohmann::json& j, GeneralFlexibleJobShopBenchmark& benchmark) {
     assert(!j.is_null());
     j.at("name").get_to(benchmark.name);
     j.at("jobs").get_to(benchmark.jobs);
@@ -128,8 +128,8 @@ namespace sched::shop {
     benchmark.path = path_string;
   }
 
-  std::vector<GeneralFlexibalJobShopBenchmark> Import::load_gfjssp_benchmarks(const std::filesystem::path& filename) {
-    std::vector<GeneralFlexibalJobShopBenchmark> benchmarks;
+  std::vector<GeneralFlexibleJobShopBenchmark> Import::load_gfjssp_benchmarks(const std::filesystem::path& filename) {
+    std::vector<GeneralFlexibleJobShopBenchmark> benchmarks;
 
     std::ifstream stream(filename);
     nlohmann::json root;
