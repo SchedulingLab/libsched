@@ -19,6 +19,10 @@ namespace sched::shop {
 
   using JobShopSchedule = GenericSchedule<JobShopTask>;
 
+  SCHED_API bool is_schedule_valid(const JobShopSchedule& schedule);
+
+  SCHED_API JobShopSchedule make_schedule_active(const JobShopSchedule& original_schedule);
+
 }
 
 #endif // SCHED_SHOP_JOB_SHOP_SCHEDULE_H

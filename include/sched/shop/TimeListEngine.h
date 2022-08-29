@@ -101,7 +101,7 @@ namespace sched::shop {
         }
       }
 
-      return schedule;
+      return make_schedule_active(schedule);
     }
 
   };

@@ -72,7 +72,7 @@ namespace sched::shop {
       }
 
       for (std::size_t i = 0; i < tasks.size() - 1; ++i) {
-        if (tasks[i].machine == tasks[i + 1].machine && tasks[index].operation.job != tasks[index + 1].operation.job) {
+        if (tasks[i].machine == tasks[i + 1].machine && tasks[i].operation.job != tasks[i + 1].operation.job) {
           result.push_back(i);
         }
       }
