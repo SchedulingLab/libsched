@@ -78,6 +78,7 @@ add_library(sched0
   library/shop/GeneralFlexibleJobShopInstance.cc
   library/shop/GeneralJobListEngine.cc
   library/shop/GeneralJobShopSchedule.cc
+  library/shop/GeneralJobShopStates.cc
   library/shop/GeneralOperationListEngine.cc
   library/shop/Import.cc
   library/shop/InputConversion.cc
@@ -108,6 +109,8 @@ add_library(sched0
   library/shop/TimeListEngine.cc
   library/shop/TimeListInput.cc
   library/shop/TimeListNeighborhood.cc
+  library/shop/TransportationListEngine.cc
+  library/shop/TransportationListInput.cc
 
   # tools
   library/tools/ConcurrentQueue.cc

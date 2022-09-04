@@ -46,7 +46,7 @@ namespace sched::shop {
     }
 
     MachineId assigned_machine_for_operation(OperationId op) const {
-      assert(!m_assignment.empty);
+      assert(!m_assignment.empty());
 
       if (auto it = m_assignment.find(op); it != m_assignment.end()) {
         return it->second;
