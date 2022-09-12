@@ -6,6 +6,7 @@
 #include <sched/common/Api.h>
 
 #include "JobShopInstance.h"
+#include "FlexibleJobShopInstance.h"
 #include "GeneralFlexibleJobShopInstance.h"
 
 namespace sched::shop {
@@ -30,6 +31,16 @@ namespace sched::shop {
     std::filesystem::path path;
   };
 
+  struct SCHED_API FlexibleJobShopBenchmark {
+    std::string name;
+    int jobs;
+    int machines;
+    Time optimum;
+    Time upper_bound;
+    Time lower_bound;
+    std::filesystem::path path;
+  };
+
   struct SCHED_API GeneralFlexibleJobShopBenchmark {
     std::string name;
     int jobs;
@@ -38,17 +49,15 @@ namespace sched::shop {
     std::filesystem::path path;
   };
 
-  class SCHED_API Import {
-  public:
-
+  struct SCHED_API Import {
     static std::vector<JobShopBenchmark> load_jssp_benchmarks(const std::filesystem::path& filename);
-
     static JobShopInstance load_jssp(const std::filesystem::path& filename);
 
+    static std::vector<FlexibleJobShopBenchmark> load_fjssp_benchmarks(const std::filesystem::path& filename);
+    static FlexibleJobShopInstance load_fjssp(const std::filesystem::path& filename);
+
     static std::vector<GeneralFlexibleJobShopBenchmark> load_gfjssp_benchmarks(const std::filesystem::path& filename);
-
     static GeneralFlexibleJobShopInstance load_gfjssp(const std::filesystem::path& filename);
-
   };
 
 }
