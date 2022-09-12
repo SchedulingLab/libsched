@@ -13,14 +13,12 @@ namespace sched::shop {
     template<typename Instance>
     auto operator()(const Instance& instance, const Input& input) {
       AssignedInstance assigned_instance(instance);
-
-      Assignment assignment;
       assigned_instance.set_assignment(assignment(instance, input.assignement));
-
-      Engine engine;
       return engine(assigned_instance, input.schedule);
     }
 
+    Assignment assignment;
+    Engine engine;
   };
 
 }
