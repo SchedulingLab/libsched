@@ -6,7 +6,6 @@
 #include <map>
 #include <utility>
 
-#include <sched/common/Api.h>
 #include <sched/common/Ids.h>
 #include <sched/common/Time.h>
 
@@ -41,7 +40,7 @@ namespace sched::shop {
       return m_instance.due_date(job);
     }
 
-    void set_assignement(std::map<OperationId, MachineId> assignment) {
+    void set_assignment(std::map<OperationId, MachineId> assignment) {
       m_assignment = std::move(assignment);
     }
 

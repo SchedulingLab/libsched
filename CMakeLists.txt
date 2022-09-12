@@ -97,8 +97,11 @@ add_library(sched0
   library/shop/OperationListImprovedNeighborhood.cc
   library/shop/OperationListInput.cc
   library/shop/OverwriteNeighborhood.cc
-  library/shop/RandomSample.cc
+  library/shop/RandomListAssignment.cc
+  library/shop/RandomListInput.cc
   library/shop/RandomNeighborSample.cc
+  library/shop/RandomNewNeighborhood.cc
+  library/shop/RandomSample.cc
   library/shop/RandomWalk.cc
   library/shop/ReverseNeighborhood.cc
   library/shop/RowNeighborhood.cc

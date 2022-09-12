@@ -14,6 +14,12 @@ namespace sched::shop {
   };
 
   template<typename AssignmentInput, typename ScheduleInput>
+  inline
+  bool operator==(const FlexibleSplitInput<AssignmentInput, ScheduleInput>& lhs, const FlexibleSplitInput<AssignmentInput, ScheduleInput>& rhs) {
+    return lhs.assignment == rhs.assignment && lhs.schedule == rhs.schedule;
+  }
+
+  template<typename AssignmentInput, typename ScheduleInput>
   struct InputTraits<FlexibleSplitInput<AssignmentInput, ScheduleInput>> {
 
     template<typename Instance>

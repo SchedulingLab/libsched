@@ -15,8 +15,8 @@ namespace sched::shop {
       return compute(input, random);
     }
 
-    template<typename Input, typename Schedule>
-    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
+    template<typename Schedule>
+    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
@@ -33,8 +33,8 @@ namespace sched::shop {
       return compute(input, random);
     }
 
-    template<typename Input, typename Schedule>
-    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
+    template<typename Schedule>
+    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
@@ -51,8 +51,8 @@ namespace sched::shop {
       return compute(input, random);
     }
 
-    template<typename Input, typename Schedule>
-    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
+    template<typename Schedule>
+    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
