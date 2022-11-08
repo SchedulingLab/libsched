@@ -75,10 +75,8 @@ add_library(sched0
   library/shop/Enumerator.cc
   library/shop/Export.cc
   library/shop/FlexibleJobShopInstance.cc
-  library/shop/GeneralFlexibleJobShopInstance.cc
+  library/shop/FlexibleJobShopTransportInstance.cc
   library/shop/GeneralJobListEngine.cc
-  library/shop/GeneralJobShopSchedule.cc
-  library/shop/GeneralJobShopStates.cc
   library/shop/GeneralOperationListEngine.cc
   library/shop/Import.cc
   library/shop/InputConversion.cc
@@ -89,6 +87,8 @@ add_library(sched0
   library/shop/JobShopCriticalPath.cc
   library/shop/JobShopSchedule.cc
   library/shop/JobShopInstance.cc
+  library/shop/JobShopTransportSchedule.cc
+  library/shop/JobShopTransportStates.cc
   library/shop/MachineListEngine.cc
   library/shop/MachineListInput.cc
   library/shop/NeighborhoodHelper.cc

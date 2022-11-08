@@ -115,7 +115,7 @@ namespace sched::shop {
         ++iteration;
       }
 
-      return std::make_tuple(best_input, best_fitness, iteration);
+      return std::make_tuple(best_input, best_fitness, best_schedule, iteration);
     }
 
     Engine engine;

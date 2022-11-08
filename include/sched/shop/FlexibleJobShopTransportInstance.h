@@ -1,5 +1,5 @@
-#ifndef SCHED_SHOP_GENERAL_FLEXIBLE_JOBSHOP_INSTANCE_H
-#define SCHED_SHOP_GENERAL_FLEXIBLE_JOBSHOP_INSTANCE_H
+#ifndef SCHED_SHOP_FLEXIBLE_JOB_SHOP_TRANSPORT_INSTANCE_H
+#define SCHED_SHOP_FLEXIBLE_JOB_SHOP_TRANSPORT_INSTANCE_H
 
 #include <cassert>
 #include <limits>
@@ -13,7 +13,7 @@
 
 namespace sched::shop {
 
-  struct SCHED_API GeneralFlexibleJobShopInstance {
+  struct SCHED_API FlexibleJobShopTransportInstance {
     static constexpr bool flexible = true;
 
     struct FlexibleOperationDesc {
@@ -29,9 +29,9 @@ namespace sched::shop {
       std::vector<OperationDesc> operations;
     };
 
-    GeneralFlexibleJobShopInstance() = default;
+    FlexibleJobShopTransportInstance() = default;
 
-    GeneralFlexibleJobShopInstance(std::size_t machines, std::vector<JobDesc> jobs, std::size_t transportation_resources, std::vector<Time> delays_empty, std::vector<Time> delays_loaded)
+    FlexibleJobShopTransportInstance(std::size_t machines, std::vector<JobDesc> jobs, std::size_t transportation_resources, std::vector<Time> delays_empty, std::vector<Time> delays_loaded)
     : m_machines(machines)
     , m_jobs(std::move(jobs))
     , m_transportation_resources(transportation_resources)
@@ -149,4 +149,4 @@ namespace sched::shop {
 }
 
 
-#endif // SCHED_FLEXIBLE_JOB_WITH_TRANSPORTATION_SHOP_INSTANCE_H
+#endif // SCHED_SHOP_FLEXIBLE_JOB_SHOP_TRANSPORT_INSTANCE_H

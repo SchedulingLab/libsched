@@ -11,8 +11,8 @@
 #include <sched/common/Ids.h>
 
 #include "JobListInput.h"
-#include "GeneralJobShopSchedule.h"
-#include "GeneralJobShopStates.h"
+#include "JobShopTransportSchedule.h"
+#include "JobShopTransportStates.h"
 
 namespace sched::shop {
 
@@ -20,9 +20,9 @@ namespace sched::shop {
     using Input = JobListInput;
 
     template<typename Instance>
-    std::optional<GeneralJobShopSchedule> operator()(const Instance& instance, const JobListInput& input) {
-      GeneralJobShopStates<Instance> states(instance);
-      GeneralJobShopSchedule schedule;
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const JobListInput& input) {
+      JobShopTransportStates<Instance> states(instance);
+      JobShopTransportSchedule schedule;
 
       for (auto job : input) {
         const OperationId operation = states.next_operation(job);
@@ -44,7 +44,7 @@ namespace sched::shop {
 
             states.update_schedule(task, schedule);
           } else {
-            std::vector<GeneralJobShopTaskPacket> packets;
+            std::vector<JobShopTransportTaskPacket> packets;
 
             for (auto machine : available) {
               for (auto transportation : sched::transportations(instance)) {
@@ -52,7 +52,7 @@ namespace sched::shop {
               }
             }
 
-            auto packet = *std::min_element(packets.begin(), packets.end(), [](const GeneralJobShopTaskPacket& lhs, const GeneralJobShopTaskPacket& rhs) {
+            auto packet = *std::min_element(packets.begin(), packets.end(), [](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
               return lhs.task.completion < rhs.task.completion;
             });
 
@@ -66,13 +66,13 @@ namespace sched::shop {
             JobShopTask task = states.create_task(operation, machine);
             states.update_schedule(task, schedule);
           } else {
-            std::vector<GeneralJobShopTaskPacket> packets;
+            std::vector<JobShopTransportTaskPacket> packets;
 
             for (auto transportation : sched::transportations(instance)) {
               packets.push_back(states.create_packet(operation, machine, transportation));
             }
 
-            auto packet = *std::min_element(packets.begin(), packets.end(), [](const GeneralJobShopTaskPacket& lhs, const GeneralJobShopTaskPacket& rhs) {
+            auto packet = *std::min_element(packets.begin(), packets.end(), [](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
               return lhs.task.completion < rhs.task.completion;
             });
 

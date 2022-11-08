@@ -1,23 +1,23 @@
-#ifndef SCHED_SHOP_GENERAL_JOB_SHOP_STATES_H
-#define SCHED_SHOP_GENERAL_JOB_SHOP_STATES_H
+#ifndef SCHED_SHOP_JOB_SHOP_TRANSPORT_STATES_H
+#define SCHED_SHOP_JOB_SHOP_TRANSPORT_STATES_H
 
 #include <vector>
 
 #include <sched/common/Ids.h>
 
-#include "GeneralJobShopSchedule.h"
+#include "JobShopTransportSchedule.h"
 
 namespace sched::shop {
 
-  struct GeneralJobShopTaskPacket {
+  struct JobShopTransportTaskPacket {
     JobShopTask task;
     TransportationTask empty_task;
     TransportationTask loaded_task;
   };
 
   template<typename Instance>
-  struct GeneralJobShopStates {
-    GeneralJobShopStates(const Instance& instance)
+  struct JobShopTransportStates {
+    JobShopTransportStates(const Instance& instance)
     : instance(instance)
     , jobs(instance.job_count())
     , machines(instance.machine_count())
@@ -49,7 +49,7 @@ namespace sched::shop {
       return task;
     }
 
-    void update_schedule(const JobShopTask& task, GeneralJobShopSchedule& schedule) {
+    void update_schedule(const JobShopTask& task, JobShopTransportSchedule& schedule) {
       JobId job = task.operation.job;
       JobState& job_state = jobs[to_index(job)];
 
@@ -62,12 +62,12 @@ namespace sched::shop {
       schedule.append(task);
     }
 
-    GeneralJobShopTaskPacket create_packet(OperationId operation, MachineId machine, TransportationId transportation) const {
+    JobShopTransportTaskPacket create_packet(OperationId operation, MachineId machine, TransportationId transportation) const {
       const JobState& job_state = jobs[to_index(operation.job)];
       const TransportationState& transportation_state = transportations[to_index(transportation)];
       const MachineState& machine_state = machines[to_index(machine)];
 
-      GeneralJobShopTaskPacket packet;
+      JobShopTransportTaskPacket packet;
 
       Time empty_time = instance.transportation_time_empty(transportation_state.machine, job_state.machine);
 
@@ -97,7 +97,7 @@ namespace sched::shop {
       return packet;
     }
 
-    void update_schedule(const GeneralJobShopTaskPacket& packet, GeneralJobShopSchedule& schedule) {
+    void update_schedule(const JobShopTransportTaskPacket& packet, JobShopTransportSchedule& schedule) {
       JobId job = packet.task.operation.job;
       JobState& job_state = jobs[to_index(job)];
 
@@ -144,4 +144,4 @@ namespace sched::shop {
 
 }
 
-#endif // SCHED_SHOP_GENERAL_JOBSHOP_STATES_H
+#endif // SCHED_SHOP_JOB_SHOP_TRANSPORT_STATES_H

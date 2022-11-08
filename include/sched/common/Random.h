@@ -9,7 +9,7 @@
 
 namespace sched {
 
-    // xoshiro256++ 1.0
+  // xoshiro256++ 1.0
   class SCHED_API Random {
   public:
     using result_type = uint64_t;

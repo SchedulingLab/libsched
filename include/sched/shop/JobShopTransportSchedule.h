@@ -22,7 +22,7 @@ namespace sched::shop {
     Time completion;
   };
 
-  class GeneralJobShopSchedule : public GenericSchedule<JobShopTask> {
+  class JobShopTransportSchedule : public GenericSchedule<JobShopTask> {
   public:
 
     void append_transportation_task(const TransportationTask& transportation_task) {

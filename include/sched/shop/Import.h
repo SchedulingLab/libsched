@@ -7,7 +7,7 @@
 
 #include "JobShopInstance.h"
 #include "FlexibleJobShopInstance.h"
-#include "GeneralFlexibleJobShopInstance.h"
+#include "FlexibleJobShopTransportInstance.h"
 
 namespace sched::shop {
 
@@ -41,7 +41,7 @@ namespace sched::shop {
     std::filesystem::path path;
   };
 
-  struct SCHED_API GeneralFlexibleJobShopBenchmark {
+  struct SCHED_API FlexibleJobShopTransportBenchmark {
     std::string name;
     int jobs;
     int machines;
@@ -50,14 +50,14 @@ namespace sched::shop {
   };
 
   struct SCHED_API Import {
-    static std::vector<JobShopBenchmark> load_jssp_benchmarks(const std::filesystem::path& filename);
-    static JobShopInstance load_jssp(const std::filesystem::path& filename);
+    static std::vector<JobShopBenchmark> load_jsp_benchmarks(const std::filesystem::path& filename);
+    static JobShopInstance load_jsp(const std::filesystem::path& filename);
 
-    static std::vector<FlexibleJobShopBenchmark> load_fjssp_benchmarks(const std::filesystem::path& filename);
-    static FlexibleJobShopInstance load_fjssp(const std::filesystem::path& filename);
+    static std::vector<FlexibleJobShopBenchmark> load_fjsp_benchmarks(const std::filesystem::path& filename);
+    static FlexibleJobShopInstance load_fjsp(const std::filesystem::path& filename);
 
-    static std::vector<GeneralFlexibleJobShopBenchmark> load_gfjssp_benchmarks(const std::filesystem::path& filename);
-    static GeneralFlexibleJobShopInstance load_gfjssp(const std::filesystem::path& filename);
+    static std::vector<FlexibleJobShopTransportBenchmark> load_fjspt_benchmarks(const std::filesystem::path& filename);
+    static FlexibleJobShopTransportInstance load_fjspt(const std::filesystem::path& filename);
   };
 
 }

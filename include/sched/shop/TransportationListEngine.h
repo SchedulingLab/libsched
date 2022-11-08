@@ -11,8 +11,8 @@
 #include <sched/common/Instance.h>
 
 #include "TransportationListInput.h"
-#include "GeneralJobShopSchedule.h"
-#include "GeneralJobShopStates.h"
+#include "JobShopTransportSchedule.h"
+#include "JobShopTransportStates.h"
 
 namespace sched::shop {
 
@@ -20,9 +20,9 @@ namespace sched::shop {
     using Input = TransportationListInput;
 
     template<typename Instance>
-    std::optional<GeneralJobShopSchedule> operator()(const Instance& instance, const TransportationListInput& input) {
-      GeneralJobShopStates<Instance> states(instance);
-      GeneralJobShopSchedule schedule;
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const TransportationListInput& input) {
+      JobShopTransportStates<Instance> states(instance);
+      JobShopTransportSchedule schedule;
 
       for (auto job : sched::jobs(instance)) {
         const OperationId operation = states.next_operation(job);
@@ -51,7 +51,7 @@ namespace sched::shop {
 
       for (auto transportation : input) {
         if constexpr (Instance::flexible) {
-          std::vector<GeneralJobShopTaskPacket> packets;
+          std::vector<JobShopTransportTaskPacket> packets;
 
           for (auto job : sched::jobs(instance)) {
             if (!states.has_next_operation(job)) {
@@ -68,13 +68,13 @@ namespace sched::shop {
           }
 
           assert(!packets.empty());
-          auto packet = *std::min_element(packets.begin(), packets.end(), [](const GeneralJobShopTaskPacket& lhs, const GeneralJobShopTaskPacket& rhs) {
+          auto packet = *std::min_element(packets.begin(), packets.end(), [](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
             return lhs.task.completion < rhs.task.completion;
           });
 
           states.update_schedule(packet, schedule);
         } else { // !flexible
-          std::vector<GeneralJobShopTaskPacket> packets;
+          std::vector<JobShopTransportTaskPacket> packets;
 
           for (auto job : sched::jobs(instance)) {
             if (!states.has_next_operation(job)) {
@@ -87,7 +87,7 @@ namespace sched::shop {
           }
 
           assert(!packets.empty());
-          auto packet = *std::min_element(packets.begin(), packets.end(), [](const GeneralJobShopTaskPacket& lhs, const GeneralJobShopTaskPacket& rhs) {
+          auto packet = *std::min_element(packets.begin(), packets.end(), [](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
             return lhs.task.completion < rhs.task.completion;
           });
 
