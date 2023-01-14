@@ -87,6 +87,8 @@ add_library(sched0
   library/shop/JobShopCriticalPath.cc
   library/shop/JobShopSchedule.cc
   library/shop/JobShopInstance.cc
+  library/shop/JobShopTaskComparator.cc
+  library/shop/JobShopTransportTaskPacketComparator.cc
   library/shop/JobShopTransportSchedule.cc
   library/shop/JobShopTransportStates.cc
   library/shop/MachineListEngine.cc
