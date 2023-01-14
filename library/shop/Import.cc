@@ -281,7 +281,7 @@ namespace sched::shop {
       std::size_t operation_machine_count;
 
       while (data >> operation_machine_count) {
-        FlexibleJobShopTransportInstance::OperationDesc operation;
+        FlexibleJobShopTransportInstance::FlexibleOperationDesc operation;
         std::size_t machine;
         Time processing;
 

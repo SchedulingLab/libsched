@@ -16,17 +16,17 @@ namespace sched::shop {
   struct SCHED_API FlexibleJobShopTransportInstance {
     static constexpr bool flexible = true;
 
-    struct FlexibleOperationDesc {
+    struct OperationDesc {
       MachineId machine;
       Time processing;
     };
 
-    struct OperationDesc {
-      std::vector<FlexibleOperationDesc> choices;
+    struct FlexibleOperationDesc {
+      std::vector<OperationDesc> choices;
     };
 
     struct JobDesc {
-      std::vector<OperationDesc> operations;
+      std::vector<FlexibleOperationDesc> operations;
     };
 
     FlexibleJobShopTransportInstance() = default;
