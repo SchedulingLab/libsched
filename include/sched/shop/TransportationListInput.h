@@ -16,6 +16,10 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<TransportationListInput> {
+    static std::string name() {
+      return "trp";
+    }
+
     static void enumerate_start(TransportationListInput& input) {
       std::sort(input.begin(), input.end());
     }

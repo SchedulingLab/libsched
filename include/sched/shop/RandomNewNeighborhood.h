@@ -3,10 +3,12 @@
 
 #include <cassert>
 #include <random>
+#include <string>
 
 #include <sched/common/Api.h>
 
 #include "NeighborhoodHelper.h"
+#include "NeighborhoodTraits.h"
 #include "RandomListInput.h"
 
 namespace sched::shop {
@@ -38,6 +40,12 @@ namespace sched::shop {
 
   };
 
+  template<>
+  struct NeighborhoodTraits<RandomNewNeighborhood> {
+    static std::string name() {
+      return "rnd";
+    }
+  };
 
 }
 

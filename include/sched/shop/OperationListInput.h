@@ -2,6 +2,7 @@
 #define SCHED_SHOP_OPERATION_LIST_INPUT_H
 
 #include <algorithm>
+#include <string>
 #include <vector>
 
 #include <sched/common/Ids.h>
@@ -16,6 +17,10 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<OperationListInput> {
+    static std::string name() {
+      return "ope";
+    }
+
     static void enumerate_start(OperationListInput& input) {
       std::sort(input.begin(), input.end());
     }

@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <string>
 #include <vector>
 
 #include <sched/common/Ids.h>
@@ -18,6 +19,9 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<MachineListInput> {
+    static std::string name() {
+      return "mch";
+    }
 
     static void enumerate_start(MachineListInput& input) {
       for (auto& machine : input) {

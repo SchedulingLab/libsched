@@ -2,6 +2,7 @@
 #define SCHED_SHOP_JOB_LIST_INPUT_H
 
 #include <algorithm>
+#include <string>
 #include <vector>
 
 #include <sched/common/Ids.h>
@@ -16,6 +17,10 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<JobListInput> {
+    static std::string name() {
+      return "job";
+    }
+
     static void enumerate_start(JobListInput& input) {
       std::sort(input.begin(), input.end());
     }

@@ -2,12 +2,14 @@
 #define SCHED_SWAP_NEIHGBORHOOD_H
 
 #include <cassert>
+#include <string>
 
 #include <sched/common/Api.h>
 #include <sched/common/Random.h>
 #include <sched/common/Range.h>
 
 #include "NeighborhoodHelper.h"
+#include "NeighborhoodTraits.h"
 
 namespace sched::shop {
 
@@ -51,6 +53,12 @@ namespace sched::shop {
 
   };
 
+  template<>
+  struct NeighborhoodTraits<SwapNeighborhood> {
+    static std::string name() {
+      return "swp";
+    }
+  };
 
 }
 

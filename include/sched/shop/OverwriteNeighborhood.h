@@ -2,12 +2,14 @@
 #define SCHED_OVERWRITE_NEIHGBORHOOD_H
 
 #include <cassert>
+#include <string>
 
 #include <sched/common/Api.h>
 #include <sched/common/Random.h>
 #include <sched/common/Range.h>
 
 #include "NeighborhoodHelper.h"
+#include "NeighborhoodTraits.h"
 
 namespace sched::shop {
 
@@ -40,6 +42,13 @@ namespace sched::shop {
       return true;
     }
 
+  };
+
+  template<>
+  struct NeighborhoodTraits<OverwriteNeighborhood> {
+    static std::string name() {
+      return "ovw";
+    }
   };
 
 }

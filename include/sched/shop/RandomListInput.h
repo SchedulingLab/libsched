@@ -1,6 +1,7 @@
 #ifndef SCHED_SHOP_RANDOM_LIST_INPUT_H
 #define SCHED_SHOP_RANDOM_LIST_INPUT_H
 
+#include <string>
 #include <vector>
 
 #include <sched/common/Instance.h>
@@ -15,6 +16,9 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<RandomListInput> {
+    static std::string name() {
+      return "rnd";
+    }
 
     template<typename Instance>
     static RandomListInput generate_input(const Instance& instance) {

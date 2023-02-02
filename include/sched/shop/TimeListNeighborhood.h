@@ -3,11 +3,13 @@
 
 #include <algorithm>
 #include <random>
+#include <string>
 
 #include <sched/common/Api.h>
 #include <sched/common/Random.h>
 
 #include "NeighborhoodHelper.h"
+#include "NeighborhoodTraits.h"
 #include "TimeListInput.h"
 
 namespace sched::shop {
@@ -42,6 +44,13 @@ namespace sched::shop {
       return true;
     }
 
+  };
+
+  template<>
+  struct NeighborhoodTraits<TimeListNeighborhood> {
+    static std::string name() {
+      return "tim";
+    }
   };
 
 }

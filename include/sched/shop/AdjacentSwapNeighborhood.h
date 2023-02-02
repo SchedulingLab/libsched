@@ -2,12 +2,14 @@
 #define SCHED_SHOP_ADJACENT_SWAP_NEIGHBORHOOD_H
 
 #include <cassert>
+#include <string>
 
 #include <sched/common/Api.h>
 #include <sched/common/Random.h>
 #include <sched/common/Range.h>
 
 #include "NeighborhoodHelper.h"
+#include "NeighborhoodTraits.h"
 
 namespace sched::shop {
 
@@ -49,7 +51,13 @@ namespace sched::shop {
       // TODO: also check that the indices are at distance 1
       return diff == 2;
     }
+  };
 
+  template<>
+  struct NeighborhoodTraits<AdjacentSwapNeighborhood> {
+    static std::string name() {
+      return "adj";
+    }
   };
 
 }

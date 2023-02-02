@@ -12,6 +12,7 @@
 #include <sched/tools/Log.h>
 
 #include "InputTraits.h"
+#include "NeighborhoodTraits.h"
 
 namespace sched::shop {
 
@@ -116,6 +117,14 @@ namespace sched::shop {
       }
 
       return std::make_tuple(best_input, best_fitness, best_schedule, iteration);
+    }
+
+    static std::string input_name() {
+      return InputTraits<Input>::name();
+    }
+
+    static std::string neighborhood_name() {
+      return NeighborhoodTraits<Neighborhood>::name();
     }
 
     Engine engine;

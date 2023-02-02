@@ -1,6 +1,7 @@
 #ifndef SCHED_SHOP_TIME_INPUT_H
 #define SCHED_SHOP_TIME_INPUT_H
 
+#include <string>
 #include <vector>
 
 #include <sched/common/Ids.h>
@@ -16,6 +17,9 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<TimeListInput> {
+    static std::string name() {
+      return "tim";
+    }
 
     template<typename Instance>
     static TimeListInput generate_input(const Instance& instance) {

@@ -2,11 +2,13 @@
 #define SCHED_SHOP_SPLIT_NEIGHBORHOOD_H
 
 #include <cassert>
+#include <string>
 #include <vector>
 
 #include <sched/common/Random.h>
 
 #include "SplitInput.h"
+#include "NeighborhoodTraits.h"
 
 namespace sched::shop {
 
@@ -66,6 +68,15 @@ namespace sched::shop {
 
     AssignmentNeighborhood assignment_neighborhood;
     ScheduleNeighborhood schedule_neighborhood;
+  };
+
+  template<SplitNeighborhoodKind Kind, typename AssignmentNeighborhood, typename ScheduleNeighborhood>
+  struct NeighborhoodTraits<FlexibleSplitNeighborhood<Kind, AssignmentNeighborhood, ScheduleNeighborhood>> {
+    static std::string name() {
+      return NeighborhoodTraits<AssignmentNeighborhood>::name() + '_'
+          + (Kind == SplitNeighborhoodKind::Either ? "or" : "and") + '_'
+          + NeighborhoodTraits<ScheduleNeighborhood>::name();
+    }
   };
 
 }

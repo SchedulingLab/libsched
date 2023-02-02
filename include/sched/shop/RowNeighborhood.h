@@ -1,10 +1,13 @@
 #ifndef SCHED_SHOP_ROW_NEIGHBORHOOD_H
 #define SCHED_SHOP_ROW_NEIGHBORHOOD_H
 
+#include <string>
+
 #include <sched/common/Random.h>
 #include <sched/common/Range.h>
 
 #include "NeighborhoodHelper.h"
+#include "NeighborhoodTraits.h"
 
 namespace sched::shop {
 
@@ -65,10 +68,19 @@ namespace sched::shop {
       return neighbors;
     }
 
+    static std::string name() {
+      return BaseNeighborhood::name();
+    }
+
     BaseNeighborhood base_neighborhood;
   };
 
-
+  template<typename BaseNeighborhood>
+  struct NeighborhoodTraits<RowNeighborhood<BaseNeighborhood>> {
+    static std::string name() {
+      return NeighborhoodTraits<BaseNeighborhood>::name();
+    }
+  };
 
   struct SwapNeighborhood;
   using SwapInRowNeighborhood = RowNeighborhood<SwapNeighborhood>;

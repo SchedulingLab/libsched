@@ -3,12 +3,14 @@
 
 #include <cassert>
 #include <algorithm>
+#include <string>
 
 #include <sched/common/Api.h>
 #include <sched/common/Random.h>
 #include <sched/common/Range.h>
 
 #include "NeighborhoodHelper.h"
+#include "NeighborhoodTraits.h"
 
 namespace sched::shop {
 
@@ -95,8 +97,15 @@ namespace sched::shop {
 
       return result;
     }
+
   };
 
+  template<>
+  struct NeighborhoodTraits<InsertNeighborhood> {
+    static std::string name() {
+      return "ins";
+    }
+  };
 
 }
 

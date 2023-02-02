@@ -1,9 +1,12 @@
 #ifndef SCHED_SHOP_OPERATION_LISY_IMPROVED_NEIGHBORHOOD_H
 #define SCHED_SHOP_OPERATION_LISY_IMPROVED_NEIGHBORHOOD_H
 
+#include <string>
+
 #include <sched/common/Api.h>
 
 #include "NeighborhoodHelper.h"
+#include "NeighborhoodTraits.h"
 #include "OperationListInput.h"
 
 namespace sched::shop {
@@ -26,6 +29,13 @@ namespace sched::shop {
     OperationListInput compute(const OperationListInput& input, Random& random);
   };
 
+  template<>
+  struct NeighborhoodTraits<OperationSwapNeighborhood> {
+    static std::string name() {
+      return "swp";
+    }
+  };
+
   struct SCHED_API OperationInsertNeighborhood {
 
     template<typename Schedule>
@@ -44,6 +54,13 @@ namespace sched::shop {
     OperationListInput compute(const OperationListInput& input, Random& random);
   };
 
+  template<>
+  struct NeighborhoodTraits<OperationInsertNeighborhood> {
+    static std::string name() {
+      return "ins";
+    }
+  };
+
   struct SCHED_API OperationReverseNeighborhood {
 
     template<typename Schedule>
@@ -60,6 +77,13 @@ namespace sched::shop {
 
   private:
     OperationListInput compute(const OperationListInput& input, Random& random);
+  };
+
+  template<>
+  struct NeighborhoodTraits<OperationReverseNeighborhood> {
+    static std::string name() {
+      return "rev";
+    }
   };
 
 }

@@ -1,6 +1,8 @@
 #ifndef SCHED_SHOP_SPLIT_INPUT_H
 #define SCHED_SHOP_SPLIT_INPUT_H
 
+#include <string>
+
 #include <sched/common/Random.h>
 
 #include "InputTraits.h"
@@ -21,6 +23,9 @@ namespace sched::shop {
 
   template<typename AssignmentInput, typename ScheduleInput>
   struct InputTraits<FlexibleSplitInput<AssignmentInput, ScheduleInput>> {
+    static std::string name() {
+      return InputTraits<AssignmentInput>::name() + '_' + InputTraits<ScheduleInput>::name();
+    }
 
     template<typename Instance>
     static FlexibleSplitInput<AssignmentInput, ScheduleInput> generate_input(const Instance& instance) {
