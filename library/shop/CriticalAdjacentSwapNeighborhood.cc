@@ -10,8 +10,6 @@
 #include <sched/shop/RowNeighborhood.h>
 #include <sched/shop/SwapNeighborhood.h>
 
-#include <sched/tools/Log.h>
-
 namespace sched::shop {
 
   namespace {
@@ -205,7 +203,8 @@ namespace sched::shop {
       auto it1 = std::find(operations.begin(), operations.end(), critical_path[i + 1].operation);
       assert(it1 != operations.end());
 
-      assert(std::abs(it0 - it1) == 1);
+      // assert(std::abs(it0 - it1) == 1);
+      // this assert could be false in the case of an operation with time 0 (orb07)
       std::iter_swap(it0, it1);
 
       result.push_back(neighbor);

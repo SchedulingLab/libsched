@@ -1,6 +1,7 @@
 #ifndef SCHED_SHOP_TIME_ENGINE_H
 #define SCHED_SHOP_TIME_ENGINE_H
 
+#include <cassert>
 #include <algorithm>
 #include <map>
 #include <optional>
@@ -44,12 +45,12 @@ namespace sched::shop {
           mapping.insert({ operation, input[index++] });
         }
 
-        if (operations > 0) {
-          OperationId operation = { job, 0 };
-          OperationState operation_state = { operation, mapping[operation] };
-          queue.push(operation_state);
-        }
+        OperationId operation = { job, 0 };
+        OperationState operation_state = { operation, mapping[operation] };
+        queue.push(operation_state);
       }
+
+      assert(mapping.size() == input.size());
 
       JobShopSchedule schedule;
 
@@ -96,11 +97,12 @@ namespace sched::shop {
 
         if (op.index + 1 < instance.operation_count(op.job)) {
           ++operation_state.operation.index;
-          operation_state.min_time = task.completion + mapping[op];
+          operation_state.min_time = task.completion + mapping[operation_state.operation];
           queue.push(operation_state);
         }
       }
 
+      assert(schedule.task_count() == input.size());
       return make_schedule_active(schedule);
     }
 

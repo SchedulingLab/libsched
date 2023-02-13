@@ -26,6 +26,10 @@ namespace sched {
       return make_iterator_range(m_tasks);
     }
 
+    std::size_t task_count() const {
+      return m_tasks.size();
+    }
+
     bool operator<(const GenericSchedule& other) {
       return m_tasks < other.m_tasks;
     }

@@ -87,14 +87,14 @@ namespace sched::shop {
         Time difference = task.start - start;
         task.start -= difference;
         task.completion -= difference;
-
-        jobs[job_index] = task.completion;
-        machines[machine_index] = task.completion;
       }
 
+      jobs[job_index] = task.completion;
+      machines[machine_index] = task.completion;
       schedule.append(task);
     }
 
+    assert(schedule.task_count() == original_schedule.task_count());
     assert(is_schedule_valid(schedule));
     return schedule;
   }

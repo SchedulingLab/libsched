@@ -40,7 +40,6 @@ struct fmt::formatter<sched::shop::MachineListInput> {
 
   template <typename FormatContext>
   auto format(const sched::shop::MachineListInput& input, FormatContext& ctx) const -> decltype(ctx.out()) {
-    std::size_t i = 0;
     format_to(ctx.out(), "[");
     format_to(ctx.out(), "{}", fmt::join(input, "; "));
     return format_to(ctx.out(), "]");
