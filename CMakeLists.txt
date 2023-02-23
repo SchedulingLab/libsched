@@ -49,6 +49,7 @@ add_library(sched0
   library/common/Random.cc
   library/common/Range.cc
   library/common/RawId.cc
+  library/common/Termination.cc
   library/common/Time.cc
 
   # para
