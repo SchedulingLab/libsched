@@ -2,7 +2,6 @@
 #define SCHED_SHOP_TABU_SEARCH_ALGORITHM_H
 
 #include <cmath>
-#include <chrono>
 #include <deque>
 #include <optional>
 #include <tuple>
@@ -20,8 +19,8 @@ namespace sched::shop {
   struct TabuSearchAlgorithm {
     using Input = typename Engine::Input;
 
-    template<typename Instance, typename Duration>
-    auto operator()(const Instance& instance, const Input& start, Random& random, std::size_t neighbors_count, Duration duration) {
+    template<typename Instance, typename Termination>
+    auto operator()(const Instance& instance, const Input& start, Random& random, std::size_t neighbors_count, Termination&& termination) {
       const std::size_t n = instance.job_count();
       const std::size_t m = instance.machine_count();
 
@@ -60,9 +59,9 @@ namespace sched::shop {
         return false;
       };
 
-      auto start_time = std::chrono::steady_clock::now();
+      termination.start();
 
-      while ((std::chrono::steady_clock::now() - start_time) < duration) {
+      while (!termination.satisfied()) {
         std::optional<Input> candidate;
         decltype(current_schedule) candidate_schedule;
         decltype(current_fitness) candidate_fitness;
@@ -114,6 +113,7 @@ namespace sched::shop {
         }
 
         ++iteration;
+        termination.step();
       }
 
       return std::make_tuple(best_input, best_fitness, best_schedule, iteration);
@@ -135,4 +135,4 @@ namespace sched::shop {
 
 }
 
-#endif // SCHED_TABU_SEARCH_ALGORITHM_H
+#endif // SCHED_SHOP_TABU_SEARCH_ALGORITHM_H

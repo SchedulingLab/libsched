@@ -27,7 +27,7 @@ namespace sched {
       // nothing to do
     }
 
-    bool finished() {
+    bool satisfied() {
       return (std::chrono::steady_clock::now() - m_start) >= m_duration;
     }
 
@@ -62,7 +62,7 @@ namespace sched {
       ++m_iteration;
     }
 
-    bool finished() {
+    bool satisfied() {
       return m_iteration >= m_count;
     }
 

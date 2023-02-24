@@ -10,6 +10,11 @@ namespace sched {
 
   constexpr Time TimeMax = std::numeric_limits<Time>::max();
 
+  struct TimeWindow {
+    Time lo;
+    Time hi;
+  };
+
 }
 
 #endif // SCHED_TIME_H

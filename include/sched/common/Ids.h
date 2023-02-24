@@ -36,6 +36,7 @@ namespace sched {
     return static_cast<std::size_t>(id);
   }
 
+  constexpr JobId AnyJob = JobId{RawAnyId};
   constexpr JobId NoJob = JobId{RawNoId};
 
   /*
