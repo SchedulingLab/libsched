@@ -14,7 +14,7 @@ namespace sched::shop {
 
   struct SCHED_API ScrambleMutation {
 
-    template<typename Input, typename Schedule>
+    template<typename Input>
     Input operator()(const Input& input, Random& random) {
       assert(!input.empty());
 
