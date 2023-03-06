@@ -4,15 +4,18 @@
 #include <string>
 
 #include <sched/common/Random.h>
-#include <sched/common/Range.h>
 
+#include "AdjacentSwapNeighborhood.h"
+#include "InsertNeighborhood.h"
 #include "NeighborhoodHelper.h"
 #include "NeighborhoodTraits.h"
+#include "SwapNeighborhood.h"
+#include "ReverseNeighborhood.h"
 
 namespace sched::shop {
 
   template<typename BaseNeighborhood>
-  struct RowNeighborhood {
+  struct RowNeighborhood : private BaseNeighborhood {
 
     template<typename Input, typename Schedule>
     Input operator()(const Input& input, const Schedule& schedule, Random& random) {
@@ -28,7 +31,7 @@ namespace sched::shop {
           continue;
         }
 
-        row = base_neighborhood(row, schedule, random);
+        row = BaseNeighborhood::operator()(row, schedule, random);
       } while (neighbor == input);
 
       return neighbor;
@@ -39,7 +42,6 @@ namespace sched::shop {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
-    BaseNeighborhood base_neighborhood;
   };
 
   template<typename BaseNeighborhood>
@@ -49,16 +51,9 @@ namespace sched::shop {
     }
   };
 
-  struct SwapNeighborhood;
   using SwapInRowNeighborhood = RowNeighborhood<SwapNeighborhood>;
-
-  struct InsertNeighborhood;
   using InsertInRowNeighborhood = RowNeighborhood<InsertNeighborhood>;
-
-  struct ReverseNeighborhood;
   using ReverseInRowNeighborhood = RowNeighborhood<ReverseNeighborhood>;
-
-  struct AdjacentSwapNeighborhood;
   using AdjacentSwapInRowNeighborhood = RowNeighborhood<AdjacentSwapNeighborhood>;
 
 }
