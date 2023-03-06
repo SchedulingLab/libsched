@@ -24,7 +24,6 @@ namespace sched::shop {
 
       while (result.size() < count) {
         Input neighbor = neighborhood(start, schedule, random);;
-        assert(neighborhood.are_neighbors(start, neighbor));
 
         if (engine(instance, neighbor)) {
           result.push_back(std::move(neighbor));

@@ -6,6 +6,7 @@
 #include <optional>
 #include <tuple>
 
+#include <sched/common/Comparison.h>
 #include <sched/common/Instance.h>
 #include <sched/common/Random.h>
 #include <sched/tools/Log.h>
@@ -78,9 +79,9 @@ namespace sched::shop {
           auto neighbor_schedule = *maybe_schedule;
           auto neighbor_fitness = criterion(instance, neighbor_schedule);
 
-          if (!candidate || criterion.is_strictly_better(candidate_fitness, neighbor_fitness)) {
+          if (!candidate || criterion.compare(neighbor_fitness, candidate_fitness) == Comparison::Better) {
 
-            if (is_tabu(neighbor_input) && !criterion.is_strictly_better(current_fitness, neighbor_fitness)) {
+            if (is_tabu(neighbor_input) && criterion.compare(neighbor_fitness, current_fitness) != Comparison::Better) {
               continue;
             }
 
@@ -106,7 +107,7 @@ namespace sched::shop {
           current_fitness = criterion(instance, current_schedule);
         }
 
-        if (criterion.is_strictly_better(best_fitness, current_fitness)) {
+        if (criterion.compare(current_fitness, best_fitness) == Comparison::Better) {
           best_input = current_input;
           best_schedule = current_schedule;
           best_fitness = current_fitness;

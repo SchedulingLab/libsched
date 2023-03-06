@@ -145,14 +145,6 @@ namespace sched::shop {
     return result;
   }
 
-  bool OperationCriticalAdjacentSwapNeighborhood::are_neighbors([[maybe_unused]] const OperationListInput& input0, [[maybe_unused]] const OperationListInput& input1) {
-    // TODO
-    // - identify the swap
-    // - check that it belongs to the same machine or it belongs to the same job
-    // WARNING: may need instance to identify the machine...
-    return true;
-  }
-
   /*
    * MachineCriticalAdjacentSwapNeighborhood
    */
@@ -223,11 +215,5 @@ namespace sched::shop {
     assert(result.size() == count);
     return result;
   }
-
-  bool MachineCriticalAdjacentSwapNeighborhood::are_neighbors([[maybe_unused]] const MachineListInput& input0, [[maybe_unused]] const MachineListInput& input1) {
-    // TODO
-    return true;
-  }
-
 
 }

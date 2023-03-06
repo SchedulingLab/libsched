@@ -37,11 +37,6 @@ namespace sched::shop {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
-    template<typename Input>
-    bool are_neighbors(const Input& input0, const Input& input1) {
-      return true;
-    }
-
   };
 
   template<>

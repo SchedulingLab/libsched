@@ -45,11 +45,6 @@ namespace sched::shop {
     return neighbor;
   }
 
-  bool OperationSwapNeighborhood::are_neighbors(const OperationListInput& input0, const OperationListInput& input1) {
-    SwapNeighborhood neighborhood;
-    return neighborhood.are_neighbors(input0, input1);
-  }
-
   // OperationInsertNeighborhood
 
   OperationListInput OperationInsertNeighborhood::compute(const OperationListInput& input, Random& random) {
@@ -87,11 +82,6 @@ namespace sched::shop {
     return neighbor;
   }
 
-  bool OperationInsertNeighborhood::are_neighbors(const OperationListInput& input0, const OperationListInput& input1) {
-    InsertNeighborhood neighborhood;
-    return neighborhood.are_neighbors(input0, input1);
-  }
-
   // OperationReverseNeighborhood
 
   OperationListInput OperationReverseNeighborhood::compute(const OperationListInput& input, Random& random) {
@@ -118,11 +108,6 @@ namespace sched::shop {
     } while (neighbor == input);
 
     return neighbor;
-  }
-
-  bool OperationReverseNeighborhood::are_neighbors(const OperationListInput& input0, const OperationListInput& input1) {
-    ReverseNeighborhood neighborhood;
-    return neighborhood.are_neighbors(input0, input1);
   }
 
 }

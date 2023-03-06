@@ -79,6 +79,7 @@ add_library(sched0
   library/shop/FlexibleJobShopTransportInstance.cc
   library/shop/GeneralJobListEngine.cc
   library/shop/GeneralOperationListEngine.cc
+  library/shop/GeneticAlgorithm.cc
   library/shop/Import.cc
   library/shop/InputConversion.cc
   library/shop/InputFmt.cc
@@ -94,11 +95,13 @@ add_library(sched0
   library/shop/JobShopTransportStates.cc
   library/shop/MachineListEngine.cc
   library/shop/MachineListInput.cc
+  library/shop/MutationNeighborhood.cc
   library/shop/NeighborhoodHelper.cc
   library/shop/NeutralityRateAnalysis.cc
   library/shop/OperationListEngine.cc
   library/shop/OperationListImprovedNeighborhood.cc
   library/shop/OperationListInput.cc
+  library/shop/OrderCrossover.cc
   library/shop/OverwriteNeighborhood.cc
   library/shop/RandomListAssignment.cc
   library/shop/RandomListInput.cc
@@ -106,8 +109,10 @@ add_library(sched0
   library/shop/RandomNewNeighborhood.cc
   library/shop/RandomSample.cc
   library/shop/RandomWalk.cc
+  library/shop/RankSelection.cc
   library/shop/ReverseNeighborhood.cc
   library/shop/RowNeighborhood.cc
+  library/shop/ScrambleNeighborhood.cc
   library/shop/SimpleDescent.cc
   library/shop/SplitInput.cc
   library/shop/SplitNeighborhood.cc

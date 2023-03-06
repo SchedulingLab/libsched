@@ -17,7 +17,6 @@ namespace sched::shop {
 
     OperationListInput operator()(const OperationListInput& input, const JobShopSchedule& schedule, Random& random);
     std::vector<OperationListInput> generate_many(const OperationListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count);
-    bool are_neighbors(const OperationListInput& input0, const OperationListInput& input1);
 
   };
 
@@ -32,7 +31,6 @@ namespace sched::shop {
 
     MachineListInput operator()(const MachineListInput& input, const JobShopSchedule& schedule, Random& random);
     std::vector<MachineListInput> generate_many(const MachineListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count);
-    bool are_neighbors(const MachineListInput& input0, const MachineListInput& input1);
 
   };
 

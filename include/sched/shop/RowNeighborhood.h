@@ -39,39 +39,6 @@ namespace sched::shop {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
-    template<typename Input>
-    bool are_neighbors(const Input& input0, const Input& input1) {
-      assert(input0.size() == input1.size());
-
-      bool neighbors = false;
-
-      for (auto i : sched::over(input0)) {
-        assert(input0[i].size() == input1[i].size());
-
-        if (input0[i] == input1[i]) {
-          continue;
-        }
-
-        if (base_neighborhood.are_neighbors(input0[i], input1[i])) {
-          if (neighbors) {
-            // there is already a neighbor row
-            return false;
-          }
-
-          neighbors = true;
-        } else {
-          // they are not neighbors
-          return false;
-        }
-      }
-
-      return neighbors;
-    }
-
-    static std::string name() {
-      return BaseNeighborhood::name();
-    }
-
     BaseNeighborhood base_neighborhood;
   };
 

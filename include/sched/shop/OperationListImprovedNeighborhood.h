@@ -23,8 +23,6 @@ namespace sched::shop {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
-    bool are_neighbors(const OperationListInput& input0, const OperationListInput& input1);
-
   private:
     OperationListInput compute(const OperationListInput& input, Random& random);
   };
@@ -48,8 +46,6 @@ namespace sched::shop {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
-    bool are_neighbors(const OperationListInput& input0, const OperationListInput& input1);
-
   private:
     OperationListInput compute(const OperationListInput& input, Random& random);
   };
@@ -72,8 +68,6 @@ namespace sched::shop {
     std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
-
-    bool are_neighbors(const OperationListInput& input0, const OperationListInput& input1);
 
   private:
     OperationListInput compute(const OperationListInput& input, Random& random);

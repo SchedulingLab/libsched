@@ -35,8 +35,6 @@ namespace sched::shop {
           maybe_next_schedule = engine(instance, next);
         } while (!maybe_next_schedule);
 
-        assert(neighborhood.are_neighbors(current, next));
-
         current = next;
         schedule = *maybe_next_schedule;
         fitness.push_back(criterion(instance, schedule));

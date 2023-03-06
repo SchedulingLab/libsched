@@ -55,49 +55,6 @@ namespace sched::shop {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
-    template<typename Input>
-    bool are_neighbors(const Input& input0, const Input& input1) {
-      std::size_t size = input0.size();
-      assert(size > 0);
-      assert(input1.size() == size);
-
-      std::size_t orig = 0;
-
-      for (; orig < size; ++orig) {
-        if (input0[orig] != input1[orig]) {
-          break;
-        }
-      }
-
-      std::size_t dest = size - 1;
-
-      for (; dest > 0; --dest) {
-        if (input0[dest] != input1[dest]) {
-          break;
-        }
-      }
-
-      if (orig >= dest) {
-        return false;
-      }
-
-      bool result = false;
-
-      if (input0[orig] == input1[dest]) {
-        result = std::equal(&input0[orig + 1], &input0[dest + 1], &input1[orig], &input1[dest]);
-      }
-
-      if (result) {
-        return true;
-      }
-
-      if (input0[dest] == input1[orig]) {
-        result = std::equal(&input0[orig], &input0[dest], &input1[orig + 1], &input1[dest + 1]);
-      }
-
-      return result;
-    }
-
   };
 
   template<>

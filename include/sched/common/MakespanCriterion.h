@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "Api.h"
+#include "Comparison.h"
 #include "Time.h"
 
 namespace sched {
@@ -22,14 +23,20 @@ namespace sched {
       return completion;
     }
 
-    constexpr
-    bool is_better(Fitness prev, Fitness next) {
-      return next <= prev;
+    constexpr Comparison compare(Fitness lhs, Fitness rhs) {
+      if (lhs < rhs) {
+        return Comparison::Better;
+      }
+
+      if (lhs > rhs) {
+        return Comparison::Worse;
+      }
+
+      return Comparison::Equivalent;
     }
 
-    constexpr
-    bool is_strictly_better(Fitness prev, Fitness next) {
-      return next < prev;
+    static Fitness worst() {
+      return TimeMax;
     }
 
   };
