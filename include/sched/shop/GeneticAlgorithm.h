@@ -30,6 +30,8 @@ namespace sched::shop {
 
     template<typename Instance, typename Termination>
     auto operator()(const Instance& instance, Random& random, std::size_t population_size, Termination termination) {
+      LogScope log0;
+
       using Solution = Solution<Engine, Criterion, Instance>;
 
       auto compute_solution = [this,instance](Input&& input) {
@@ -48,6 +50,8 @@ namespace sched::shop {
 
       // initial population
 
+//       Log::println("Initial population");
+
       std::vector<Solution> population;
 
       for (std::size_t i = 0; i < population_size; ++i) {
@@ -61,9 +65,14 @@ namespace sched::shop {
       std::sort(population.begin(), population.end(), solution_compare);
 
       termination.start();
+      std::size_t generation = 0;
 
       while (!termination.satisfied()) {
+        LogScope log1;
+
         // selection
+
+//         Log::println("Selection");
 
         auto selected = selection(population, population_size / 2, random); // TODO: selection size
         assert(selected.size() > 1);
@@ -75,6 +84,8 @@ namespace sched::shop {
         std::vector<Solution> offsprings;
 
         // crossover
+
+//         Log::println("Crossover");
 
         std::bernoulli_distribution crossover_distribution(crossover_probability);
 
@@ -89,13 +100,15 @@ namespace sched::shop {
             j = selected_distribution(random);
           }
 
-          auto [ child0, child1 ] = crossover(selected[i].input, selected[j].input);
+          auto [ child0, child1 ] = crossover(selected[i].input, selected[j].input, random);
 
           offsprings.push_back(compute_solution(std::move(child0)));
           offsprings.push_back(compute_solution(std::move(child1)));
         }
 
         // mutation
+
+//         Log::println("Mutation");
 
         std::bernoulli_distribution mutation_distribution(mutation_probability);
 
@@ -116,7 +129,14 @@ namespace sched::shop {
         offsprings.resize(population_size);
         std::swap(offsprings, population);
 
+        if (criterion.compare(population.front().fitness, Criterion::worst()) == Comparison::Equivalent) {
+          Log::println("#{}: worst with {}", generation, population.front().input);
+        } else {
+          Log::println("#{}: {} with {}", generation, population.front().fitness, population.front().input);
+        }
+
         termination.step();
+        ++generation;
       }
 
       return population;
