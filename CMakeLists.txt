@@ -70,6 +70,7 @@ add_library(sched0
 
   # shop
   library/shop/AdjacentSwapNeighborhood.cc
+  library/shop/AlternateMutation.cc
   library/shop/AlternateNeighborhood.cc
   library/shop/AssignedInstance.cc
   library/shop/AssignedEngine.cc
