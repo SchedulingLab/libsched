@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <sched/common/Api.h>
+#include <sched/common/Array2D.h>
 #include <sched/common/Ids.h>
 #include <sched/common/Time.h>
 
@@ -31,7 +32,7 @@ namespace sched::shop {
 
     FlexibleJobShopTransportInstance() = default;
 
-    FlexibleJobShopTransportInstance(std::size_t machines, std::vector<JobDesc> jobs, std::size_t transportation_resources, std::vector<Time> delays_empty, std::vector<Time> delays_loaded)
+    FlexibleJobShopTransportInstance(std::size_t machines, std::vector<JobDesc> jobs, std::size_t transportation_resources, Array2D<Time> delays_empty, Array2D<Time> delays_loaded)
     : m_machines(machines)
     , m_jobs(std::move(jobs))
     , m_transportation_resources(transportation_resources)
@@ -91,11 +92,7 @@ namespace sched::shop {
         return Time{0};
       }
 
-      assert(sched::to_index(origin) < m_machines);
-      assert(sched::to_index(target) < m_machines);
-      std::size_t index = sched::to_index(origin) * m_machines + sched::to_index(target);
-      assert(index < m_delays_empty.size());
-      return m_delays_empty[index];
+      return m_delays_empty(sched::to_index(origin), sched::to_index(target));
     }
 
     Time transportation_time_loaded(MachineId origin, MachineId target) const noexcept {
@@ -103,11 +100,7 @@ namespace sched::shop {
         return Time{0};
       }
 
-      assert(sched::to_index(origin) < m_machines);
-      assert(sched::to_index(target) < m_machines);
-      std::size_t index = sched::to_index(origin) * m_machines + sched::to_index(target);
-      assert(index < m_delays_loaded.size());
-      return m_delays_loaded[index];
+      return m_delays_loaded(sched::to_index(origin), sched::to_index(target));
     }
 
   private:
@@ -128,11 +121,11 @@ namespace sched::shop {
         }
       }
 
-      if (m_delays_empty.size() != m_machines * m_machines) {
+      if (m_delays_empty.rows() != m_machines || m_delays_empty.cols() != m_machines) {
         return false;
       }
 
-      if (m_delays_loaded.size() != m_machines * m_machines) {
+      if (m_delays_loaded.rows() != m_machines || m_delays_loaded.cols() != m_machines) {
         return false;
       }
 
@@ -142,8 +135,8 @@ namespace sched::shop {
     std::size_t m_machines;
     std::vector<JobDesc> m_jobs;
     std::size_t m_transportation_resources;
-    std::vector<Time> m_delays_empty;
-    std::vector<Time> m_delays_loaded;
+    Array2D<Time> m_delays_empty;
+    Array2D<Time> m_delays_loaded;
   };
 
 }

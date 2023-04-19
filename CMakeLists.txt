@@ -39,6 +39,7 @@ find_package(lqp REQUIRED)
 
 add_library(sched0
   # common
+  library/common/Array2D.cc
   library/common/Fixed.cc
   library/common/GenericSchedule.cc
   library/common/Graph.cc

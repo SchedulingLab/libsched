@@ -300,19 +300,26 @@ namespace sched::shop {
 
     input >> transportation_resources;
 
-    std::vector<Time> delays;
+    Array2D<Time> delays(machine_count, machine_count);
+    std::size_t from = 0;
 
     for (std::string line; std::getline(input, line); ) {
       std::istringstream data;
       data.str(line);
 
       Time duration;
+      std::size_t to = 0;
 
       while (data >> duration) {
-        delays.push_back(duration);
+        delays(from, to) = duration;
+        ++to;
       }
+
+      assert(to == machine_count);
+      ++from;
     }
 
+    assert(from == machine_count);
     return FlexibleJobShopTransportInstance(machine_count, std::move(jobs), transportation_resources, delays, delays);
   }
 
