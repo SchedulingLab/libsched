@@ -18,7 +18,7 @@
 
 namespace sched::shop {
 
-  template<typename Engine, typename Selection, typename Mutation, typename Crossover, typename Criterion>
+  template<typename Engine, typename Selection, typename Crossover, typename Mutation, typename Criterion>
   struct GeneticAlgorithm {
     using Input = typename Engine::Input;
 
@@ -152,8 +152,8 @@ namespace sched::shop {
 
     Engine engine;
     Selection selection;
-    Mutation mutation;
     Crossover crossover;
+    Mutation mutation;
     Criterion criterion;
     double crossover_probability;
     double mutation_probability;
