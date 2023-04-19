@@ -17,6 +17,11 @@ namespace sched {
   };
 
   constexpr
+  MachineId machine(std::size_t i) {
+    return MachineId{i};
+  }
+
+  constexpr
   std::size_t to_index(MachineId id) {
     return static_cast<std::size_t>(id);
   }
@@ -30,6 +35,11 @@ namespace sched {
 
   enum JobId : std::size_t {
   };
+
+  constexpr
+  JobId job(std::size_t i) {
+    return JobId{i};
+  }
 
   constexpr
   std::size_t to_index(JobId id) {
@@ -47,6 +57,11 @@ namespace sched {
     JobId job;
     std::size_t index;
   };
+
+  constexpr
+  OperationId operation(JobId job, std::size_t index) {
+    return { job, index };
+  }
 
   constexpr
   bool operator<(const OperationId& lhs, const OperationId& rhs) {

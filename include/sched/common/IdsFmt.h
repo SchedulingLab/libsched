@@ -21,6 +21,10 @@ struct fmt::formatter<sched::JobId> {
 
   template <typename FormatContext>
   auto format(sched::JobId id, FormatContext& ctx) const -> decltype(ctx.out()) {
+    if (id == sched::AnyJob) {
+      return format_to(ctx.out(), "any");
+    }
+
     return format_to(ctx.out(), "{}", static_cast<std::size_t>(id));
   }
 };
