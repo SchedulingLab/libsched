@@ -32,6 +32,8 @@ namespace sched::shop {
     auto operator()(const Instance& instance, Random& random, std::size_t population_size, Termination termination) {
       LogScope log0;
 
+      const std::size_t offsprings_size_max = population_size * 9 / 10;
+
       using Solution = Solution<Engine, Criterion, Instance>;
 
       auto compute_solution = [this,instance](Input&& input) {
@@ -124,16 +126,30 @@ namespace sched::shop {
 
         // replacement
 
-        offsprings.insert(offsprings.end(), population.begin(), population.end());
-        std::sort(offsprings.begin(), offsprings.end(), solution_compare);
-        offsprings.resize(population_size);
-        std::swap(offsprings, population);
 
-        if (criterion.compare(population.front().fitness, Criterion::worst()) == Comparison::Equivalent) {
-          Log::println("#{}: worst with {}", generation, population.front().input);
-        } else {
-          Log::println("#{}: {} with {}", generation, population.front().fitness, population.front().input);
+        if (offsprings.size() > offsprings_size_max) {
+          std::sort(offsprings.begin(), offsprings.end(), solution_compare);
+          offsprings.resize(offsprings_size_max);
         }
+
+        offsprings.insert(offsprings.end(), population.begin(), population.end());
+        assert(offsprings.size() >= population_size);
+        offsprings.resize(population_size);
+        std::sort(offsprings.begin(), offsprings.end(), solution_compare);
+        population = std::move(offsprings);
+        assert(std::is_sorted(population.begin(), population.end(), solution_compare));
+
+        auto display_criterion = [this](auto value) {
+          if (criterion.compare(value, Criterion::worst()) == Comparison::Equivalent) {
+            using namespace std::literals;
+            return "worst"s;
+          }
+
+          return fmt::format("{}", value);
+        };
+
+        Log::println("#{}: {} with {} (last: {} with {})", generation, display_criterion(population.front().fitness), population.front().input, display_criterion(population.back().fitness), population.back().input);
+
 
         termination.step();
         ++generation;

@@ -10,8 +10,55 @@
 namespace sched {
 
   template<typename T>
+  class Span {
+  public:
+    Span(T* ptr, std::size_t size)
+    : m_ptr(ptr)
+    , m_size(size)
+    {
+    }
+
+    T& operator[](std::size_t index) {
+      assert(index < m_size);
+      return m_ptr[index];
+    }
+
+    const T& operator[](std::size_t index) const {
+      assert(index < m_size);
+      return m_ptr[index];
+    }
+
+    T* begin() {
+      return m_ptr;
+    }
+
+    const T* begin() const {
+      return m_ptr;
+    }
+
+    T* end() {
+      return m_ptr + m_size;
+    }
+
+    const T* end() const {
+      return m_ptr + m_size;
+    }
+
+  private:
+    T* m_ptr;
+    std::size_t m_size;
+  };
+
+  template<typename T>
+  Span<T> span(T* ptr, std::size_t size) {
+    return Span<T>(ptr, size);
+  }
+
+
+  template<typename T>
   class Array2D {
   public:
+
     Array2D()
     : m_rows(0)
     , m_cols(0)
@@ -62,6 +109,14 @@ namespace sched {
     {
       assert(valid(row, col));
       return m_data[linearize(row, col)];
+    }
+
+    auto operator[](std::size_t row) {
+      return span(m_data.data() + row * m_cols, m_cols);
+    }
+
+    auto operator[](std::size_t row) const {
+      return span(m_data.data() + row * m_cols, m_cols);
     }
 
     const T* raw_data() const noexcept
