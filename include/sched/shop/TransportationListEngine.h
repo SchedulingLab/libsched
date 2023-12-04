@@ -10,12 +10,14 @@
 #include <sched/common/Ids.h>
 #include <sched/common/Instance.h>
 
-#include "TransportationListInput.h"
 #include "JobShopTransportSchedule.h"
 #include "JobShopTransportStates.h"
+#include "JobShopTaskComparator.h"
+#include "TransportationListInput.h"
 
 namespace sched::shop {
 
+  template<typename Comparator>
   struct SCHED_API TransportationListEngine {
     using Input = TransportationListInput;
 
@@ -23,6 +25,7 @@ namespace sched::shop {
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const TransportationListInput& input) {
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
+      Comparator comparator;
 
       for (auto job : sched::jobs(instance)) {
         const OperationId operation = states.next_operation(job);
@@ -37,8 +40,8 @@ namespace sched::shop {
             return states.create_task(operation, machine);
           });
 
-          auto task = *std::min_element(tasks.begin(), tasks.end(), [](const JobShopTask& lhs, const JobShopTask& rhs) {
-            return lhs.completion < rhs.completion;
+          auto task = *std::min_element(tasks.begin(), tasks.end(), [comparator](const JobShopTask& lhs, const JobShopTask& rhs) {
+            return comparator(lhs, rhs);
           });
 
           states.update_schedule(task, schedule);
@@ -68,8 +71,8 @@ namespace sched::shop {
           }
 
           assert(!packets.empty());
-          auto packet = *std::min_element(packets.begin(), packets.end(), [](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-            return lhs.task.completion < rhs.task.completion;
+          auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
+            return comparator(lhs.task, rhs.task);
           });
 
           states.update_schedule(packet, schedule);
@@ -87,8 +90,8 @@ namespace sched::shop {
           }
 
           assert(!packets.empty());
-          auto packet = *std::min_element(packets.begin(), packets.end(), [](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-            return lhs.task.completion < rhs.task.completion;
+          auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
+            return comparator(lhs.task, rhs.task);
           });
 
           states.update_schedule(packet, schedule);
@@ -99,6 +102,13 @@ namespace sched::shop {
     }
 
   };
+
+  using TransportationListEngineEST = TransportationListEngine<JobShopTaskEarliestStartingTime>;
+  using TransportationListEngineLST = TransportationListEngine<JobShopTaskLatestStartingTime>;
+  using TransportationListEngineEFT = TransportationListEngine<JobShopTaskEarliestFinishTime>;
+  using TransportationListEngineLFT = TransportationListEngine<JobShopTaskLatestFinishTime>;
+  using TransportationListEngineSPT = TransportationListEngine<JobShopTaskShortestProcessingTime>;
+  using TransportationListEngineLPT = TransportationListEngine<JobShopTaskLargestProcessingTime>;
 
 }
 

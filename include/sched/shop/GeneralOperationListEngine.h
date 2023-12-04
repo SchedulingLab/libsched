@@ -8,6 +8,7 @@
 
 #include "InputConversion.h"
 #include "JobShopTransportSchedule.h"
+#include "JobShopTaskComparator.h"
 #include "GeneralJobListEngine.h"
 #include "OperationListInput.h"
 
