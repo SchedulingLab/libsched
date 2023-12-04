@@ -13,6 +13,7 @@
 
 namespace sched::shop {
 
+  template<typename Comparator>
   struct SCHED_API GeneralOperationListEngine {
     using Input = OperationListInput;
 
@@ -24,10 +25,17 @@ namespace sched::shop {
         return std::nullopt;
       }
 
-      GeneralJobListEngine engine;
+      GeneralJobListEngine<Comparator> engine;
       return engine(instance, *maybe_job_list);
     }
   };
+
+  using GeneralOperationListEngineEST = GeneralOperationListEngine<JobShopTaskEarliestStartingTime>;
+  using GeneralOperationListEngineLST = GeneralOperationListEngine<JobShopTaskLatestStartingTime>;
+  using GeneralOperationListEngineEFT = GeneralOperationListEngine<JobShopTaskEarliestFinishTime>;
+  using GeneralOperationListEngineLFT = GeneralOperationListEngine<JobShopTaskLatestFinishTime>;
+  using GeneralOperationListEngineSPT = GeneralOperationListEngine<JobShopTaskShortestProcessingTime>;
+  using GeneralOperationListEngineLPT = GeneralOperationListEngine<JobShopTaskLargestProcessingTime>;
 
 }
 

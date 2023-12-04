@@ -13,9 +13,11 @@
 #include "JobListInput.h"
 #include "JobShopTransportSchedule.h"
 #include "JobShopTransportStates.h"
+#include "JobShopTaskComparator.h"
 
 namespace sched::shop {
 
+  template<typename Comparator>
   struct SCHED_API GeneralJobListEngine {
     using Input = JobListInput;
 
@@ -23,6 +25,7 @@ namespace sched::shop {
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const JobListInput& input) {
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
+      Comparator comparator;
 
       for (auto job : input) {
         const OperationId operation = states.next_operation(job);
@@ -38,8 +41,8 @@ namespace sched::shop {
               return states.create_task(operation, machine);
             });
 
-            auto task = *std::min_element(tasks.begin(), tasks.end(), [](const JobShopTask& lhs, const JobShopTask& rhs) {
-              return lhs.completion < rhs.completion;
+            auto task = *std::min_element(tasks.begin(), tasks.end(), [comparator](const JobShopTask& lhs, const JobShopTask& rhs) {
+              return comparator(lhs, rhs);
             });
 
             states.update_schedule(task, schedule);
@@ -52,8 +55,8 @@ namespace sched::shop {
               }
             }
 
-            auto packet = *std::min_element(packets.begin(), packets.end(), [](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-              return lhs.task.completion < rhs.task.completion;
+            auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
+              return comparator(lhs.task, rhs.task);
             });
 
             states.update_schedule(packet, schedule);
@@ -85,6 +88,13 @@ namespace sched::shop {
     }
 
   };
+
+  using GeneralJobListEngineEST = GeneralJobListEngine<JobShopTaskEarliestStartingTime>;
+  using GeneralJobListEngineLST = GeneralJobListEngine<JobShopTaskLatestStartingTime>;
+  using GeneralJobListEngineEFT = GeneralJobListEngine<JobShopTaskEarliestFinishTime>;
+  using GeneralJobListEngineLFT = GeneralJobListEngine<JobShopTaskLatestFinishTime>;
+  using GeneralJobListEngineSPT = GeneralJobListEngine<JobShopTaskShortestProcessingTime>;
+  using GeneralJobListEngineLPT = GeneralJobListEngine<JobShopTaskLargestProcessingTime>;
 
 }
 
