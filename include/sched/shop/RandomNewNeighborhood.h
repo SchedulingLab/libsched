@@ -18,13 +18,17 @@ namespace sched::shop {
     template<typename Schedule>
     RandomListInput operator()(const RandomListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
       assert(!input.empty());
+      std::uniform_real_distribution<double> dist_value(0.0, 1.0);
+      std::bernoulli_distribution dist_change(0.15);
       RandomListInput neighbor = input;
 
-      std::uniform_int_distribution<std::size_t> dist_index(0, neighbor.size() - 1);
-      std::size_t index = dist_index(random);
-
-      std::uniform_real_distribution<double> dist_value(0.0, 1.0);
-      neighbor[index] = dist_value(random);
+      while (neighbor == input) {
+        for (auto & value : neighbor) {
+          if (dist_change(random)) {
+            value = dist_value(random);
+          }
+        }
+      }
 
       return neighbor;
     }

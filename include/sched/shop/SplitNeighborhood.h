@@ -13,8 +13,8 @@
 namespace sched::shop {
 
   enum class SplitNeighborhoodKind {
-    Either,
-    Both,
+    One,
+    All,
   };
 
   template<SplitNeighborhoodKind Kind, typename AssignmentNeighborhood, typename ScheduleNeighborhood>
@@ -24,7 +24,7 @@ namespace sched::shop {
     FlexibleSplitInput<AssignmentInput, ScheduleInput> operator()(const FlexibleSplitInput<AssignmentInput, ScheduleInput>& input, const Schedule& schedule, Random& random) {
       FlexibleSplitInput<AssignmentInput, ScheduleInput> neighbor = input;
 
-      if constexpr (Kind == SplitNeighborhoodKind::Either) {
+      if constexpr (Kind == SplitNeighborhoodKind::One) {
         std::bernoulli_distribution dist(0.5);
 
         if (dist(random)) {
@@ -50,7 +50,7 @@ namespace sched::shop {
       std::vector<FlexibleSplitInput<AssignmentInput, ScheduleInput>> neighbors;
 
       for (std::size_t i = 0; i < count; ++i) {
-        if constexpr (Kind == SplitNeighborhoodKind::Either) {
+        if constexpr (Kind == SplitNeighborhoodKind::One) {
           std::bernoulli_distribution dist(0.5);
 
           if (dist(random)) {
@@ -74,8 +74,8 @@ namespace sched::shop {
   struct NeighborhoodTraits<FlexibleSplitNeighborhood<Kind, AssignmentNeighborhood, ScheduleNeighborhood>> {
     static std::string name() {
       return NeighborhoodTraits<AssignmentNeighborhood>::name() + '_'
-          + (Kind == SplitNeighborhoodKind::Either ? "or" : "and") + '_'
-          + NeighborhoodTraits<ScheduleNeighborhood>::name();
+          + NeighborhoodTraits<ScheduleNeighborhood>::name() + '_'
+          + (Kind == SplitNeighborhoodKind::One ? "one" : "all");
     }
   };
 

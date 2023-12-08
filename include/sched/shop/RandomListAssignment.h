@@ -22,16 +22,16 @@ namespace sched::shop {
       std::size_t input_index = 0;
 
       for (auto job : sched::jobs(instance)) {
-        OperationId operation;
+        OperationId operation = {};
         operation.job = job;
         auto operation_count = instance.operation_count(job);
 
         for (std::size_t index = 0; index < operation_count; ++index) {
           operation.index = index;
           auto available = instance.machines_for_operation(operation);
-          std::size_t machine_count = available.size();
+          auto machine_count = available.size();
           assert(machine_count > 0);
-          std::size_t machine_index = input[input_index] * machine_count;
+          auto machine_index = static_cast<std::size_t>(input[input_index] * static_cast<double>(machine_count));
           assert(machine_index < machine_count);
 
           [[maybe_unused]] auto [ iterator, inserted ] = assignment.insert({ operation, available[machine_index] });

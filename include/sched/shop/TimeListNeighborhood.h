@@ -18,19 +18,17 @@ namespace sched::shop {
 
     template<typename Schedule>
     TimeListInput operator()(const TimeListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
-      TimeListInput neighbor;
       std::bernoulli_distribution dist_change(0.15);
+      TimeListInput neighbor = input;
 
-      do {
-        neighbor = input;
-
+      while (neighbor == input) {
         for (auto & lag : neighbor) {
           if (dist_change(random)) {
             std::negative_binomial_distribution<Time> dist_time(lag == 0 ? 4 : 4 * lag, 0.8);
             lag = std::max(dist_time(random), Time(0));
           }
         }
-      } while (input == neighbor);
+      }
 
       return neighbor;
     }
