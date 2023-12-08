@@ -20,13 +20,13 @@ namespace sched::para {
     {
     }
 
-    ParallelInstance operator()(Random& random) {
-      Time range = m_max - m_min;
-      Time lower = range - range / 10; // should be m_min + range - range / 10
-      Time upper = range / 5;          // should be m_min + range / 5
+    ParallelInstance operator()(Random& random) const {
+      const Time range = m_max - m_min;
+      const Time lower = range - range / 10; // should be m_min + range - range / 10
+      const Time upper = range / 5;          // should be m_min + range / 5
 
-      std::size_t minority = m_jobs / 50;
-      std::size_t majority = m_jobs - minority;
+      const std::size_t minority = m_jobs / 50;
+      const std::size_t majority = m_jobs - minority;
 
       std::vector<Time> times;
 
@@ -42,7 +42,7 @@ namespace sched::para {
         times.push_back(small(random));
       }
 
-      return ParallelInstance(m_machines, std::move(times));
+      return { m_machines, std::move(times) };
     }
 
   private:

@@ -20,11 +20,11 @@ namespace sched::para {
 
     template<typename Instance>
     ParallelSchedule operator()(const Instance& instance) {
-      LptAlgorithm lpt;
+      const LptAlgorithm lpt;
 
       ParallelSchedule fallback = lpt(instance);
 
-      MakespanCriterion criterion;
+      const MakespanCriterion criterion;
       Time makespan = criterion(instance, fallback);
 
       std::vector<ParallelJob> jobs;
@@ -47,7 +47,7 @@ namespace sched::para {
       double ratio = 4.0 / 3.0 - 1.0 / (3.0 * instance.machine_count());
 
       Time upper = makespan;
-      Time lower = std::max({ average, max, static_cast<Time>(makespan / ratio) });
+      Time lower = std::max({ average, max, static_cast<Time>(static_cast<double>(makespan) / ratio) });
 
       std::sort(jobs.begin(), jobs.end(), [](const ParallelJob& lhs, const ParallelJob& rhs) {
         return lhs.processing_time > rhs.processing_time;
@@ -55,12 +55,12 @@ namespace sched::para {
 
       std::vector<std::vector<ParallelJob>> result;
 
-      Time max_difference = std::max(Time(1), average / 200);
+      const Time max_difference = std::max(Time(1), average / 200);
 
       while ((upper - lower) > max_difference) {
-        Time middle = lower + (upper - lower) / 2;
+        const Time middle = lower + (upper - lower) / 2;
 
-        auto boxes = details::computeFirstFitDecreasing(jobs, middle);
+        auto boxes = details::compute_first_fit_decreasing(jobs, middle);
 
         if (boxes.size() <= instance.machine_count()) {
           upper = middle;
@@ -82,7 +82,7 @@ namespace sched::para {
         Time time = 0;
 
         for (auto & job : group) {
-          ParallelTask task;
+          ParallelTask task = {};
           task.job = job.id;
           task.machine = MachineId{machine};
           task.start = time;

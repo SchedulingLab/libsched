@@ -28,7 +28,7 @@ namespace sched::para {
       }
     };
 
-    LdmSet ldmSetMerge(const LdmSet& lhs, const LdmSet& rhs) {
+    inline LdmSet ldm_set_merge(const LdmSet& lhs, const LdmSet& rhs) {
       LdmSet result;
       result.members.insert(result.members.end(), lhs.members.begin(), lhs.members.end());
       result.members.insert(result.members.end(), rhs.members.begin(), rhs.members.end());
@@ -44,18 +44,18 @@ namespace sched::para {
       LdmTuple(std::size_t machine_count, ParallelJob job)
       : sets(machine_count - 1)
       {
-        sets.push_back(LdmSet(job));
+        sets.emplace_back(job);
       }
     };
 
-    LdmTuple LdmTupleMerge(const LdmTuple& lhs, const LdmTuple& rhs) {
-      std::size_t count = lhs.sets.size();
+    inline LdmTuple ldm_tuple_merge(const LdmTuple& lhs, const LdmTuple& rhs) {
+      const std::size_t count = lhs.sets.size();
       assert(rhs.sets.size() == count);
 
       LdmTuple result;
 
       for (std::size_t i = 0; i < count; ++i) {
-        result.sets.push_back(ldmSetMerge(lhs.sets[i], rhs.sets[count - i - 1]));
+        result.sets.push_back(ldm_set_merge(lhs.sets[i], rhs.sets[count - i - 1]));
       }
 
       assert(result.sets.size() == count);
@@ -77,7 +77,7 @@ namespace sched::para {
       }
 
       void append(ParallelJob job) {
-        tuples.push_back(LdmTuple(machine_count, job));
+        tuples.emplace_back(machine_count, job);
       }
 
       void run() {
@@ -88,12 +88,12 @@ namespace sched::para {
         std::sort(tuples.begin(), tuples.end(), comparator);
 
         while (tuples.size() > 1) {
-          LdmTuple last1 = std::move(tuples.back());
+          const LdmTuple last1 = std::move(tuples.back());
           tuples.pop_back();
-          LdmTuple last2 = std::move(tuples.back());
+          const LdmTuple last2 = std::move(tuples.back());
           tuples.pop_back();
 
-          LdmTuple merged = LdmTupleMerge(last1, last2);
+          LdmTuple merged = ldm_tuple_merge(last1, last2);
 
           auto it = std::lower_bound(tuples.begin(), tuples.end(), merged, comparator);
           tuples.insert(it, std::move(merged));
@@ -126,7 +126,7 @@ namespace sched::para {
         Time time = 0;
 
         for (const ParallelJob& job : set.members) {
-          ParallelTask task;
+          ParallelTask task = {};
           task.job = job.id;
           task.machine = MachineId{machine};
           task.start = time;

@@ -17,9 +17,10 @@ namespace sched::shop {
     Input operator()(const Input& input, Random& random) {
       assert(!input.empty());
 
-      std::size_t max = input.size() - 1;
-      std::size_t index;
+      const std::size_t max = input.size() - 1;
+      std::size_t index = 0;
 
+      // NOLINTNEXTLINE(cppcoreguidelines-avoid-do-while)
       do {
         index = random.compute_uniform_integer(std::size_t{0}, max - 1);
         assert(index < input.size() - 1);

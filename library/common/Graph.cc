@@ -5,10 +5,6 @@
 namespace sched {
 
   Graph::Graph(std::size_t n)
-  : m_next_vertex_id(0)
-  , m_next_edge_id(0)
-  , m_vertex_count(0)
-  , m_edge_count(0)
   {
     if (n > 0) {
       m_vertices.reserve(n);
@@ -19,8 +15,8 @@ namespace sched {
   VertexId Graph::add_vertex() {
     auto id = VertexId{ m_next_vertex_id++ };
     m_vertices.push_back({ id });
-    m_in_edges.push_back({ });
-    m_out_edges.push_back({ });
+    m_in_edges.emplace_back( );
+    m_out_edges.emplace_back( );
     ++m_vertex_count;
     return id;
   }
@@ -77,7 +73,7 @@ namespace sched {
 
   void Graph::remove_edge(EdgeId e) {
     assert(is_valid(e));
-    [[maybe_unused]] std::size_t erased;
+    [[maybe_unused]] std::size_t erased = 0;
     Edge& edge = m_edges[to_index(e)];
     erased = m_in_edges[to_index(edge.target)].erase(e);
     assert(erased == 1);

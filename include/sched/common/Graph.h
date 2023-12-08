@@ -93,11 +93,10 @@ namespace sched {
   private:
     void erase_edge(Edge& edge);
 
-  private:
-    std::size_t m_next_vertex_id;
-    std::size_t m_next_edge_id;
-    std::size_t m_vertex_count;
-    std::size_t m_edge_count;
+    std::size_t m_next_vertex_id = 0;
+    std::size_t m_next_edge_id = 0;
+    std::size_t m_vertex_count = 0;
+    std::size_t m_edge_count = 0;
     std::vector<Vertex> m_vertices;
     std::vector<Edge> m_edges;
     std::vector<std::set<EdgeId>> m_in_edges;

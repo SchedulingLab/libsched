@@ -7,20 +7,22 @@
 
 template <>
 struct fmt::formatter<sched::MachineId> {
-  constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.end()) { return ctx.end(); }
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  constexpr auto parse(format_parse_context& ctx) { return ctx.end(); }
 
-  template <typename FormatContext>
-  auto format(sched::MachineId id, FormatContext& ctx) const -> decltype(ctx.out()) {
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  auto format(sched::MachineId id, format_context& ctx) const -> format_context::iterator {
     return format_to(ctx.out(), "{}", static_cast<std::size_t>(id));
   }
 };
 
 template <>
 struct fmt::formatter<sched::JobId> {
-  constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.end()) { return ctx.end(); }
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  constexpr auto parse(format_parse_context& ctx) { return ctx.end(); }
 
-  template <typename FormatContext>
-  auto format(sched::JobId id, FormatContext& ctx) const -> decltype(ctx.out()) {
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  auto format(sched::JobId id, format_context& ctx) const -> format_context::iterator {
     if (id == sched::AnyJob) {
       return format_to(ctx.out(), "any");
     }
@@ -31,10 +33,11 @@ struct fmt::formatter<sched::JobId> {
 
 template <>
 struct fmt::formatter<sched::OperationId> {
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.end()) { return ctx.end(); }
 
-  template <typename FormatContext>
-  auto format(sched::OperationId id, FormatContext& ctx) const -> decltype(ctx.out()) {
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  auto format(sched::OperationId id, format_context& ctx) const -> format_context::iterator {
     return format_to(ctx.out(), "({}, {})", id.job, id.index);
   }
 };

@@ -27,7 +27,7 @@ namespace sched {
       // nothing to do
     }
 
-    bool satisfied() {
+    bool satisfied() const {
       return (std::chrono::steady_clock::now() - m_start) >= m_duration;
     }
 
@@ -49,8 +49,7 @@ namespace sched {
   public:
     constexpr
     IterationCountTermination(std::size_t count)
-    : m_iteration(0)
-    , m_count(count)
+    : m_count(count)
     {
     }
 
@@ -62,13 +61,13 @@ namespace sched {
       ++m_iteration;
     }
 
-    bool satisfied() {
+    bool satisfied() const {
       return m_iteration >= m_count;
     }
 
   private:
-    std::size_t m_iteration;
-    std::size_t m_count;
+    std::size_t m_iteration = 0;
+    std::size_t m_count = 0;
   };
 
   struct IterationCountValue {
@@ -92,7 +91,7 @@ namespace sched {
 
   constexpr
   IterationCountTermination terminate_after(IterationCountValue value) {
-    return IterationCountTermination(value.count);
+    return { value.count };
   }
 
 }

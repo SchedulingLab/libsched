@@ -38,7 +38,6 @@ namespace sched {
   private:
     uint64_t next();
 
-  private:
     uint64_t m_state[4];
   };
 

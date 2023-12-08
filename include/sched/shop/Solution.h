@@ -1,6 +1,8 @@
 #ifndef SCHED_SHOP_SOLUTION_H
 #define SCHED_SHOP_SOLUTION_H
 
+#include <utility>
+
 namespace sched::shop {
 
   template<typename Engine, typename Criterion, typename Instance>

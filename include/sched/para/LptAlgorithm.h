@@ -27,7 +27,7 @@ namespace sched::para {
         return lhs.processing_time > rhs.processing_time;
       });
 
-      EarliestFinishTime eft;
+      const EarliestFinishTime eft;
       return eft(instance, jobs);
     }
 

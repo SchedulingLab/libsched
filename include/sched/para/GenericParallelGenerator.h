@@ -27,7 +27,7 @@ namespace sched::para {
         times.push_back(m_distribution(random));
       }
 
-      return ParallelInstance(m_machines, std::move(times));
+      return { m_machines, std::move(times) };
     }
 
   private:

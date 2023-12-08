@@ -38,16 +38,16 @@ namespace sched::para {
 
     template<typename Instance, int Iterations = 7>
     ParallelSchedule apply(const Instance& instance, const std::vector<ParallelJob>& jobs, Time sum, Time max) {
-      Time average = sum / instance.machine_count();
+      const Time average = sum / instance.machine_count();
       Time lower = std::max(average, max);
       Time upper = std::max(2 * average, max);
 
       std::vector<std::vector<ParallelJob>> result;
 
       for (int i = 0; i < Iterations; ++i) {
-        Time middle = lower + (upper - lower) / 2;
+        const Time middle = lower + (upper - lower) / 2;
 
-        auto boxes = details::computeFirstFitDecreasing(jobs, middle);
+        auto boxes = details::compute_first_fit_decreasing(jobs, middle);
 
         if (boxes.size() <= instance.machine_count()) {
           upper = middle;
@@ -58,7 +58,7 @@ namespace sched::para {
       }
 
       if (result.empty()) {
-        result = details::computeFirstFitDecreasing(jobs, upper);
+        result = details::compute_first_fit_decreasing(jobs, upper);
         assert(result.size() <= instance.machine_count());
       }
 
@@ -70,7 +70,7 @@ namespace sched::para {
         Time time = 0;
 
         for (auto & job : group) {
-          ParallelTask task;
+          ParallelTask task = {};
           task.job = job.id;
           task.machine = MachineId{machine};
           task.start = time;

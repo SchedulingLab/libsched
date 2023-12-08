@@ -34,7 +34,7 @@ namespace sched::para {
         std::size_t machine = queue.top();
         queue.pop();
 
-        ParallelTask task;
+        ParallelTask task = {};
         task.job = job.id;
         task.machine = MachineId{machine};
         task.start = machines[machine];

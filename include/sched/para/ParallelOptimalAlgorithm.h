@@ -26,7 +26,7 @@ namespace sched::para {
         jobs.push_back({ job, instance.processing_time(job, AnyMachine) });
       }
 
-      std::size_t job_count = instance.job_count();
+      [[maybe_unused]] const std::size_t job_count = instance.job_count();
       assert(job_count == jobs.size());
       std::size_t machine_count = instance.machine_count();
 
@@ -101,7 +101,7 @@ namespace sched::para {
             assert(!unique);
             unique = true;
 
-            ParallelTask task;
+            ParallelTask task = {};
             task.job = job.id;
             task.machine = MachineId{machine};
             task.start = machines[machine];

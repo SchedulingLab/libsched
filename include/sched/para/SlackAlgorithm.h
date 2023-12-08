@@ -31,13 +31,13 @@ namespace sched::para {
       });
 
       std::vector<std::vector<ParallelJob>> groups;
-      std::size_t machine_count = instance.machine_count();
+      const std::size_t machine_count = instance.machine_count();
       std::size_t job_count = instance.job_count();
       std::size_t i = 0;
 
       while (job_count > 0) {
-        std::size_t count = std::min(job_count, machine_count);
-        std::vector<ParallelJob> group(jobs.begin() + i, jobs.begin() + i + count);
+        const std::size_t count = std::min(job_count, machine_count);
+        std::vector<ParallelJob> group(&jobs[i], &jobs[i] + count);
         groups.push_back(std::move(group));
         i += count;
         job_count -= count;
@@ -66,7 +66,7 @@ namespace sched::para {
         }
       }
 
-      EarliestFinishTime eft;
+      const EarliestFinishTime eft;
       return eft(instance, jobs);
     }
 

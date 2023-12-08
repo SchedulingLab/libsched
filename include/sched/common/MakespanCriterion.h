@@ -23,6 +23,7 @@ namespace sched {
       return completion;
     }
 
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     constexpr Comparison compare(Fitness lhs, Fitness rhs) {
       if (lhs < rhs) {
         return Comparison::Better;
