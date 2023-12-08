@@ -24,7 +24,7 @@ namespace sched::shop {
     }
 
   private:
-    OperationListInput compute(const OperationListInput& input, Random& random);
+    static OperationListInput compute(const OperationListInput& input, Random& random);
   };
 
   template<>
@@ -47,7 +47,7 @@ namespace sched::shop {
     }
 
   private:
-    OperationListInput compute(const OperationListInput& input, Random& random);
+    static OperationListInput compute(const OperationListInput& input, Random& random);
   };
 
   template<>
@@ -70,13 +70,36 @@ namespace sched::shop {
     }
 
   private:
-    OperationListInput compute(const OperationListInput& input, Random& random);
+    static OperationListInput compute(const OperationListInput& input, Random& random);
   };
 
   template<>
   struct NeighborhoodTraits<OperationReverseNeighborhood> {
     static std::string name() {
       return "rev";
+    }
+  };
+
+  struct SCHED_API OperationCappedReverseNeighborhood {
+
+    template<typename Schedule>
+    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
+      return compute(input, random);
+    }
+
+    template<typename Schedule>
+    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
+      return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
+    }
+
+  private:
+    static OperationListInput compute(const OperationListInput& input, Random& random);
+  };
+
+  template<>
+  struct NeighborhoodTraits<OperationCappedReverseNeighborhood> {
+    static std::string name() {
+      return "crv";
     }
   };
 

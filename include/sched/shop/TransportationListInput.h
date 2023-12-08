@@ -37,6 +37,15 @@ namespace sched::shop {
       }
 
       const std::size_t transportation_count = instance.transportation_count();
+
+      // add r * 10%
+      transportation_needs += transportation_count * std::max(transportation_needs / 10, std::size_t(1));
+
+      // all transport must be equiprobable
+      if (transportation_needs % transportation_count != 0) {
+        transportation_needs += transportation_count - (transportation_needs % transportation_count);
+      }
+
       TransportationListInput input;
 
       for (std::size_t i = 0; i < transportation_needs; ++i) {

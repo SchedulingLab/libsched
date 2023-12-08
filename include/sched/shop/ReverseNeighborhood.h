@@ -7,6 +7,7 @@
 namespace sched::shop {
 
   using ReverseNeighborhood = MutationNeighborhood<ReverseMutation>;
+  using CappedReverseNeighborhood = MutationNeighborhood<CappedReverseMutation>;
 
 }
 

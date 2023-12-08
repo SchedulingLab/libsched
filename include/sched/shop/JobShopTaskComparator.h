@@ -7,7 +7,7 @@ namespace sched::shop {
 
   struct JobShopTaskEarliestStartingTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) {
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const {
       return lhs.start < rhs.start;
     }
 
@@ -15,7 +15,7 @@ namespace sched::shop {
 
   struct JobShopTaskLatestStartingTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) {
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const {
       return lhs.start > rhs.start;
     }
 
@@ -23,7 +23,7 @@ namespace sched::shop {
 
   struct JobShopTaskEarliestFinishTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) {
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const {
       return lhs.completion < rhs.completion;
     }
 
@@ -31,7 +31,7 @@ namespace sched::shop {
 
   struct JobShopTaskLatestFinishTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) {
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const {
       return lhs.completion > rhs.completion;
     }
 
@@ -39,7 +39,7 @@ namespace sched::shop {
 
   struct JobShopTaskShortestProcessingTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) {
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const {
       return (lhs.completion - lhs.start) < (rhs.completion - rhs.start);
     }
 
@@ -47,7 +47,7 @@ namespace sched::shop {
 
   struct JobShopTaskLargestProcessingTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) {
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const {
       return (lhs.completion - lhs.start) > (rhs.completion - rhs.start);
     }
 

@@ -1,0 +1,6 @@
+CompileFlags:
+    CompilationDatabase: build.cmake
+Index:
+    StandardLibrary: Yes
+Diagnostics:
+    UnusedIncludes: Strict

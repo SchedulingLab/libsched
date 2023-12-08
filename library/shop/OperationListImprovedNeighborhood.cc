@@ -32,9 +32,10 @@ namespace sched::shop {
     assert(!input.empty());
 
     std::size_t max = input.size() - 1;
-    std::size_t n0, n1;
+    std::size_t n0 = 0;
+    std::size_t n1 = 0;
 
-    do {
+    do { // NOLINT(cppcoreguidelines-avoid-do-while)
       n0 = random.compute_uniform_integer(std::size_t{0}, max);
       Extent<std::size_t> extent = compute_extent(input, n0);
       n1 = random.compute_uniform_integer(extent.lo, extent.hi);
@@ -51,12 +52,13 @@ namespace sched::shop {
     assert(!input.empty());
 
     std::size_t max = input.size() - 1;
-    OperationListInput neighbor;
+    OperationListInput neighbor = input;
 
-    do {
-      std::size_t orig, dest;
+    while (neighbor == input) {
+      std::size_t orig = 0;
+      std::size_t dest = 0;
 
-      do {
+      do { // NOLINT(cppcoreguidelines-avoid-do-while)
         orig = random.compute_uniform_integer(std::size_t{0}, max);
         Extent<std::size_t> extent = compute_extent(input, orig);
         dest = random.compute_uniform_integer(extent.lo, extent.hi);
@@ -76,7 +78,7 @@ namespace sched::shop {
       }
 
       neighbor[dest] = val;
-    } while (neighbor == input);
+    }
 
 
     return neighbor;
@@ -88,12 +90,12 @@ namespace sched::shop {
     assert(!input.empty());
 
     std::size_t max = input.size() - 1;
-    OperationListInput neighbor;
+    OperationListInput neighbor = input;
 
-    do {
+    while (neighbor == input) {
       std::size_t endpoints[2];
 
-      do {
+      do { // NOLINT(cppcoreguidelines-avoid-do-while)
         endpoints[0] = random.compute_uniform_integer(std::size_t{0}, max);
         Extent<std::size_t> extent = compute_extent(input, endpoints[0]);
         endpoints[1] = random.compute_uniform_integer(extent.lo, extent.hi);
@@ -103,9 +105,37 @@ namespace sched::shop {
         std::swap(endpoints[0], endpoints[1]);
       }
 
-      neighbor = input;
-      std::reverse(neighbor.begin() + endpoints[0], neighbor.begin() + endpoints[1] + 1);
-    } while (neighbor == input);
+      std::reverse(&neighbor[endpoints[0]], &neighbor[endpoints[1]] + 1);
+    }
+
+    return neighbor;
+  }
+
+
+  // OperationCappedReverseNeighborhood
+
+  OperationListInput OperationCappedReverseNeighborhood::compute(const OperationListInput& input, Random& random) {
+    assert(!input.empty());
+
+    std::size_t max = input.size() - 1;
+    OperationListInput neighbor = input;
+
+    while (neighbor == input) {
+      std::size_t endpoints[2];
+
+      do { // NOLINT(cppcoreguidelines-avoid-do-while)
+        endpoints[0] = random.compute_uniform_integer(std::size_t{0}, max);
+        Extent<std::size_t> extent = compute_extent(input, endpoints[0]);
+        endpoints[1] = random.compute_uniform_integer(extent.lo, extent.hi);
+
+        if (endpoints[0] > endpoints[1]) {
+          std::swap(endpoints[0], endpoints[1]);
+        }
+
+      } while (endpoints[0] == endpoints[1] || (endpoints[1] - endpoints[0] > std::max(max / 5, std::size_t(5))) || !compute_extent(input, endpoints[1]).contains(endpoints[0]));
+
+      std::reverse(&neighbor[endpoints[0]], &neighbor[endpoints[1]] + 1);
+    }
 
     return neighbor;
   }
