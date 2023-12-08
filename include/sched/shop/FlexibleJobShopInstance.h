@@ -98,7 +98,7 @@ namespace sched::shop {
       return true;
     }
 
-    std::size_t m_machines;
+    std::size_t m_machines = 0;
     std::vector<JobDesc> m_jobs;
   };
 

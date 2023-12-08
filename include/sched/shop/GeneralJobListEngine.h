@@ -7,7 +7,6 @@
 #include <tuple>
 #include <vector>
 
-#include <sched/common/Api.h>
 #include <sched/common/Ids.h>
 
 #include "JobListInput.h"
@@ -18,7 +17,7 @@
 namespace sched::shop {
 
   template<typename Comparator>
-  struct SCHED_API GeneralJobListEngine {
+  struct GeneralJobListEngine {
     using Input = JobListInput;
 
     template<typename Instance>
@@ -75,8 +74,8 @@ namespace sched::shop {
               packets.push_back(states.create_packet(operation, machine, transportation));
             }
 
-            auto packet = *std::min_element(packets.begin(), packets.end(), [](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-              return lhs.task.completion < rhs.task.completion;
+            auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
+              return comparator(lhs.task, rhs.task);
             });
 
             states.update_schedule(packet, schedule);
