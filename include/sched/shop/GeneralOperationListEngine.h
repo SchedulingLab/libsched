@@ -2,7 +2,6 @@
 #define SCHED_SHOP_GENERAL_OPERATION_LIST_ENGINE_H
 
 #include <optional>
-#include <vector>
 
 #include <sched/common/Api.h>
 

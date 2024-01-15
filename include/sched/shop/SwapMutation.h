@@ -18,12 +18,13 @@ namespace sched::shop {
       assert(!input.empty());
 
       std::size_t max = input.size() - 1;
-      std::size_t index0, index1;
+      std::size_t index0 = 0;
+      std::size_t index1 = 0;
 
-      do {
+      while (index0 == index1 || input[index0] == input[index1]) {
         index0 = random.compute_uniform_integer(std::size_t{0}, max);
         index1 = random.compute_uniform_integer(std::size_t{0}, max);
-      } while (index0 == index1 || input[index0] == input[index1]);
+      }
 
       Input mutant = input;
       std::swap(mutant[index0], mutant[index1]);

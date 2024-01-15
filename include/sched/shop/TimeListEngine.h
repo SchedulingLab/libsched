@@ -59,7 +59,7 @@ namespace sched::shop {
         queue.pop();
 
         const OperationId op = operation_state.operation;
-        JobShopTask task;
+        JobShopTask task = {};
 
         if constexpr (Instance::flexible) {
           auto available = instance.machines_for_operation(op);
@@ -70,7 +70,7 @@ namespace sched::shop {
           std::transform(available.begin(), available.end(), std::back_inserter(tasks), [&](MachineId machine) {
             Time processing_time = instance.processing_time(op, machine);
 
-            JobShopTask task;
+            JobShopTask task = {};
             task.operation = op;
             task.machine = machine;
             task.start = std::max({ operation_state.min_time, machines[to_index(machine)] });

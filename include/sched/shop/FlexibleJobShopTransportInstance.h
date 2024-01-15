@@ -2,7 +2,6 @@
 #define SCHED_SHOP_FLEXIBLE_JOB_SHOP_TRANSPORT_INSTANCE_H
 
 #include <cassert>
-#include <limits>
 #include <vector>
 
 #include <sched/common/Api.h>
