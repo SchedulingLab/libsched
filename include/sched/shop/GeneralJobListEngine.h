@@ -7,6 +7,7 @@
 #include <vector>
 
 #include <sched/common/Ids.h>
+#include <sched/common/Instance.h>
 
 #include "JobListInput.h"
 #include "JobShopTransportSchedule.h"

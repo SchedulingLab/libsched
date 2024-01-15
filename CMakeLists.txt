@@ -81,6 +81,7 @@ add_library(sched0
   library/shop/FlexibleJobShopInstance.cc
   library/shop/FlexibleJobShopTransportInstance.cc
   library/shop/GeneralJobListEngine.cc
+  library/shop/GeneralMachineListEngine.cc
   library/shop/GeneralOperationListEngine.cc
   library/shop/GeneticAlgorithm.cc
   library/shop/Import.cc
@@ -92,6 +93,7 @@ add_library(sched0
   library/shop/JobShopCriticalPath.cc
   library/shop/JobShopSchedule.cc
   library/shop/JobShopInstance.cc
+  library/shop/JobShopStates.cc
   library/shop/JobShopTaskComparator.cc
   library/shop/JobShopTransportTaskPacketComparator.cc
   library/shop/JobShopTransportSchedule.cc

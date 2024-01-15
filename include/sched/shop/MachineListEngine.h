@@ -10,6 +10,7 @@
 
 #include "JobShopSchedule.h"
 #include "MachineListInput.h"
+#include "JobShopStates.h"
 
 namespace sched::shop {
 
@@ -18,20 +19,7 @@ namespace sched::shop {
 
     template<typename Instance>
     std::optional<JobShopSchedule> operator()(const Instance& instance, const MachineListInput& input) {
-      struct JobState {
-        std::size_t operation = 0;
-        Time time = 0;
-      };
-
-      std::vector<JobState> jobs(instance.job_count(), JobState{});
-
-      struct MachineState {
-        Time time = 0;
-        std::size_t index = 0;
-      };
-
-      std::vector<MachineState> machines(instance.machine_count(), MachineState{});
-
+      JobShopStates<Instance> states(instance);
       JobShopSchedule schedule;
 
       for (;;) {
@@ -40,7 +28,7 @@ namespace sched::shop {
         bool finished = true;
 
         for (auto machine : sched::machines(instance)) {
-          auto& machine_state = machines[to_index(machine)];
+          auto& machine_state = states.machines[to_index(machine)];
 
           if (machine_state.index == input[to_index(machine)].size()) {
             // there is no more operation to schedule on this machine
@@ -50,27 +38,15 @@ namespace sched::shop {
           finished = false;
 
           // check if the next operation is schedulable
-          auto& op = input[to_index(machine)][machine_state.index];
-          auto& job_state = jobs[to_index(op.job)];
+          auto& operation = input[to_index(machine)][machine_state.index];
+          auto& job_state = states.jobs[to_index(operation.job)];
 
-          if (op.index == job_state.operation) {
+          if (operation.index == job_state.operation) {
             // we found one
             found = true;
 
-            Time processing_time = instance.processing_time(op, machine);
-
-            JobShopTask task;
-            task.operation = op;
-            task.machine = machine;
-            task.start = std::max({ job_state.time, machine_state.time, instance.release_date(op.job) });
-            task.completion = task.start + processing_time;
-
-            machine_state.time = job_state.time = task.completion;
-
-            schedule.append(task);
-
-            ++machine_state.index;
-            ++job_state.operation;
+            JobShopTask task = states.create_task(operation, machine);
+            states.update_schedule(task, schedule);
             break;
           }
         }
