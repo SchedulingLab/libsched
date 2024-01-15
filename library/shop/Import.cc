@@ -6,7 +6,34 @@
 
 #include <nlohmann/json.hpp>
 
+#include <sched/tools/Log.h>
+
 namespace sched::shop {
+
+  namespace {
+
+    std::vector<int64_t> read_numbers(std::istream& input)
+    {
+      std::vector<int64_t> numbers;
+
+      for (std::string line; std::getline(input, line); ) {
+        if (line[0] == '#') {
+          continue;
+        }
+
+        int64_t value = 0;
+        std::istringstream line_input(line);
+
+        while (line_input >> value) {
+          numbers.push_back(value);
+        }
+      }
+
+      return numbers;
+    }
+
+  }
+
 
   /*
    * jsp
@@ -251,76 +278,66 @@ namespace sched::shop {
       throw std::runtime_error("File not found: " + filename.string());
     }
 
-    std::size_t machine_count;
-    std::size_t job_count;
+    auto numbers = read_numbers(input);
+    auto iterator = numbers.begin();
 
-    for (std::string line; std::getline(input, line); ) {
-      if (line[0] == '#') {
-        continue;
+    // Log::println("numbers: {}", numbers.size());
+
+    auto next = [&iterator, &numbers]() -> int64_t {
+      if (iterator != numbers.end()) {
+        return *iterator++;
       }
 
-      std::istringstream first;
-      first.str(line);
-      first >> job_count >> machine_count;
-      break;
-    }
+      throw std::runtime_error("Bad format!");
+      return 0;
+    };
+
+    const std::size_t job_count = next();
+    const std::size_t machine_count = next();
+
+    // Log::println("machine_count: {}, job_count: {}", machine_count, job_count);
 
     std::vector<FlexibleJobShopTransportInstance::JobDesc> jobs;
 
     for (std::size_t i = 0; i < job_count; ++i) {
-      std::string line;
-
-      if (!std::getline(input, line)) {
-        throw std::runtime_error("Missing data for job #" + std::to_string(i));
-      }
-
-      std::istringstream data;
-      data.str(line);
+      const std::size_t operation_count = next();
+      // Log::println("[{}] operation_count: {}", i, operation_count);
 
       FlexibleJobShopTransportInstance::JobDesc job;
-      std::size_t operation_machine_count;
 
-      while (data >> operation_machine_count) {
+      for (std::size_t j = 0; j < operation_count; ++j) {
+        const std::size_t operation_machine_count = next();
+        // Log::println("[{}, {}] operation_machine_count: {}", i, j, operation_machine_count);
+
         FlexibleJobShopTransportInstance::FlexibleOperationDesc operation;
-        std::size_t machine;
-        Time processing;
 
-        for (std::size_t j = 0; j < operation_machine_count; ++j) {
-          data >> machine >> processing;
+        for (std::size_t k = 0; k < operation_machine_count; ++k) {
+          const std::size_t machine = next();
+          const Time processing = next();
+          // Log::println("[{}, {}, {}] machine: {}, processing: {}", i, j, k, machine, processing);
           operation.choices.push_back({ MachineId{machine}, processing });
         }
 
         job.operations.push_back(std::move(operation));
+
       }
 
       jobs.push_back(std::move(job));
     }
 
-    std::size_t transportation_resources;
+    const std::size_t transportation_resources = next();
 
-    input >> transportation_resources;
+    // Log::println("transportation_resources: {}", transportation_resources);
 
     Array2D<Time> delays(machine_count, machine_count);
-    std::size_t from = 0;
 
-    for (std::string line; std::getline(input, line); ) {
-      std::istringstream data;
-      data.str(line);
-
-      Time duration;
-      std::size_t to = 0;
-
-      while (data >> duration) {
-        delays(from, to) = duration;
-        ++to;
+    for (std::size_t from = 0; from < machine_count; ++from) {
+      for (std::size_t to = 0; to < machine_count; ++to) {
+        delays(from, to) = next();
       }
-
-      assert(to == machine_count);
-      ++from;
     }
 
-    assert(from == machine_count);
-    return FlexibleJobShopTransportInstance(machine_count, std::move(jobs), transportation_resources, delays, delays);
+    return { machine_count, std::move(jobs), transportation_resources, delays, delays };
   }
 
 }
