@@ -12,35 +12,37 @@
 
 namespace sched::shop {
 
-  using RandomListInput = std::vector<double>;
+  struct FloatListInput : std::vector<double> {
+    using std::vector<double>::vector;
+  };
 
   template<>
-  struct InputTraits<RandomListInput> {
+  struct InputTraits<FloatListInput> {
     static std::string name() {
-      return "rnd";
+      return "flt";
     }
 
     template<typename Instance>
-    static RandomListInput generate_input(const Instance& instance) {
+    static FloatListInput generate_input(const Instance& instance) {
       std::size_t operation_count = 0;
 
       for (auto job : sched::jobs(instance)) {
         operation_count += instance.operation_count(job);
       }
 
-      RandomListInput input(operation_count, 0.0);
+      FloatListInput input(operation_count, 0.0);
       return input;
     }
 
     template<typename Instance>
-    static RandomListInput generate_random(const Instance& instance, Random& random) {
+    static FloatListInput generate_random(const Instance& instance, Random& random) {
       std::size_t operation_count = 0;
 
       for (auto job : sched::jobs(instance)) {
         operation_count += instance.operation_count(job);
       }
 
-      RandomListInput input(operation_count);
+      FloatListInput input(operation_count);
       std::uniform_real_distribution<double> dist(0.0, 1.0);
 
       for (auto & item : input) {
@@ -51,7 +53,7 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static RandomListInput generate_feasible(const Instance& instance, Random& random) {
+    static FloatListInput generate_feasible(const Instance& instance, Random& random) {
       return generate_random(instance, random);
     }
 

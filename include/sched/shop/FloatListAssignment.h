@@ -8,15 +8,15 @@
 #include <sched/common/Ids.h>
 #include <sched/common/Instance.h>
 
-#include "RandomListInput.h"
+#include "FloatListInput.h"
 
 namespace sched::shop {
 
-  struct SCHED_API RandomListAssignment {
-    using Input = RandomListInput;
+  struct SCHED_API FloatListAssignment {
+    using Input = FloatListInput;
 
     template<typename Instance>
-    std::map<OperationId, MachineId> operator()(const Instance& instance, const RandomListInput& input) {
+    std::map<OperationId, MachineId> operator()(const Instance& instance, const FloatListInput& input) {
       static_assert(Instance::flexible, "Instance should be flexible.");
       std::map<OperationId, MachineId> assignment;
       std::size_t input_index = 0;

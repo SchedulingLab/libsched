@@ -9,18 +9,18 @@
 
 #include "NeighborhoodHelper.h"
 #include "NeighborhoodTraits.h"
-#include "RandomListInput.h"
+#include "FloatListInput.h"
 
 namespace sched::shop {
 
   struct SCHED_API RandomNewNeighborhood {
 
     template<typename Schedule>
-    RandomListInput operator()(const RandomListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
+    FloatListInput operator()(const FloatListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
       assert(!input.empty());
       std::uniform_real_distribution<double> dist_value(0.0, 1.0);
       std::bernoulli_distribution dist_change(0.15);
-      RandomListInput neighbor = input;
+      FloatListInput neighbor = input;
 
       while (neighbor == input) {
         for (auto & value : neighbor) {
@@ -34,7 +34,7 @@ namespace sched::shop {
     }
 
     template<typename Schedule>
-    std::vector<RandomListInput> generate_many(const RandomListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
+    std::vector<FloatListInput> generate_many(const FloatListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 

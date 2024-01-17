@@ -14,16 +14,16 @@
 #include "JobShopTaskComparator.h"
 #include "JobShopTransportSchedule.h"
 #include "JobShopTransportStates.h"
-#include "RandomListInput.h"
+#include "FloatListInput.h"
 
 namespace sched::shop {
 
   template<typename Comparator>
   struct GeneralMachineListEngine {
-    using Input = RandomListInput;
+    using Input = FloatListInput;
 
     template<typename Instance>
-    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const RandomListInput& input) {
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const FloatListInput& input) {
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
       Comparator comparator;

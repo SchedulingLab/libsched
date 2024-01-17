@@ -1,16 +1,14 @@
 #ifndef SCHED_SWAP_ENGINE_H
 #define SCHED_SWAP_ENGINE_H
 
-#include <cassert>
-#include <algorithm>
 #include <optional>
 
 #include <sched/common/Api.h>
 #include <sched/common/Ids.h>
 
 #include "JobShopSchedule.h"
-#include "MachineListInput.h"
 #include "JobShopStates.h"
+#include "MachineListInput.h"
 
 namespace sched::shop {
 

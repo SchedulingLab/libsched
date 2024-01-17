@@ -74,12 +74,16 @@ add_library(sched0
   library/shop/AlternateNeighborhood.cc
   library/shop/AssignedInstance.cc
   library/shop/AssignedEngine.cc
+  library/shop/AssignmentEngine.cc
   library/shop/AutocorrelationAnalysis.cc
   library/shop/CriticalAdjacentSwapNeighborhood.cc
   library/shop/Enumerator.cc
   library/shop/Export.cc
   library/shop/FlexibleJobShopInstance.cc
   library/shop/FlexibleJobShopTransportInstance.cc
+  library/shop/FloatListAssignment.cc
+  library/shop/FloatListInput.cc
+  library/shop/GeneralAssignmentEngine.cc
   library/shop/GeneralJobListEngine.cc
   library/shop/GeneralMachineListEngine.cc
   library/shop/GeneralOperationListEngine.cc
@@ -108,8 +112,6 @@ add_library(sched0
   library/shop/OperationListInput.cc
   library/shop/OrderCrossover.cc
   library/shop/OverwriteNeighborhood.cc
-  library/shop/RandomListAssignment.cc
-  library/shop/RandomListInput.cc
   library/shop/RandomNeighborSample.cc
   library/shop/RandomNewNeighborhood.cc
   library/shop/RandomSample.cc
