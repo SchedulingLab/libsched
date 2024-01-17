@@ -9,6 +9,7 @@
 #include <sched/common/Random.h>
 
 #include "InputTraits.h"
+#include "InputSize.h"
 
 namespace sched::shop {
 
@@ -30,25 +31,13 @@ namespace sched::shop {
 
     template<typename Instance>
     static TransportationListInput generate_input(const Instance& instance) {
-      std::size_t transportation_needs = 0;
-
-      for (auto job : sched::jobs(instance)) {
-        transportation_needs += (instance.operation_count(job) - 1);
-      }
-
+      const std::size_t input_size = input_extended_size_for(instance);
       const std::size_t transportation_count = instance.transportation_count();
 
-      // add r * 10%
-      transportation_needs += transportation_count * std::max(transportation_needs / 10, std::size_t(1));
-
-      // all transport must be equiprobable
-      if (transportation_needs % transportation_count != 0) {
-        transportation_needs += transportation_count - (transportation_needs % transportation_count);
-      }
-
       TransportationListInput input;
+      input.reserve(input_size);
 
-      for (std::size_t i = 0; i < transportation_needs; ++i) {
+      for (std::size_t i = 0; i < input_size; ++i) {
         input.push_back(TransportationId{i % transportation_count});
       }
 

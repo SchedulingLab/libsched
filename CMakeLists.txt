@@ -128,6 +128,7 @@ add_library(sched0
   library/shop/TimeListEngine.cc
   library/shop/TimeListInput.cc
   library/shop/TimeListNeighborhood.cc
+  library/shop/TransportationFloatListEngine.cc
   library/shop/TransportationListEngine.cc
   library/shop/TransportationListInput.cc
 

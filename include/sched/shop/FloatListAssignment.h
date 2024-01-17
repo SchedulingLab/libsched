@@ -1,5 +1,5 @@
-#ifndef SCHED_SHOP_RANDOM_LIST_ASSIGNMENT_H
-#define SCHED_SHOP_RANDOM_LIST_ASSIGNMENT_H
+#ifndef SCHED_SHOP_FLOAT_LIST_ASSIGNMENT_H
+#define SCHED_SHOP_FLOAT_LIST_ASSIGNMENT_H
 
 #include <cassert>
 #include <map>
@@ -48,4 +48,4 @@ namespace sched::shop {
 
 }
 
-#endif // SCHED_SHOP_RANDOM_LIST_ASSIGNMENT_H
+#endif // SCHED_SHOP_FLOAT_LIST_ASSIGNMENT_H

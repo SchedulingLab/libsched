@@ -1,5 +1,5 @@
-#ifndef SCHED_SHOP_RANDOM_LIST_INPUT_H
-#define SCHED_SHOP_RANDOM_LIST_INPUT_H
+#ifndef SCHED_SHOP_FLOAT_LIST_INPUT_H
+#define SCHED_SHOP_FLOAT_LIST_INPUT_H
 
 #include <string>
 #include <vector>
@@ -9,12 +9,11 @@
 #include <sched/common/Range.h>
 
 #include "InputTraits.h"
+#include "InputSize.h"
 
 namespace sched::shop {
 
-  struct FloatListInput : std::vector<double> {
-    using std::vector<double>::vector;
-  };
+  using FloatListInput = std::vector<double>;
 
   template<>
   struct InputTraits<FloatListInput> {
@@ -24,28 +23,16 @@ namespace sched::shop {
 
     template<typename Instance>
     static FloatListInput generate_input(const Instance& instance) {
-      std::size_t operation_count = 0;
-
-      for (auto job : sched::jobs(instance)) {
-        operation_count += instance.operation_count(job);
-      }
-
-      FloatListInput input(operation_count, 0.0);
-      return input;
+      return { input_size_for(instance), 0.0 };
     }
 
     template<typename Instance>
     static FloatListInput generate_random(const Instance& instance, Random& random) {
-      std::size_t operation_count = 0;
+      FloatListInput input = generate_input(instance);
 
-      for (auto job : sched::jobs(instance)) {
-        operation_count += instance.operation_count(job);
-      }
-
-      FloatListInput input(operation_count);
       std::uniform_real_distribution<double> dist(0.0, 1.0);
 
-      for (auto & item : input) {
+      for (auto& item : input) {
         item = dist(random);
       }
 
@@ -60,4 +47,4 @@ namespace sched::shop {
   };
 }
 
-#endif // SCHED_SHOP_RANDOM_LIST_INPUT_H
+#endif // SCHED_SHOP_FLOAT_LIST_INPUT_H
