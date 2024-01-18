@@ -44,20 +44,9 @@ namespace sched::shop {
           }
         }
 
-        if (!tasks.empty()) {
-          auto task = *std::min_element(tasks.begin(), tasks.end(), [comparator](const JobShopTask& lhs, const JobShopTask& rhs) {
-            return comparator(lhs, rhs);
-          });
-
-          states.update_schedule(task, schedule);
-        } else if (!packets.empty()) {
-          auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-            return comparator(lhs.task, rhs.task);
-          });
-
-          states.update_schedule(packet, schedule);
-        } else {
-          return std::nullopt;
+        if (!states.choose_and_update(tasks, packets, schedule, comparator)) {
+          // no more tasks or packets, we have finished
+          break;
         }
       }
 

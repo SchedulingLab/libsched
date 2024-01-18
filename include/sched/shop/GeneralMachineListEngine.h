@@ -28,54 +28,7 @@ namespace sched::shop {
       JobShopTransportSchedule schedule;
       Comparator comparator;
 
-      std::vector<std::vector<std::tuple<OperationId, double>>> machine_assignment;
-
-      if constexpr (Instance::flexible) {
-        std::vector<std::vector<std::tuple<OperationId, double>>> machine_assignment;
-
-        std::size_t index = 0;
-
-        for (auto job : sched::jobs(instance)) {
-          auto operations = instance.operation_count(job);
-
-          for (std::size_t i = 0; i < operations; ++i) {
-            auto input_element = input[index++];
-            OperationId operation = { job, i };
-
-            const auto available = instance.machines_for_operation(operation);
-            assert(!available.empty());
-
-            for (auto machine : available) {
-              assert(to_index(machine) < machine_assignment.size());
-              machine_assignment[to_index(machine)].emplace_back(operation, input_element);
-            }
-          }
-        }
-
-        assert(index == input.size());
-      } else { // !flexible
-
-        std::size_t index = 0;
-
-        for (auto job : sched::jobs(instance)) {
-          auto operations = instance.operation_count(job);
-
-          for (std::size_t i = 0; i < operations; ++i) {
-            OperationId operation = { job, i };
-            MachineId machine = instance.assigned_machine_for_operation(operation);
-            assert(to_index(machine) < machine_assignment.size());
-            machine_assignment[to_index(machine)].emplace_back(operation, input[index++]);
-          }
-        }
-
-        assert(index == input.size());
-      }
-
-      for (auto& machine : machine_assignment) {
-        std::sort(machine.begin(), machine.end(), [](const std::tuple<OperationId, double>& lhs, const std::tuple<OperationId, double>& rhs) {
-          return std::get<double>(lhs) < std::get<double>(rhs);
-        });
-      }
+      std::vector<std::vector<std::tuple<OperationId, double>>> machine_assignment = compute_machine_assignment(instance, input);
 
       for (;;) {
         std::vector<JobShopTask> tasks;
@@ -128,24 +81,54 @@ namespace sched::shop {
           break;
         }
 
-        if (!tasks.empty()) {
-          auto task = *std::min_element(tasks.begin(), tasks.end(), [comparator](const JobShopTask& lhs, const JobShopTask& rhs) {
-            return comparator(lhs, rhs);
-          });
-
-          states.update_schedule(task, schedule);
-        } else if (!packets.empty()) {
-          auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-            return comparator(lhs.task, rhs.task);
-          });
-
-          states.update_schedule(packet, schedule);
-        } else {
+        if (!states.choose_and_update(tasks, packets, schedule, comparator)) {
           return std::nullopt;
         }
       }
 
       return schedule;
+    }
+
+    template<typename Instance>
+    std::vector<std::vector<std::tuple<OperationId, double>>> compute_machine_assignment(const Instance& instance, const FloatListInput& input)
+    {
+      std::vector<std::vector<std::tuple<OperationId, double>>> machine_assignment;
+
+      std::size_t index = 0;
+
+      for (auto job : sched::jobs(instance)) {
+        auto operations = instance.operation_count(job);
+
+        for (std::size_t i = 0; i < operations; ++i) {
+          auto input_element = input[index++];
+          OperationId operation = { job, i };
+
+          if constexpr (Instance::flexible) {
+            const auto available = instance.machines_for_operation(operation);
+            assert(!available.empty());
+
+            for (auto machine : available) {
+              assert(to_index(machine) < machine_assignment.size());
+              machine_assignment[to_index(machine)].emplace_back(operation, input_element);
+            }
+          } else { // !flexible
+            MachineId machine = instance.assigned_machine_for_operation(operation);
+            assert(to_index(machine) < machine_assignment.size());
+            machine_assignment[to_index(machine)].emplace_back(operation, input[index++]);
+
+          }
+        }
+      }
+
+      assert(index == input.size());
+
+      std::for_each(machine_assignment.begin(), machine_assignment.end(), [](const std::vector<std::tuple<OperationId, double>>& machine) {
+        std::sort(machine.begin(), machine.end(), [](const std::tuple<OperationId, double>& lhs, const std::tuple<OperationId, double>& rhs) {
+          return std::get<double>(lhs) < std::get<double>(rhs);
+        });
+      });
+
+      return machine_assignment;
     }
 
   };

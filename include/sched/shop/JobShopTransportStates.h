@@ -1,6 +1,7 @@
 #ifndef SCHED_SHOP_JOB_SHOP_TRANSPORT_STATES_H
 #define SCHED_SHOP_JOB_SHOP_TRANSPORT_STATES_H
 
+#include <algorithm>
 #include <vector>
 
 #include <sched/common/Ids.h>
@@ -88,6 +89,42 @@ namespace sched::shop {
       schedule.append(packet.task);
       schedule.append_transportation_task(packet.empty_task);
       schedule.append_transportation_task(packet.loaded_task);
+    }
+
+    template<typename Comparator>
+    bool choose_and_update(const std::vector<JobShopTask>& tasks, const std::vector<JobShopTransportTaskPacket>& packets, JobShopTransportSchedule& schedule, Comparator&& comparator)
+    {
+      if (!tasks.empty() && !packets.empty()) {
+        auto task = *std::min_element(tasks.begin(), tasks.end(), [comparator](const JobShopTask& lhs, const JobShopTask& rhs) {
+          return comparator(lhs, rhs);
+        });
+
+        auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
+          return comparator(lhs.task, rhs.task);
+        });
+
+        if (comparator(task, packet.task)) {
+          update_schedule(task, schedule);
+        } else {
+          update_schedule(packet, schedule);
+        }
+      } else if (!tasks.empty()) {
+        auto task = *std::min_element(tasks.begin(), tasks.end(), [comparator](const JobShopTask& lhs, const JobShopTask& rhs) {
+          return comparator(lhs, rhs);
+        });
+
+        update_schedule(task, schedule);
+      } else if (!packets.empty()) {
+        auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
+          return comparator(lhs.task, rhs.task);
+        });
+
+        update_schedule(packet, schedule);
+      } else {
+        return false;
+      }
+
+      return true;
     }
 
     struct TransportationState {

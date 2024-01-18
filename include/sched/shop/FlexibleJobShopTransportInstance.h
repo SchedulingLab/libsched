@@ -131,7 +131,7 @@ namespace sched::shop {
       return true;
     }
 
-    std::size_t m_machines;
+    std::size_t m_machines = 0;
     std::vector<JobDesc> m_jobs;
     std::size_t m_transportation_resources;
     Array2D<Time> m_delays_empty;
