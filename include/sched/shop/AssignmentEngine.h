@@ -42,11 +42,11 @@ namespace sched::shop {
 
           states.update_schedule(task, schedule);
         } else {
-          return std::nullopt;
+          break;
         }
       }
 
-      return std::nullopt;
+      return schedule;
     }
 
     Assignment assignment;

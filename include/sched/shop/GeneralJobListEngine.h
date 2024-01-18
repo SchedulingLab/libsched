@@ -48,10 +48,10 @@ namespace sched::shop {
           } else {
             std::vector<JobShopTransportTaskPacket> packets;
 
-            for (auto machine : available) {
-              for (auto transportation : sched::transportations(instance)) {
-                packets.push_back(states.create_packet(operation, machine, transportation));
-              }
+            for (auto transportation : sched::transportations(instance)) {
+              std::transform(available.begin(), available.end(), std::back_inserter(packets), [&](MachineId machine) {
+                return states.create_packet(operation, machine, transportation);
+              });
             }
 
             auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
