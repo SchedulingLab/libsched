@@ -83,6 +83,7 @@ add_library(sched0
   library/shop/FlexibleJobShopTransportInstance.cc
   library/shop/FloatListAssignment.cc
   library/shop/FloatListInput.cc
+  library/shop/FloatListTransportationAssignment.cc
   library/shop/GeneralAssignmentEngine.cc
   library/shop/GeneralJobListEngine.cc
   library/shop/GeneralMachineListEngine.cc
@@ -129,8 +130,12 @@ add_library(sched0
   library/shop/TimeListInput.cc
   library/shop/TimeListNeighborhood.cc
   library/shop/TransportationFloatListEngine.cc
+  library/shop/TransportationJobListEngine.cc
   library/shop/TransportationListEngine.cc
   library/shop/TransportationListInput.cc
+  library/shop/TransportationListTransportationAssignment.cc
+  library/shop/TransportationMachineListEngine.cc
+  library/shop/TransportationOperationListEngine.cc
 
   # tools
   library/tools/ConcurrentQueue.cc

@@ -29,7 +29,7 @@ namespace sched::shop {
       JobShopTransportSchedule schedule;
       Comparator comparator;
 
-      for (auto job : input) {
+      for (auto job : input.schedule) {
         assert(transportation_index < transportation.size());
         const OperationId operation = states.next_operation(job);
 

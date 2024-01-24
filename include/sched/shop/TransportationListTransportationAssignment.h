@@ -12,7 +12,7 @@
 
 namespace sched::shop {
 
-  struct SCHED_API FloatListTransportationAssignment {
+  struct SCHED_API TransportationListTransportationAssignment {
     using Input = TransportationListInput;
 
     template<typename Instance>
