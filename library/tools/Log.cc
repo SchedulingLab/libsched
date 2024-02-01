@@ -2,13 +2,17 @@
 
 #include <chrono>
 #include <limits>
-#include <thread>
-
-#include <iostream>
 
 #include <fmt/chrono.h>
 
 namespace sched {
+  namespace {
+    thread_local int g_indent = 0; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+  }
+
+  int Log::current_indent_depth() {
+    return g_indent;
+  }
 
   void Log::open_scope() {
     ++g_indent;
@@ -31,7 +35,6 @@ namespace sched {
   }
 
   std::mutex Log::g_log_mutex;
-  thread_local int Log::g_indent = 0;
   int Log::g_max_scope = std::numeric_limits<int>::max();
 
 }

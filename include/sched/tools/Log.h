@@ -14,7 +14,7 @@ namespace sched {
 
     template<typename ... T>
     static void println(fmt::format_string<T...> fmt, T&&... args) {
-      if (g_indent > g_max_scope) {
+      if (current_indent_depth() > g_max_scope) {
         return;
       }
 
@@ -22,6 +22,7 @@ namespace sched {
       print_line_string(string);
     }
 
+    static int current_indent_depth();
     static void open_scope();
     static void close_scope();
 
@@ -30,9 +31,7 @@ namespace sched {
   private:
     static void print_line_string(const std::string& string);
 
-  private:
     static std::mutex g_log_mutex;
-    static thread_local int g_indent;
     static int g_max_scope;
   };
 
@@ -42,12 +41,14 @@ namespace sched {
     }
 
     LogScope(const LogScope&) = delete;
+    LogScope(LogScope&&) = delete;
 
     ~LogScope() {
       Log::close_scope();
     }
 
     LogScope& operator=(const LogScope&) = delete;
+    LogScope& operator=(LogScope&&) = delete;
   };
 
 }
