@@ -2,6 +2,8 @@
 #define SCHED_SHOP_GENETIC_ALGORITHM_H
 
 #include <cmath>
+
+#include <algorithm>
 #include <chrono>
 #include <deque>
 #include <optional>

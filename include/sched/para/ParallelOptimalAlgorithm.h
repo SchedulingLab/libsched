@@ -5,7 +5,7 @@
 #include <vector>
 
 #include <lqp/Problem.h>
-#include <lqp/Solver.h>
+#include <lqp/GlpkSolver.h>
 
 #include <sched/common/Api.h>
 #include <sched/common/Instance.h>
@@ -77,16 +77,14 @@ namespace sched::para {
 
       problem.set_objective(lqp::Sense::Minimize, c_max, "c_max");
 
-      auto solver = lqp::make_solver(lqp::SolverImplementation::Glpk);
+      lqp::GlpkSolver solver;
 
       lqp::SolverConfig config;
       config.use_mip = true;
       config.presolve = true;
       config.verbose = false;
 
-      auto result = solver->solve(problem, config);
-      assert(result.has_solution());
-      auto solution = result.solution();
+      auto solution = solver.solve(problem, config);
 
       ParallelSchedule schedule;
       std::vector<Time> machines(machine_count, 0);
