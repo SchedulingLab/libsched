@@ -27,6 +27,7 @@ end
 
 target("sched")
     set_kind("shared")
+    add_defines("SCHED_BUILD")
     add_files("library/**/*.cc")
     add_headerfiles("include/(sched/**/*.h)")
     add_includedirs("include", { public = true })
