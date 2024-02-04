@@ -50,7 +50,7 @@ namespace sched::shop {
       std::deque<Tabu> tabu_list;
 
       auto is_tabu = [&](const Input& input) {
-        return std::find(tabu_list.begin(), tabu_list.end(), input) != tabu_list.end();
+        return std::find_if(tabu_list.begin(), tabu_list.end(), [&](const Tabu& tabu) { return tabu.input == input; }) != tabu_list.end();
       };
 
       termination.start();
