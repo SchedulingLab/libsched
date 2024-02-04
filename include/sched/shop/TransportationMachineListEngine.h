@@ -32,7 +32,7 @@ namespace sched::shop {
       JobShopTransportSchedule schedule;
       Comparator comparator;
 
-      std::vector<std::vector<std::tuple<OperationId, double>>> machine_assignment = compute_machine_assignment(instance, input);
+      std::vector<std::vector<std::tuple<OperationId, double>>> machine_assignment = compute_machine_assignment(instance, input.schedule);
 
       for (;;) {
         assert(transportation_index < transportation.size());
@@ -142,6 +142,8 @@ namespace sched::shop {
 
       return machine_assignment;
     }
+
+    TransportationAssignment transportation_assignment;
   };
 
 }
