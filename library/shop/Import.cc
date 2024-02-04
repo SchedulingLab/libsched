@@ -154,7 +154,7 @@ namespace sched::shop {
       Time processing = 0;
 
       while (data >> machine >> processing) {
-        JobShopInstance::OperationDesc op = { MachineId{ machine }, processing };
+        const JobShopInstance::OperationDesc op = { MachineId{ machine }, processing };
         job.operations.push_back(op);
       }
 

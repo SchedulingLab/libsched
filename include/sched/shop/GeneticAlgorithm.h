@@ -29,7 +29,7 @@ namespace sched::shop {
     template<typename Instance, typename Termination>
     auto operator()(const Instance& instance, Random& random, std::size_t population_size, Termination termination)
     {
-      LogScope log0;
+      const LogScope log0;
 
       const std::size_t offsprings_size_max = population_size * 9 / 10;
 
@@ -69,7 +69,7 @@ namespace sched::shop {
       std::size_t generation = 0;
 
       while (!termination.satisfied()) {
-        LogScope log1;
+        const LogScope log1;
 
         // selection
 

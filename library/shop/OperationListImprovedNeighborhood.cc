@@ -34,13 +34,13 @@ namespace sched::shop {
   {
     assert(!input.empty());
 
-    std::size_t max = input.size() - 1;
+    const std::size_t max = input.size() - 1;
     std::size_t n0 = 0;
     std::size_t n1 = 0;
 
     do { // NOLINT(cppcoreguidelines-avoid-do-while)
       n0 = random.compute_uniform_integer(std::size_t{ 0 }, max);
-      Extent<std::size_t> extent = compute_extent(input, n0);
+      const Extent<std::size_t> extent = compute_extent(input, n0);
       n1 = random.compute_uniform_integer(extent.lo, extent.hi);
     } while (n0 == n1 || !compute_extent(input, n1).contains(n1));
 
@@ -55,7 +55,7 @@ namespace sched::shop {
   {
     assert(!input.empty());
 
-    std::size_t max = input.size() - 1;
+    const std::size_t max = input.size() - 1;
     OperationListInput neighbor = input;
 
     while (neighbor == input) {
@@ -64,7 +64,7 @@ namespace sched::shop {
 
       do { // NOLINT(cppcoreguidelines-avoid-do-while)
         orig = random.compute_uniform_integer(std::size_t{ 0 }, max);
-        Extent<std::size_t> extent = compute_extent(input, orig);
+        const Extent<std::size_t> extent = compute_extent(input, orig);
         dest = random.compute_uniform_integer(extent.lo, extent.hi);
       } while (orig == dest);
 
@@ -93,7 +93,7 @@ namespace sched::shop {
   {
     assert(!input.empty());
 
-    std::size_t max = input.size() - 1;
+    const std::size_t max = input.size() - 1;
     OperationListInput neighbor = input;
 
     while (neighbor == input) {
@@ -101,7 +101,7 @@ namespace sched::shop {
 
       do { // NOLINT(cppcoreguidelines-avoid-do-while)
         endpoints[0] = random.compute_uniform_integer(std::size_t{ 0 }, max);
-        Extent<std::size_t> extent = compute_extent(input, endpoints[0]);
+        const Extent<std::size_t> extent = compute_extent(input, endpoints[0]);
         endpoints[1] = random.compute_uniform_integer(extent.lo, extent.hi);
       } while (endpoints[0] == endpoints[1] || !compute_extent(input, endpoints[1]).contains(endpoints[0]));
 
@@ -121,7 +121,7 @@ namespace sched::shop {
   {
     assert(!input.empty());
 
-    std::size_t max = input.size() - 1;
+    const std::size_t max = input.size() - 1;
     OperationListInput neighbor = input;
 
     while (neighbor == input) {
@@ -129,7 +129,7 @@ namespace sched::shop {
 
       do { // NOLINT(cppcoreguidelines-avoid-do-while)
         endpoints[0] = random.compute_uniform_integer(std::size_t{ 0 }, max);
-        Extent<std::size_t> extent = compute_extent(input, endpoints[0]);
+        const Extent<std::size_t> extent = compute_extent(input, endpoints[0]);
         endpoints[1] = random.compute_uniform_integer(extent.lo, extent.hi);
 
         if (endpoints[0] > endpoints[1]) {

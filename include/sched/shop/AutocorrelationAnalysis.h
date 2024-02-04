@@ -25,14 +25,14 @@ namespace sched::shop {
         Statistics ft0_x_ftl;
 
         for (std::size_t i = 0; i < count; ++i) {
-          double x0 = walk[i];
-          double xl = walk[i + offset];
+          const double x0 = walk[i];
+          const double xl = walk[i + offset];
           ft0.add(x0);
           ftl.add(xl);
           ft0_x_ftl.add(x0 * xl);
         }
 
-        double var0 = ft0.get_variance();
+        const double var0 = ft0.get_variance();
 
         if (var0 < std::numeric_limits<double>::epsilon()) {
           // all the values are the same

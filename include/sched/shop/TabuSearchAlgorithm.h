@@ -23,7 +23,7 @@ namespace sched::shop {
     using Input = typename Engine::Input;
 
     template<typename Instance, typename Termination>
-    auto operator()(const Instance& instance, const Input& start, Random& random, std::size_t neighbors_count, Termination&& termination)
+    auto operator()(const Instance& instance, const Input& start, Random& random, std::size_t neighbors_count, Termination termination)
     {
       const std::size_t n = instance.job_count();
       const std::size_t m = instance.machine_count();

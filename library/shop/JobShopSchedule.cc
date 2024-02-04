@@ -86,10 +86,10 @@ namespace sched::shop {
       auto machine_index = to_index(task.machine);
       assert(machine_index < machine_count);
 
-      Time start = std::max(jobs[job_index], machines[machine_index]);
+      const Time start = std::max(jobs[job_index], machines[machine_index]);
 
       if (start < task.start) {
-        Time difference = task.start - start;
+        const Time difference = task.start - start;
         task.start -= difference;
         task.completion -= difference;
       }

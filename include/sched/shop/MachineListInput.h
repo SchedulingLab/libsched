@@ -78,7 +78,7 @@ namespace sched::shop {
       std::vector<std::size_t> operations(instance.job_count(), 0);
 
       for (auto job : jobs) {
-        std::size_t index = operations[sched::to_index(job)]++;
+        const std::size_t index = operations[sched::to_index(job)]++;
         OperationId operation = { job, index };
         auto machine = instance.assigned_machine_for_operation(operation);
         input[sched::to_index(machine)].push_back(operation);

@@ -13,10 +13,10 @@ namespace sched::para {
 
   template<typename Distribution>
   struct GenericParallelGenerator {
-    GenericParallelGenerator(std::size_t machines, std::size_t jobs, Distribution&& distribution)
+    GenericParallelGenerator(std::size_t machines, std::size_t jobs, Distribution distribution)
     : m_machines(machines)
     , m_jobs(jobs)
-    , m_distribution(std::forward<Distribution>(distribution))
+    , m_distribution(std::move(distribution))
     {
     }
 

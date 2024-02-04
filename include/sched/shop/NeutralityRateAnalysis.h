@@ -14,7 +14,7 @@ namespace sched::shop {
     template<typename Fitness>
     double operator()(const std::vector<Fitness>& walk)
     {
-      assert(walk.size() > 0);
+      assert(!walk.empty());
       std::size_t count = 0;
       std::size_t change = 0;
 

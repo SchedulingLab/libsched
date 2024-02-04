@@ -131,7 +131,7 @@ namespace sched {
       throw std::runtime_error("matrix size mismatch.");
     }
 
-    std::size_t n = lhs.column_count();
+    const std::size_t n = lhs.column_count();
 
     for (std::size_t li = 0; li < res.line_count(); ++li) {
       for (std::size_t co = 0; co < res.column_count(); ++co) {

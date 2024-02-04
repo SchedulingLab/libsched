@@ -47,10 +47,10 @@ namespace sched::shop {
 
     void update_schedule(const JobShopTask& task, JobShopSchedule& schedule)
     {
-      JobId job = task.operation.job;
+      const JobId job = task.operation.job;
       JobState& job_state = jobs[to_index(job)];
 
-      MachineId machine = task.machine;
+      const MachineId machine = task.machine;
       MachineState& machine_state = machines[to_index(machine)];
 
       ++job_state.operation;

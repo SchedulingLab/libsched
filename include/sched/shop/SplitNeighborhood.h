@@ -2,6 +2,7 @@
 #define SCHED_SHOP_SPLIT_NEIGHBORHOOD_H
 
 #include <cassert>
+#include <cstdint>
 
 #include <string>
 #include <vector>
@@ -13,7 +14,7 @@
 
 namespace sched::shop {
 
-  enum class SplitNeighborhoodKind {
+  enum class SplitNeighborhoodKind : uint8_t {
     One,
     All,
   };

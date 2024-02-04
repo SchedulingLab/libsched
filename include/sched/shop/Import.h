@@ -1,6 +1,8 @@
 #ifndef SCHED_IMPORT_H
 #define SCHED_IMPORT_H
 
+#include <cstdint>
+
 #include <filesystem>
 
 #include <sched/common/Api.h>
@@ -11,7 +13,7 @@
 
 namespace sched::shop {
 
-  enum class BenchmarkGenerator {
+  enum class BenchmarkGenerator : uint8_t {
     Unknown,
     Const,
     Uniform99,

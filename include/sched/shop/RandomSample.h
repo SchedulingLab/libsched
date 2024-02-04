@@ -1,6 +1,8 @@
 #ifndef SCHED_RANDOM_SAMPLE_H
 #define SCHED_RANDOM_SAMPLE_H
 
+#include <cstdint>
+
 #include <vector>
 
 #include <sched/common/Random.h>
@@ -9,7 +11,7 @@
 
 namespace sched::shop {
 
-  enum class RandomSamplePolicy {
+  enum class RandomSamplePolicy : uint8_t {
     Uniform,
     Feasible,
   };

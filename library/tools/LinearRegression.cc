@@ -29,7 +29,7 @@ namespace sched {
       res(2, 1) = -(mat(0, 0) * mat(2, 1) - mat(0, 1) * mat(2, 0));
       res(2, 2) = mat(0, 0) * mat(1, 1) - mat(0, 1) * mat(1, 0);
 
-      double det = mat(0, 0) * res(0, 0) + mat(1, 0) * res(0, 1) + mat(2, 0) * res(0, 2);
+      const double det = mat(0, 0) * res(0, 0) + mat(1, 0) * res(0, 1) + mat(2, 0) * res(0, 2);
       res /= det;
 
       return res;
@@ -69,8 +69,8 @@ namespace sched {
       y(i, 0) = point.y;
     }
 
-    Matrix x_trans = x.transpose();
-    Matrix mat = (inverse(x_trans * x) * x_trans) * y;
+    const Matrix x_trans = x.transpose();
+    const Matrix mat = (inverse(x_trans * x) * x_trans) * y;
 
     assert(mat.line_count() == 3);
     assert(mat.column_count() == 1);
@@ -83,11 +83,11 @@ namespace sched {
       stats.add(point.y);
     }
 
-    double y_mean = stats.get_mean();
-    Matrix y_hat = x * mat;
+    const double y_mean = stats.get_mean();
+    const Matrix y_hat = x * mat;
 
-    double ssr = norm2(y_hat) - static_cast<double>(m_data.size()) * y_mean * y_mean;
-    double sst = norm2(y) - static_cast<double>(m_data.size()) * y_mean * y_mean;
+    const double ssr = norm2(y_hat) - static_cast<double>(m_data.size()) * y_mean * y_mean;
+    const double sst = norm2(y) - static_cast<double>(m_data.size()) * y_mean * y_mean;
 
     Result res;
     res.a0 = mat(0, 0);

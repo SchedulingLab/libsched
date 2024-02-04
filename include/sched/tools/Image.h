@@ -8,6 +8,7 @@
 
 namespace sched {
 
+  // NOLINTNEXTLINE(performance-enum-size)
   enum class Color : int {
     Black = -2,
     White = -1,

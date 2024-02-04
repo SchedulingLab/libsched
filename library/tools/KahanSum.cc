@@ -14,7 +14,7 @@ namespace sched {
 
   void KahanSum::add(double x)
   {
-    double t = m_sum + x;
+    const double t = m_sum + x;
 
     if (std::fabs(m_sum) > std::fabs(x)) {
       m_c += (m_sum - t) + x;

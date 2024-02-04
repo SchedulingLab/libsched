@@ -47,11 +47,13 @@ namespace sched::shop {
       return get_job(job).operations.size();
     }
 
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     constexpr Time release_date([[maybe_unused]] JobId job) const noexcept
     {
       return 0;
     }
 
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     constexpr Time due_date([[maybe_unused]] JobId job) const noexcept
     {
       return TimeMax;

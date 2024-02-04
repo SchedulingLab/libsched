@@ -29,7 +29,7 @@ namespace sched {
 
   void Log::set_max_scope(int max_scope)
   {
-    std::lock_guard<std::mutex> lock(g_log_mutex);
+    const std::lock_guard<std::mutex> lock(g_log_mutex);
     g_max_scope = max_scope;
   }
 
@@ -37,7 +37,7 @@ namespace sched {
   {
     auto now = std::chrono::system_clock::now();
 
-    std::lock_guard<std::mutex> lock(g_log_mutex);
+    const std::lock_guard<std::mutex> lock(g_log_mutex);
     fmt::print("[{}] {}{}\n", now, std::string(g_indent, '\t'), string);
   }
 

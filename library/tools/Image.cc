@@ -85,7 +85,7 @@ namespace sched {
 
     for (std::size_t row = 0; row < m_height; ++row) {
       for (std::size_t col = 0; col < m_width; ++col) {
-        RGB rgb = pal.get_rgb(get_color(row, col));
+        const RGB rgb = pal.get_rgb(get_color(row, col));
         out << static_cast<int>(rgb.r) << ' ' << static_cast<int>(rgb.g) << ' ' << static_cast<int>(rgb.b) << ' ';
       }
 

@@ -20,9 +20,9 @@ namespace sched {
   void Statistics::add(double x)
   {
     ++m_count;
-    double delta = x - m_mean.get_result();
+    const double delta = x - m_mean.get_result();
     m_mean.add(delta / static_cast<double>(m_count));
-    double delta2 = x - m_mean.get_result();
+    const double delta2 = x - m_mean.get_result();
     m_m2.add(delta * delta2);
 
     if (m_count == 1) {
