@@ -101,6 +101,7 @@ namespace sched::shop {
         auto operations = instance.operation_count(job);
 
         for (std::size_t i = 0; i < operations; ++i) {
+          assert(index < input.size());
           auto input_element = input[index++];
           OperationId operation = { job, i };
 
@@ -115,14 +116,14 @@ namespace sched::shop {
           } else { // !flexible
             MachineId machine = instance.assigned_machine_for_operation(operation);
             assert(to_index(machine) < machine_assignment.size());
-            machine_assignment[to_index(machine)].emplace_back(operation, input[index++]);
+            machine_assignment[to_index(machine)].emplace_back(operation, input_element);
           }
         }
       }
 
       assert(index == input.size());
 
-      std::for_each(machine_assignment.begin(), machine_assignment.end(), [](const std::vector<std::tuple<OperationId, double>>& machine) {
+      std::for_each(machine_assignment.begin(), machine_assignment.end(), [](std::vector<std::tuple<OperationId, double>>& machine) {
         std::sort(machine.begin(), machine.end(), [](const std::tuple<OperationId, double>& lhs, const std::tuple<OperationId, double>& rhs) {
           return std::get<double>(lhs) < std::get<double>(rhs);
         });
