@@ -2,6 +2,7 @@
 #define SCHED_PARA_COMBINE_ALGORITHM_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <vector>
 
@@ -19,7 +20,8 @@ namespace sched::para {
   struct SCHED_API CombineAlgorithm {
 
     template<typename Instance>
-    ParallelSchedule operator()(const Instance& instance) {
+    ParallelSchedule operator()(const Instance& instance)
+    {
       const LptAlgorithm lpt;
 
       ParallelSchedule fallback = lpt(instance);
@@ -78,13 +80,13 @@ namespace sched::para {
 
       std::size_t machine = 0;
 
-      for (auto & group : result) {
+      for (auto& group : result) {
         Time time = 0;
 
-        for (auto & job : group) {
+        for (auto& job : group) {
           ParallelTask task = {};
           task.job = job.id;
-          task.machine = MachineId{machine};
+          task.machine = MachineId{ machine };
           task.start = time;
           task.completion = task.start + job.processing_time;
           schedule.append(task);
@@ -97,12 +99,8 @@ namespace sched::para {
 
       return schedule;
     }
-
   };
 
-
 }
-
-
 
 #endif // SCHED_PARA_COMBINE_ALGORITHM_H

@@ -11,7 +11,8 @@ namespace sched::shop {
     using Input = FlexibleSplitInput<typename Assignment::Input, typename Engine::Input>;
 
     template<typename Instance>
-    auto operator()(const Instance& instance, const Input& input) {
+    auto operator()(const Instance& instance, const Input& input)
+    {
       AssignedInstance assigned_instance(instance);
       assigned_instance.set_assignment(assignment(instance, input.assignment));
       return engine(assigned_instance, input.schedule);

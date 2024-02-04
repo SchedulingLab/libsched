@@ -18,18 +18,21 @@ namespace sched::shop {
     {
     }
 
-    bool has_next_operation(JobId job) const {
+    bool has_next_operation(JobId job) const
+    {
       const JobState& job_state = jobs[to_index(job)];
       return job_state.operation < instance.operation_count(job);
     }
 
-    OperationId next_operation(JobId job) const {
+    OperationId next_operation(JobId job) const
+    {
       assert(has_next_operation(job));
       const JobState& job_state = jobs[to_index(job)];
       return { job, job_state.operation };
     }
 
-    JobShopTask create_task(OperationId operation, MachineId machine) const {
+    JobShopTask create_task(OperationId operation, MachineId machine) const
+    {
       const JobState& job_state = jobs[to_index(operation.job)];
       const MachineState& machine_state = machines[to_index(machine)];
 
@@ -42,7 +45,8 @@ namespace sched::shop {
       return task;
     }
 
-    void update_schedule(const JobShopTask& task, JobShopSchedule& schedule) {
+    void update_schedule(const JobShopTask& task, JobShopSchedule& schedule)
+    {
       JobId job = task.operation.job;
       JobState& job_state = jobs[to_index(job)];
 
@@ -55,7 +59,6 @@ namespace sched::shop {
       ++machine_state.index;
       schedule.append(task);
     }
-
 
     struct JobState {
       MachineId machine = NoMachine;

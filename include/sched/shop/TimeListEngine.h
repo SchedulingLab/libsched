@@ -2,6 +2,7 @@
 #define SCHED_SHOP_TIME_ENGINE_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <map>
 #include <optional>
@@ -21,8 +22,9 @@ namespace sched::shop {
     using Input = TimeListInput;
 
     template<typename Instance>
-    std::optional<JobShopSchedule> operator()(const Instance& instance, const TimeListInput& input) {
-      std::vector<Time> machines(instance.machine_count(), Time{0});
+    std::optional<JobShopSchedule> operator()(const Instance& instance, const TimeListInput& input)
+    {
+      std::vector<Time> machines(instance.machine_count(), Time{ 0 });
 
       struct OperationState {
         OperationId operation;
@@ -105,10 +107,8 @@ namespace sched::shop {
       assert(schedule.task_count() == input.size());
       return make_schedule_active(schedule);
     }
-
   };
 
 }
-
 
 #endif // SCHED_SHOP_TIME_ENGINE_H

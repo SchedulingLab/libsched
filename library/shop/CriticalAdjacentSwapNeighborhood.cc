@@ -1,4 +1,6 @@
+// clang-format off: main header
 #include <sched/shop/CriticalAdjacentSwapNeighborhood.h>
+// clang-format on
 
 #include <algorithm>
 #include <iterator>
@@ -15,7 +17,8 @@ namespace sched::shop {
   namespace {
 
     template<typename Iterator>
-    bool fill_the_gap(Iterator it0, Iterator it1) {
+    bool fill_the_gap(Iterator it0, Iterator it1)
+    {
       if (it1 < it0) {
         std::swap(it0, it1);
       }
@@ -39,7 +42,8 @@ namespace sched::shop {
       return it0 == it1;
     }
 
-    std::optional<std::size_t> compute_one_swappable_task(const std::vector<JobShopTask>& tasks, Random& random) {
+    std::optional<std::size_t> compute_one_swappable_task(const std::vector<JobShopTask>& tasks, Random& random)
+    {
       if (tasks.size() < 2) {
         return std::nullopt;
       }
@@ -50,7 +54,7 @@ namespace sched::shop {
       const std::size_t max_iterations = tasks.size() / 5 + 1;
 
       do {
-        std::size_t index = random.compute_uniform_integer(std::size_t{0}, max - 1);
+        std::size_t index = random.compute_uniform_integer(std::size_t{ 0 }, max - 1);
 
         if (tasks[index].machine == tasks[index + 1].machine && tasks[index].operation.job != tasks[index + 1].operation.job) {
           return index;
@@ -62,7 +66,8 @@ namespace sched::shop {
       return std::nullopt;
     }
 
-    std::vector<std::size_t> compute_all_swappable_tasks(const std::vector<JobShopTask>& tasks) {
+    std::vector<std::size_t> compute_all_swappable_tasks(const std::vector<JobShopTask>& tasks)
+    {
       std::vector<std::size_t> result;
 
       if (tasks.empty()) {
@@ -78,14 +83,14 @@ namespace sched::shop {
       return result;
     }
 
-
   }
 
   /*
    * OperationCriticalAdjacentSwapNeighborhood
    */
 
-  OperationListInput OperationCriticalAdjacentSwapNeighborhood::operator()(const OperationListInput& input, const JobShopSchedule& schedule, Random& random) {
+  OperationListInput OperationCriticalAdjacentSwapNeighborhood::operator()(const OperationListInput& input, const JobShopSchedule& schedule, Random& random)
+  {
     auto critical_path = sched::shop::critical_path(schedule);
     auto maybe_swappable = compute_one_swappable_task(critical_path, random);
 
@@ -110,7 +115,8 @@ namespace sched::shop {
     return fallback(input, schedule, random);
   }
 
-  std::vector<OperationListInput> OperationCriticalAdjacentSwapNeighborhood::generate_many(const OperationListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count) {
+  std::vector<OperationListInput> OperationCriticalAdjacentSwapNeighborhood::generate_many(const OperationListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count)
+  {
     auto critical_path = sched::shop::critical_path(schedule);
     auto swappables = compute_all_swappable_tasks(critical_path);
 
@@ -149,7 +155,8 @@ namespace sched::shop {
    * MachineCriticalAdjacentSwapNeighborhood
    */
 
-  MachineListInput MachineCriticalAdjacentSwapNeighborhood::operator()(const MachineListInput& input, const JobShopSchedule& schedule, Random& random) {
+  MachineListInput MachineCriticalAdjacentSwapNeighborhood::operator()(const MachineListInput& input, const JobShopSchedule& schedule, Random& random)
+  {
     auto critical_path = sched::shop::critical_path(schedule);
     auto maybe_swappable = compute_one_swappable_task(critical_path, random);
 
@@ -160,14 +167,14 @@ namespace sched::shop {
       assert(critical_path[index + 1].machine == machine);
 
       MachineListInput neighbor = input;
-      auto & operations = neighbor[to_index(machine)];
+      auto& operations = neighbor[to_index(machine)];
 
       auto it0 = std::find(operations.begin(), operations.end(), critical_path[index].operation);
       assert(it0 != operations.end());
       auto it1 = std::find(operations.begin(), operations.end(), critical_path[index + 1].operation);
       assert(it1 != operations.end());
 
-//       assert(std::abs(it0 - it1) == 1);
+      //       assert(std::abs(it0 - it1) == 1);
       std::iter_swap(it0, it1);
       return neighbor;
     }
@@ -177,7 +184,8 @@ namespace sched::shop {
     return fallback(input, schedule, random);
   }
 
-  std::vector<MachineListInput> MachineCriticalAdjacentSwapNeighborhood::generate_many(const MachineListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count) {
+  std::vector<MachineListInput> MachineCriticalAdjacentSwapNeighborhood::generate_many(const MachineListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count)
+  {
     auto critical_path = sched::shop::critical_path(schedule);
     auto swappables = compute_all_swappable_tasks(critical_path);
 
@@ -188,7 +196,7 @@ namespace sched::shop {
       assert(critical_path[i + 1].machine == machine);
 
       MachineListInput neighbor = input;
-      auto & operations = neighbor[to_index(machine)];
+      auto& operations = neighbor[to_index(machine)];
 
       auto it0 = std::find(operations.begin(), operations.end(), critical_path[i].operation);
       assert(it0 != operations.end());

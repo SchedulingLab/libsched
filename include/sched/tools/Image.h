@@ -15,12 +15,12 @@ namespace sched {
 
   namespace literals {
 
-    constexpr Color operator""_color(unsigned long long int value) {
-      return Color{static_cast<int>(value)};
+    constexpr Color operator""_color(unsigned long long int value)
+    {
+      return Color{ static_cast<int>(value) };
     }
 
   }
-
 
   class SCHED_API Image {
   public:

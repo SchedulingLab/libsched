@@ -1,15 +1,19 @@
+// clang-format off: main header
 #include <sched/tools/KahanSum.h>
+// clang-format on
 
 #include <cmath>
 
 namespace sched {
 
-  void KahanSum::reset() {
+  void KahanSum::reset()
+  {
     m_sum = 0.0;
     m_c = 0.0f;
   }
 
-  void KahanSum::add(double x) {
+  void KahanSum::add(double x)
+  {
     double t = m_sum + x;
 
     if (std::fabs(m_sum) > std::fabs(x)) {

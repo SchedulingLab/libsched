@@ -2,6 +2,7 @@
 #define SCHED_PARA_LDM_ALGORITHM_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <vector>
 
@@ -28,7 +29,8 @@ namespace sched::para {
       }
     };
 
-    inline LdmSet ldm_set_merge(const LdmSet& lhs, const LdmSet& rhs) {
+    inline LdmSet ldm_set_merge(const LdmSet& lhs, const LdmSet& rhs)
+    {
       LdmSet result;
       result.members.insert(result.members.end(), lhs.members.begin(), lhs.members.end());
       result.members.insert(result.members.end(), rhs.members.begin(), rhs.members.end());
@@ -48,7 +50,8 @@ namespace sched::para {
       }
     };
 
-    inline LdmTuple ldm_tuple_merge(const LdmTuple& lhs, const LdmTuple& rhs) {
+    inline LdmTuple ldm_tuple_merge(const LdmTuple& lhs, const LdmTuple& rhs)
+    {
       const std::size_t count = lhs.sets.size();
       assert(rhs.sets.size() == count);
 
@@ -76,11 +79,13 @@ namespace sched::para {
       {
       }
 
-      void append(ParallelJob job) {
+      void append(ParallelJob job)
+      {
         tuples.emplace_back(machine_count, job);
       }
 
-      void run() {
+      void run()
+      {
         auto comparator = [](const LdmTuple& lhs, const LdmTuple& rhs) {
           return (lhs.sets.back().total - lhs.sets.front().total) < (rhs.sets.back().total - rhs.sets.front().total);
         };
@@ -99,7 +104,6 @@ namespace sched::para {
           tuples.insert(it, std::move(merged));
         }
       }
-
     };
 
   }
@@ -107,7 +111,8 @@ namespace sched::para {
   struct SCHED_API LargestDifferencingMethodAlgorithm {
 
     template<typename Instance>
-    ParallelSchedule operator()(const Instance& instance) {
+    ParallelSchedule operator()(const Instance& instance)
+    {
       details::LdmPartition partition(instance.machine_count());
 
       for (auto job : sched::jobs(instance)) {
@@ -128,7 +133,7 @@ namespace sched::para {
         for (const ParallelJob& job : set.members) {
           ParallelTask task = {};
           task.job = job.id;
-          task.machine = MachineId{machine};
+          task.machine = MachineId{ machine };
           task.start = time;
           task.completion = task.start + job.processing_time;
           schedule.append(task);
@@ -141,7 +146,6 @@ namespace sched::para {
 
       return schedule;
     }
-
   };
 
   using LdmAlgorithm = LargestDifferencingMethodAlgorithm;

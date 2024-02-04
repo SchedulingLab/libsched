@@ -17,20 +17,24 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<JobListInput> {
-    static std::string name() {
+    static std::string name()
+    {
       return "job";
     }
 
-    static void enumerate_start(JobListInput& input) {
+    static void enumerate_start(JobListInput& input)
+    {
       std::sort(input.begin(), input.end());
     }
 
-    static bool enumerate_next(JobListInput& input) {
+    static bool enumerate_next(JobListInput& input)
+    {
       return std::next_permutation(input.begin(), input.end());
     }
 
     template<typename Instance>
-    static JobListInput generate_input(const Instance& instance) {
+    static JobListInput generate_input(const Instance& instance)
+    {
       JobListInput input;
 
       for (auto job : sched::jobs(instance)) {
@@ -45,22 +49,21 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static JobListInput generate_random(const Instance& instance, Random& random) {
+    static JobListInput generate_random(const Instance& instance, Random& random)
+    {
       JobListInput input = generate_input(instance);
       std::shuffle(input.begin(), input.end(), random);
       return input;
     }
 
     template<typename Instance>
-    static JobListInput generate_feasible(const Instance& instance, Random& random) {
+    static JobListInput generate_feasible(const Instance& instance, Random& random)
+    {
       // all inputs are feasible
       return generate_random(instance, random);
     }
-
   };
 
-
 }
-
 
 #endif // SCHED_SHOP_JOB_LIST_INPUT_H

@@ -17,7 +17,8 @@ namespace sched::shop {
     using Input = typename Assignment::Input;
 
     template<typename Instance>
-    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input) {
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
+    {
       auto operations_assignment = assignment(instance, input);
 
       JobShopTransportStates<Instance> states(instance);
@@ -32,7 +33,7 @@ namespace sched::shop {
           if (states.has_next_operation(job)) {
             auto operation = states.next_operation(job);
             assert(operations_assignment.find(operation) != operations_assignment.end());
-            auto machine =  operations_assignment[operation];
+            auto machine = operations_assignment[operation];
 
             if (operation.index == 0) {
               tasks.push_back(states.create_task(operation, machine));

@@ -15,7 +15,8 @@ namespace sched::para {
   struct SCHED_API EarliestFinishTime {
 
     template<typename Instance>
-    ParallelSchedule operator()(const Instance& instance, const std::vector<ParallelJob>& jobs) {
+    ParallelSchedule operator()(const Instance& instance, const std::vector<ParallelJob>& jobs)
+    {
       std::vector<Time> machines(instance.machine_count(), 0);
 
       auto comparator = [&machines](std::size_t lhs, std::size_t rhs) {
@@ -36,7 +37,7 @@ namespace sched::para {
 
         ParallelTask task = {};
         task.job = job.id;
-        task.machine = MachineId{machine};
+        task.machine = MachineId{ machine };
         task.start = machines[machine];
         task.completion = task.start + job.processing_time;
         schedule.append(task);
@@ -47,7 +48,6 @@ namespace sched::para {
 
       return schedule;
     }
-
   };
 
 }

@@ -2,6 +2,7 @@
 #define SCHED_SHOP_TABU_SEARCH_ALGORITHM_H
 
 #include <cmath>
+
 #include <deque>
 #include <optional>
 #include <tuple>
@@ -21,7 +22,8 @@ namespace sched::shop {
     using Input = typename Engine::Input;
 
     template<typename Instance, typename Termination>
-    auto operator()(const Instance& instance, const Input& start, Random& random, std::size_t neighbors_count, Termination&& termination) {
+    auto operator()(const Instance& instance, const Input& start, Random& random, std::size_t neighbors_count, Termination&& termination)
+    {
       const std::size_t n = instance.job_count();
       const std::size_t m = instance.machine_count();
 
@@ -31,7 +33,7 @@ namespace sched::shop {
         o += instance.operation_count(job);
       }
 
-      const std::size_t tabu_duration = static_cast<std::size_t>((n + m / 2.0) * std::exp(- 1.0 * n / (5.0 * m)) + o / 2.0 * std::exp(-(5.0 * m) / n));
+      const std::size_t tabu_duration = static_cast<std::size_t>((n + m / 2.0) * std::exp(-1.0 * n / (5.0 * m)) + o / 2.0 * std::exp(-(5.0 * m) / n));
 
       Input best_input = start;
       auto best_schedule = *engine(instance, best_input);
@@ -51,7 +53,7 @@ namespace sched::shop {
       std::deque<Tabu> tabu_list;
 
       auto is_tabu = [&](const Input& input) {
-        for (auto &tabu : tabu_list) {
+        for (auto& tabu : tabu_list) {
           if (input == tabu.input) {
             return true;
           }
@@ -69,7 +71,7 @@ namespace sched::shop {
 
         auto neighbors = neighborhood.generate_many(current_input, current_schedule, random, neighbors_count);
 
-        for (auto & neighbor_input : neighbors) {
+        for (auto& neighbor_input : neighbors) {
           auto maybe_schedule = engine(instance, neighbor_input);
 
           if (!maybe_schedule) {
@@ -120,11 +122,13 @@ namespace sched::shop {
       return std::make_tuple(best_input, best_fitness, best_schedule, iteration);
     }
 
-    static std::string input_name() {
+    static std::string input_name()
+    {
       return InputTraits<Input>::name();
     }
 
-    static std::string neighborhood_name() {
+    static std::string neighborhood_name()
+    {
       return NeighborhoodTraits<Neighborhood>::name();
     }
 
@@ -132,7 +136,6 @@ namespace sched::shop {
     Neighborhood neighborhood;
     Criterion criterion;
   };
-
 
 }
 

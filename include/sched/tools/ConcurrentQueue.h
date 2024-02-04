@@ -11,7 +11,8 @@ namespace sched {
   template<typename T>
   class ConcurrentQueue {
   public:
-    std::optional<T> pop() {
+    std::optional<T> pop()
+    {
       std::unique_lock<std::mutex> lock(m_mutex);
 
       if (m_closed && m_queue.empty()) {
@@ -27,25 +28,29 @@ namespace sched {
       return value;
     }
 
-    void push(const T& value) {
+    void push(const T& value)
+    {
       std::lock_guard<std::mutex> lock(m_mutex);
       m_queue.push_back(value);
       m_condition.notify_one();
     }
 
-    void push(T&& value) {
+    void push(T&& value)
+    {
       std::lock_guard<std::mutex> lock(m_mutex);
       m_queue.push_back(std::move(value));
       m_condition.notify_one();
     }
 
-    void clear() {
+    void clear()
+    {
       std::lock_guard<std::mutex> lock(m_mutex);
       m_queue.clear();
       m_closed = false;
     }
 
-    void close() {
+    void close()
+    {
       std::lock_guard<std::mutex> lock(m_mutex);
       m_closed = true;
     }

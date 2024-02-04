@@ -2,6 +2,7 @@
 #define SCHED_SHOP_TRANSPORTATION_JOB_LIST_ENGINE_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <optional>
 #include <vector>
@@ -21,7 +22,8 @@ namespace sched::shop {
     using Input = TransportSplitInput<JobListInput, typename TransportationAssignment::Input>;
 
     template<typename Instance>
-    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input) {
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
+    {
       auto transportation = transportation_assignment(instance, input.transport);
       std::size_t transportation_index = 0;
 

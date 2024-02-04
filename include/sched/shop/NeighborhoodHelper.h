@@ -11,7 +11,8 @@ namespace sched::shop {
   struct SCHED_API NeighborhoodHelper {
 
     template<typename Neighborhood, typename Input, typename Schedule>
-    static std::vector<Input> generate_many(Neighborhood& neighborhood, const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
+    static std::vector<Input> generate_many(Neighborhood& neighborhood, const Input& input, const Schedule& schedule, Random& random, std::size_t count)
+    {
       std::vector<Input> result;
 
       for (std::size_t i = 0; i < count; ++i) {
@@ -20,7 +21,6 @@ namespace sched::shop {
 
       return result;
     }
-
   };
 
 }

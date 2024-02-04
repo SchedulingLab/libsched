@@ -2,6 +2,7 @@
 #define SCHED_PARA_MULTIFIT_ALGORITHM_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <vector>
 
@@ -17,7 +18,8 @@ namespace sched::para {
   struct SCHED_API MultifitAlgorithm {
 
     template<typename Instance, int Iterations = 7>
-    ParallelSchedule operator()(const Instance& instance) {
+    ParallelSchedule operator()(const Instance& instance)
+    {
       std::vector<ParallelJob> jobs;
       Time sum = 0;
       Time max = 0;
@@ -37,7 +39,8 @@ namespace sched::para {
     }
 
     template<typename Instance, int Iterations = 7>
-    ParallelSchedule apply(const Instance& instance, const std::vector<ParallelJob>& jobs, Time sum, Time max) {
+    ParallelSchedule apply(const Instance& instance, const std::vector<ParallelJob>& jobs, Time sum, Time max)
+    {
       const Time average = sum / instance.machine_count();
       Time lower = std::max(average, max);
       Time upper = std::max(2 * average, max);
@@ -66,13 +69,13 @@ namespace sched::para {
 
       std::size_t machine = 0;
 
-      for (auto & group : result) {
+      for (auto& group : result) {
         Time time = 0;
 
-        for (auto & job : group) {
+        for (auto& job : group) {
           ParallelTask task = {};
           task.job = job.id;
-          task.machine = MachineId{machine};
+          task.machine = MachineId{ machine };
           task.start = time;
           task.completion = task.start + job.processing_time;
           schedule.append(task);
@@ -85,13 +88,8 @@ namespace sched::para {
 
       return schedule;
     }
-
-
-
   };
 
-
 }
-
 
 #endif // SCHED_PARA_MULTIFIT_ALGORITHM_H

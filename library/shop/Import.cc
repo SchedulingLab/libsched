@@ -1,6 +1,9 @@
+// clang-format off: main header
 #include <sched/shop/Import.h>
+// clang-format on
 
 #include <cassert>
+
 #include <fstream>
 #include <sstream>
 
@@ -16,7 +19,7 @@ namespace sched::shop {
     {
       std::vector<int64_t> numbers;
 
-      for (std::string line; std::getline(input, line); ) {
+      for (std::string line; std::getline(input, line);) {
         if (line[0] == '#') {
           continue;
         }
@@ -34,21 +37,22 @@ namespace sched::shop {
 
   }
 
-
   /*
    * jsp
    */
 
+  // clang-format off
   NLOHMANN_JSON_SERIALIZE_ENUM(BenchmarkGenerator, {
-    { BenchmarkGenerator::Const, "gen-const" },
-    { BenchmarkGenerator::Uniform99, "gen-uniform-99" },
-    { BenchmarkGenerator::Uniform200, "gen-uniform-200" },
-    { BenchmarkGenerator::Binomial, "gen-binom" },
-    { BenchmarkGenerator::NegativeBinomial, "gen-nbinom" },
+    {            BenchmarkGenerator::Const,       "gen-const" },
+    {        BenchmarkGenerator::Uniform99,  "gen-uniform-99" },
+    {       BenchmarkGenerator::Uniform200, "gen-uniform-200" },
+    {         BenchmarkGenerator::Binomial,       "gen-binom" },
+    { BenchmarkGenerator::NegativeBinomial,      "gen-nbinom" },
   })
+  // clang-format on
 
-
-  static void from_json(const nlohmann::json& j, JobShopBenchmark& benchmark) {
+  static void from_json(const nlohmann::json& j, JobShopBenchmark& benchmark)
+  {
     assert(!j.is_null());
     j.at("name").get_to(benchmark.name);
     j.at("jobs").get_to(benchmark.jobs);
@@ -56,7 +60,7 @@ namespace sched::shop {
 
     if (j.at("optimum").is_null()) {
       benchmark.optimum = 0;
-      auto & bounds = j.at("bounds");
+      auto& bounds = j.at("bounds");
 
       if (bounds.is_null()) {
         benchmark.upper_bound = 0;
@@ -82,7 +86,8 @@ namespace sched::shop {
     benchmark.path = path_string;
   }
 
-  std::vector<JobShopBenchmark> Import::load_jsp_benchmarks(const std::filesystem::path& filename) {
+  std::vector<JobShopBenchmark> Import::load_jsp_benchmarks(const std::filesystem::path& filename)
+  {
     std::vector<JobShopBenchmark> benchmarks;
 
     std::ifstream stream(filename);
@@ -94,7 +99,8 @@ namespace sched::shop {
     return benchmarks;
   }
 
-  JobShopInstance Import::load_jsp(const std::filesystem::path& filename) {
+  JobShopInstance Import::load_jsp(const std::filesystem::path& filename)
+  {
     std::ifstream input(filename);
 
     if (!input) {
@@ -104,7 +110,7 @@ namespace sched::shop {
     std::size_t machine_count;
     std::size_t job_count;
 
-    for (std::string line; std::getline(input, line); ) {
+    for (std::string line; std::getline(input, line);) {
       if (line[0] == '#') {
         continue;
       }
@@ -117,7 +123,7 @@ namespace sched::shop {
 
     std::vector<JobShopInstance::JobDesc> jobs;
 
-    for (std::string line; std::getline(input, line); ) {
+    for (std::string line; std::getline(input, line);) {
       std::istringstream data;
       data.str(line);
 
@@ -126,11 +132,11 @@ namespace sched::shop {
       Time processing;
 
       while (data >> machine >> processing) {
-        JobShopInstance::OperationDesc op = { MachineId{machine}, processing };
+        JobShopInstance::OperationDesc op = { MachineId{ machine }, processing };
         job.operations.push_back(op);
       }
 
-//       assert(job.operations.size() == machine_count);
+      //       assert(job.operations.size() == machine_count);
       jobs.push_back(std::move(job));
     }
 
@@ -143,7 +149,8 @@ namespace sched::shop {
    * fjsp
    */
 
-  static void from_json(const nlohmann::json& j, FlexibleJobShopBenchmark& benchmark) {
+  static void from_json(const nlohmann::json& j, FlexibleJobShopBenchmark& benchmark)
+  {
     assert(!j.is_null());
     j.at("name").get_to(benchmark.name);
     j.at("jobs").get_to(benchmark.jobs);
@@ -151,7 +158,7 @@ namespace sched::shop {
 
     if (j.at("optimum").is_null()) {
       benchmark.optimum = 0;
-      auto & bounds = j.at("bounds");
+      auto& bounds = j.at("bounds");
 
       if (bounds.is_null()) {
         benchmark.upper_bound = 0;
@@ -171,7 +178,8 @@ namespace sched::shop {
     benchmark.path = path_string;
   }
 
-  std::vector<FlexibleJobShopBenchmark> Import::load_fjsp_benchmarks(const std::filesystem::path& filename) {
+  std::vector<FlexibleJobShopBenchmark> Import::load_fjsp_benchmarks(const std::filesystem::path& filename)
+  {
     std::vector<FlexibleJobShopBenchmark> benchmarks;
 
     std::ifstream stream(filename);
@@ -183,7 +191,8 @@ namespace sched::shop {
     return benchmarks;
   }
 
-  FlexibleJobShopInstance Import::load_fjsp(const std::filesystem::path& filename) {
+  FlexibleJobShopInstance Import::load_fjsp(const std::filesystem::path& filename)
+  {
     std::ifstream input(filename);
 
     if (!input) {
@@ -193,7 +202,7 @@ namespace sched::shop {
     std::size_t machine_count;
     std::size_t job_count;
 
-    for (std::string line; std::getline(input, line); ) {
+    for (std::string line; std::getline(input, line);) {
       if (line[0] == '#') {
         continue;
       }
@@ -230,7 +239,7 @@ namespace sched::shop {
 
         for (std::size_t j = 0; j < operation_machine_count; ++j) {
           data >> machine >> processing;
-          operation.choices.push_back({ MachineId{machine}, processing });
+          operation.choices.push_back({ MachineId{ machine }, processing });
         }
 
         job.operations.push_back(std::move(operation));
@@ -247,7 +256,8 @@ namespace sched::shop {
    * fjspt
    */
 
-  static void from_json(const nlohmann::json& j, FlexibleJobShopTransportBenchmark& benchmark) {
+  static void from_json(const nlohmann::json& j, FlexibleJobShopTransportBenchmark& benchmark)
+  {
     assert(!j.is_null());
     j.at("name").get_to(benchmark.name);
     j.at("jobs").get_to(benchmark.jobs);
@@ -259,7 +269,8 @@ namespace sched::shop {
     benchmark.path = path_string;
   }
 
-  std::vector<FlexibleJobShopTransportBenchmark> Import::load_fjspt_benchmarks(const std::filesystem::path& filename) {
+  std::vector<FlexibleJobShopTransportBenchmark> Import::load_fjspt_benchmarks(const std::filesystem::path& filename)
+  {
     std::vector<FlexibleJobShopTransportBenchmark> benchmarks;
 
     std::ifstream stream(filename);
@@ -271,7 +282,8 @@ namespace sched::shop {
     return benchmarks;
   }
 
-  FlexibleJobShopTransportInstance Import::load_fjspt(const std::filesystem::path& filename) {
+  FlexibleJobShopTransportInstance Import::load_fjspt(const std::filesystem::path& filename)
+  {
     std::ifstream input(filename);
 
     if (!input) {
@@ -315,11 +327,10 @@ namespace sched::shop {
           const std::size_t machine = next();
           const Time processing = next();
           // Log::println("[{}, {}, {}] machine: {}, processing: {}", i, j, k, machine, processing);
-          operation.choices.push_back({ MachineId{machine}, processing });
+          operation.choices.push_back({ MachineId{ machine }, processing });
         }
 
         job.operations.push_back(std::move(operation));
-
       }
 
       jobs.push_back(std::move(job));
@@ -341,4 +352,3 @@ namespace sched::shop {
   }
 
 }
-

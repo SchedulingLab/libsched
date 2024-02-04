@@ -2,6 +2,7 @@
 #define SCHED_SHOP_GENERAL_JOB_LIST_ENGINE_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <optional>
 #include <vector>
@@ -10,9 +11,9 @@
 #include <sched/common/Instance.h>
 
 #include "JobListInput.h"
+#include "JobShopTaskComparator.h"
 #include "JobShopTransportSchedule.h"
 #include "JobShopTransportStates.h"
-#include "JobShopTaskComparator.h"
 
 namespace sched::shop {
 
@@ -21,7 +22,8 @@ namespace sched::shop {
     using Input = JobListInput;
 
     template<typename Instance>
-    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const JobListInput& input) {
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const JobListInput& input)
+    {
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
       Comparator comparator;
@@ -85,7 +87,6 @@ namespace sched::shop {
 
       return schedule;
     }
-
   };
 
   using GeneralJobListEngineEST = GeneralJobListEngine<JobShopTaskEarliestStartingTime>;

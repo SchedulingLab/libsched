@@ -11,19 +11,23 @@ namespace sched {
   public:
     Matrix(std::size_t lines, std::size_t columns, double val = 0.0);
 
-    std::size_t line_count() const {
+    std::size_t line_count() const
+    {
       return m_lines;
     }
 
-    std::size_t column_count() const {
+    std::size_t column_count() const
+    {
       return m_columns;
     }
 
-    double operator()(std::size_t li, std::size_t co) const {
+    double operator()(std::size_t li, std::size_t co) const
+    {
       return value_at(li, co);
     }
 
-    double& operator()(std::size_t li, std::size_t co) {
+    double& operator()(std::size_t li, std::size_t co)
+    {
       return value_at(li, co);
     }
 

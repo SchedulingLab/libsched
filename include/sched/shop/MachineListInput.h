@@ -2,6 +2,7 @@
 #define SCHED_SHOP_MACHINE_LIST_INPUT_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -19,18 +20,21 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<MachineListInput> {
-    static std::string name() {
+    static std::string name()
+    {
       return "mch";
     }
 
-    static void enumerate_start(MachineListInput& input) {
+    static void enumerate_start(MachineListInput& input)
+    {
       for (auto& machine : input) {
         std::sort(machine.begin(), machine.end());
       }
     }
 
-    static bool enumerate_next(MachineListInput& input) {
-      for (auto & machine : input) {
+    static bool enumerate_next(MachineListInput& input)
+    {
+      for (auto& machine : input) {
         if (std::next_permutation(machine.begin(), machine.end())) {
           return true;
         }
@@ -40,7 +44,8 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static MachineListInput generate_input(const Instance& instance) {
+    static MachineListInput generate_input(const Instance& instance)
+    {
       static_assert(!Instance::flexible, "MachineListInput does not work with flexible instances.");
       MachineListInput input(instance.machine_count());
 
@@ -58,7 +63,8 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static MachineListInput generate_random(const Instance& instance, Random& random) {
+    static MachineListInput generate_random(const Instance& instance, Random& random)
+    {
       static_assert(!Instance::flexible, "MachineListInput does not work with flexible instances.");
       MachineListInput input = generate_input(instance);
 
@@ -70,7 +76,8 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static MachineListInput generate_feasible(const Instance& instance, Random& random) {
+    static MachineListInput generate_feasible(const Instance& instance, Random& random)
+    {
       static_assert(!Instance::flexible, "MachineListInput does not work with flexible instances.");
       std::vector<JobId> jobs;
 
@@ -97,7 +104,6 @@ namespace sched::shop {
 
       return input;
     }
-
   };
 
 }

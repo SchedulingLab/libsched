@@ -2,6 +2,7 @@
 #define SCHED_RANDOM_WALK_H
 
 #include <cassert>
+
 #include <vector>
 
 #include <sched/common/Random.h>
@@ -15,7 +16,8 @@ namespace sched::shop {
     using Fitness = typename Criterion::Fitness;
 
     template<typename Instance>
-    std::vector<Fitness> operator()(const Instance& instance, const Input& start, Random& random, std::size_t count = 1000) {
+    std::vector<Fitness> operator()(const Instance& instance, const Input& start, Random& random, std::size_t count = 1000)
+    {
       // find a first feasible solution
       Input current = start;
 

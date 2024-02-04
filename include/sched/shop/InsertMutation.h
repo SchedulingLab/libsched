@@ -2,6 +2,7 @@
 #define SCHED_INSERT_MUTATION_H
 
 #include <cassert>
+
 #include <string>
 
 #include <sched/common/Api.h>
@@ -14,7 +15,8 @@ namespace sched::shop {
   struct SCHED_API InsertMutation {
 
     template<typename Input>
-    Input operator()(const Input& input, Random& random) {
+    Input operator()(const Input& input, Random& random)
+    {
       assert(!input.empty());
 
       std::size_t max = input.size() - 1;
@@ -24,8 +26,8 @@ namespace sched::shop {
         std::size_t orig, dest;
 
         do {
-          orig = random.compute_uniform_integer(std::size_t{0}, max);
-          dest = random.compute_uniform_integer(std::size_t{0}, max);
+          orig = random.compute_uniform_integer(std::size_t{ 0 }, max);
+          dest = random.compute_uniform_integer(std::size_t{ 0 }, max);
         } while (orig == dest);
 
         neighbor = input;
@@ -44,15 +46,14 @@ namespace sched::shop {
         neighbor[dest] = val;
       } while (neighbor == input);
 
-
       return neighbor;
     }
-
   };
 
   template<>
   struct MutationTraits<InsertMutation> {
-    static std::string name() {
+    static std::string name()
+    {
       return "ins";
     }
   };

@@ -2,6 +2,7 @@
 #define SCHED_NEUTRALITY_RATE_ANALYSIS_H
 
 #include <cassert>
+
 #include <vector>
 
 #include <sched/common/Api.h>
@@ -11,7 +12,8 @@ namespace sched::shop {
   struct SCHED_API NeutralityRateAnalysis {
 
     template<typename Fitness>
-    double operator()(const std::vector<Fitness>& walk) {
+    double operator()(const std::vector<Fitness>& walk)
+    {
       assert(walk.size() > 0);
       std::size_t count = 0;
       std::size_t change = 0;
@@ -46,10 +48,8 @@ namespace sched::shop {
 
       return 100.0 * static_cast<double>(count - 1 - change) / static_cast<double>(count - 1);
     }
-
   };
 
 }
-
 
 #endif // SCHED_NEUTRALITY_RATE_ANALYSIS_H

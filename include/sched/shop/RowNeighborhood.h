@@ -9,8 +9,8 @@
 #include "InsertNeighborhood.h"
 #include "NeighborhoodHelper.h"
 #include "NeighborhoodTraits.h"
-#include "SwapNeighborhood.h"
 #include "ReverseNeighborhood.h"
+#include "SwapNeighborhood.h"
 
 namespace sched::shop {
 
@@ -18,14 +18,15 @@ namespace sched::shop {
   struct RowNeighborhood : private BaseNeighborhood {
 
     template<typename Input, typename Schedule>
-    Input operator()(const Input& input, const Schedule& schedule, Random& random) {
+    Input operator()(const Input& input, const Schedule& schedule, Random& random)
+    {
       assert(!input.empty());
       std::size_t rows = input.size() - 1;
       Input neighbor;
 
       do {
         neighbor = input;
-        auto& row = neighbor[random.compute_uniform_integer(std::size_t{0}, rows)];
+        auto& row = neighbor[random.compute_uniform_integer(std::size_t{ 0 }, rows)];
 
         if (row.size() <= 1) {
           continue;
@@ -38,15 +39,16 @@ namespace sched::shop {
     }
 
     template<typename Input, typename Schedule>
-    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
+    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count)
+    {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
-
   };
 
   template<typename BaseNeighborhood>
   struct NeighborhoodTraits<RowNeighborhood<BaseNeighborhood>> {
-    static std::string name() {
+    static std::string name()
+    {
       return NeighborhoodTraits<BaseNeighborhood>::name();
     }
   };

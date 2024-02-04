@@ -2,6 +2,7 @@
 #define SCHED_SHOP_FLEXIBLE_JOB_SHOP_TRANSPORT_INSTANCE_H
 
 #include <cassert>
+
 #include <vector>
 
 #include <sched/common/Api.h>
@@ -41,19 +42,23 @@ namespace sched::shop {
       assert(is_valid());
     }
 
-    std::size_t machine_count() const noexcept {
+    std::size_t machine_count() const noexcept
+    {
       return m_machines;
     }
 
-    std::size_t job_count() const noexcept {
+    std::size_t job_count() const noexcept
+    {
       return m_jobs.size();
     }
 
-    std::size_t operation_count(JobId job) const {
+    std::size_t operation_count(JobId job) const
+    {
       return get_job(job).operations.size();
     }
 
-    std::vector<MachineId> machines_for_operation(OperationId op) const {
+    std::vector<MachineId> machines_for_operation(OperationId op) const
+    {
       std::vector<MachineId> machines;
 
       for (auto& choice : get_job(op.job).operations[op.index].choices) {
@@ -63,16 +68,19 @@ namespace sched::shop {
       return machines;
     }
 
-    constexpr Time release_date([[maybe_unused]] JobId job) const noexcept {
+    constexpr Time release_date([[maybe_unused]] JobId job) const noexcept
+    {
       return 0;
     }
 
-    constexpr Time due_date([[maybe_unused]] JobId job) const noexcept {
+    constexpr Time due_date([[maybe_unused]] JobId job) const noexcept
+    {
       return TimeMax;
     }
 
-    Time processing_time(OperationId op, [[maybe_unused]] MachineId machine) const {
-      for (auto & choice : get_job(op.job).operations[op.index].choices) {
+    Time processing_time(OperationId op, [[maybe_unused]] MachineId machine) const
+    {
+      for (auto& choice : get_job(op.job).operations[op.index].choices) {
         if (choice.machine == machine) {
           return choice.processing;
         }
@@ -82,37 +90,42 @@ namespace sched::shop {
       return TimeMax;
     }
 
-    constexpr std::size_t transportation_count() const noexcept {
+    constexpr std::size_t transportation_count() const noexcept
+    {
       return m_transportation_resources;
     }
 
-    Time transportation_time_empty(MachineId origin, MachineId target) const noexcept {
+    Time transportation_time_empty(MachineId origin, MachineId target) const noexcept
+    {
       if (origin == NoMachine) {
-        return Time{0};
+        return Time{ 0 };
       }
 
       return m_delays_empty(sched::to_index(origin), sched::to_index(target));
     }
 
-    Time transportation_time_loaded(MachineId origin, MachineId target) const noexcept {
+    Time transportation_time_loaded(MachineId origin, MachineId target) const noexcept
+    {
       if (origin == NoMachine) {
-        return Time{0};
+        return Time{ 0 };
       }
 
       return m_delays_loaded(sched::to_index(origin), sched::to_index(target));
     }
 
   private:
-    const JobDesc& get_job(JobId id) const {
+    const JobDesc& get_job(JobId id) const
+    {
       auto index = sched::to_index(id);
       assert(index < m_jobs.size());
       return m_jobs[index];
     }
 
-    bool is_valid() const noexcept {
-      for (auto & job : m_jobs) {
-        for (auto & op : job.operations) {
-          for (auto & choice : op.choices) {
+    bool is_valid() const noexcept
+    {
+      for (auto& job : m_jobs) {
+        for (auto& op : job.operations) {
+          for (auto& choice : op.choices) {
             if (sched::to_index(choice.machine) >= m_machines) {
               return false;
             }
@@ -139,6 +152,5 @@ namespace sched::shop {
   };
 
 }
-
 
 #endif // SCHED_SHOP_FLEXIBLE_JOB_SHOP_TRANSPORT_INSTANCE_H

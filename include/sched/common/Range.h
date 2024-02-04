@@ -2,6 +2,7 @@
 #define SCHED_RANGE_H
 
 #include <cstddef>
+
 #include <iterator>
 
 namespace sched {
@@ -19,59 +20,68 @@ namespace sched {
 
       std::size_t index;
 
-      void swap(Iterator& other) noexcept {
+      void swap(Iterator& other) noexcept
+      {
         using std::swap;
         swap(index, other.index);
       }
 
-      reference operator*() noexcept {
-        return Id{index};
+      reference operator*() noexcept
+      {
+        return Id{ index };
       }
 
-       pointer operator->() noexcept {
-        return Id{index};
+      pointer operator->() noexcept
+      {
+        return Id{ index };
       }
 
-      Iterator& operator++() noexcept {
+      Iterator& operator++() noexcept
+      {
         ++index;
         return *this;
       }
 
-      Iterator operator++(int) noexcept {
+      Iterator operator++(int) noexcept
+      {
         Iterator copy = *this;
         ++index;
         return copy;
       }
 
-      Iterator& operator--() noexcept {
+      Iterator& operator--() noexcept
+      {
         --index;
         return *this;
       }
 
-      constexpr bool operator!=(const Iterator& other) const noexcept {
+      constexpr bool operator!=(const Iterator& other) const noexcept
+      {
         return index != other.index;
       }
 
-      constexpr bool operator==(const Iterator& other) const noexcept {
+      constexpr bool operator==(const Iterator& other) const noexcept
+      {
         return index == other.index;
       }
-
     };
 
-    constexpr Iterator begin() const noexcept {
-      return Iterator{0};
+    constexpr Iterator begin() const noexcept
+    {
+      return Iterator{ 0 };
     }
 
-    constexpr Iterator end() const noexcept {
-      return Iterator{size};
+    constexpr Iterator end() const noexcept
+    {
+      return Iterator{ size };
     }
   };
 
   template<typename T>
-  Range<std::size_t> over(const T& container) {
+  Range<std::size_t> over(const T& container)
+  {
     return { container.size() };
   }
-
 
   template<class T>
   class IteratorRange {
@@ -83,11 +93,13 @@ namespace sched {
     {
     }
 
-    Iterator begin() {
+    Iterator begin()
+    {
       return m_beg;
     }
 
-    Iterator end() {
+    Iterator end()
+    {
       return m_end;
     }
 
@@ -97,14 +109,14 @@ namespace sched {
   };
 
   template<class T>
-  inline
-  IteratorRange<typename T::iterator> make_iterator_range(T& cont) {
+  inline IteratorRange<typename T::iterator> make_iterator_range(T& cont)
+  {
     return IteratorRange<typename T::iterator>(cont.begin(), cont.end());
   }
 
   template<class T>
-  inline
-  IteratorRange<typename T::const_iterator> make_iterator_range(const T& cont) {
+  inline IteratorRange<typename T::const_iterator> make_iterator_range(const T& cont)
+  {
     return IteratorRange<typename T::const_iterator>(cont.begin(), cont.end());
   }
 

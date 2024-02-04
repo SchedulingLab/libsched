@@ -17,12 +17,14 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<TimeListInput> {
-    static std::string name() {
+    static std::string name()
+    {
       return "tim";
     }
 
     template<typename Instance>
-    static TimeListInput generate_input(const Instance& instance) {
+    static TimeListInput generate_input(const Instance& instance)
+    {
       TimeListInput input;
 
       for (auto job : sched::jobs(instance)) {
@@ -37,7 +39,8 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static TimeListInput generate_random(const Instance& instance, Random& random) {
+    static TimeListInput generate_random(const Instance& instance, Random& random)
+    {
       std::size_t count = 0;
       Time max_time = 0;
 
@@ -50,7 +53,7 @@ namespace sched::shop {
           if constexpr (Instance::flexible) {
             const auto machines = instance.machines_for_operation(operation);
 
-            for (auto & machine : machines) {
+            for (auto& machine : machines) {
               Time processing_time = instance.processing_time(operation, machine);
 
               if (processing_time > max_time) {
@@ -81,10 +84,10 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static TimeListInput generate_feasible(const Instance& instance, [[maybe_unused]] Random& random) {
+    static TimeListInput generate_feasible(const Instance& instance, [[maybe_unused]] Random& random)
+    {
       return generate_random(instance, random);
     }
-
   };
 
 }

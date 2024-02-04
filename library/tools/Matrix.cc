@@ -1,6 +1,9 @@
+// clang-format off: main header
 #include <sched/tools/Matrix.h>
+// clang-format on
 
 #include <cassert>
+
 #include <stdexcept>
 
 #include <sched/tools/KahanSum.h>
@@ -13,7 +16,8 @@ namespace sched {
   {
   }
 
-  Matrix& Matrix::operator+=(const Matrix& other) {
+  Matrix& Matrix::operator+=(const Matrix& other)
+  {
     assert(line_count() == other.line_count());
     assert(column_count() == other.column_count());
 
@@ -26,7 +30,8 @@ namespace sched {
     return *this;
   }
 
-  Matrix& Matrix::operator-=(const Matrix& other) {
+  Matrix& Matrix::operator-=(const Matrix& other)
+  {
     assert(line_count() == other.line_count());
     assert(column_count() == other.column_count());
 
@@ -39,23 +44,26 @@ namespace sched {
     return *this;
   }
 
-  Matrix& Matrix::operator*=(double val) {
-    for (auto & x : m_data) {
+  Matrix& Matrix::operator*=(double val)
+  {
+    for (auto& x : m_data) {
       x *= val;
     }
 
     return *this;
   }
 
-  Matrix& Matrix::operator/=(double val) {
-    for (auto & x : m_data) {
+  Matrix& Matrix::operator/=(double val)
+  {
+    for (auto& x : m_data) {
       x /= val;
     }
 
     return *this;
   }
 
-  Matrix Matrix::transpose() const {
+  Matrix Matrix::transpose() const
+  {
     Matrix transposed(m_columns, m_lines);
 
     for (std::size_t li = 0; li < m_lines; ++li) {
@@ -67,37 +75,43 @@ namespace sched {
     return transposed;
   }
 
-  double Matrix::value_at(std::size_t li, std::size_t co) const {
+  double Matrix::value_at(std::size_t li, std::size_t co) const
+  {
     assert(li < m_lines);
     assert(co < m_columns);
     assert(linearize(li, co) < m_data.size());
     return m_data[linearize(li, co)];
   }
 
-  double& Matrix::value_at(std::size_t li, std::size_t co) {
+  double& Matrix::value_at(std::size_t li, std::size_t co)
+  {
     assert(li < m_lines);
     assert(co < m_columns);
     assert(linearize(li, co) < m_data.size());
     return m_data[linearize(li, co)];
   }
 
-  std::size_t Matrix::linearize(std::size_t li, std::size_t co) const {
+  std::size_t Matrix::linearize(std::size_t li, std::size_t co) const
+  {
     return li * m_columns + co;
   }
 
-  Matrix operator+(const Matrix& lhs, const Matrix& rhs) {
+  Matrix operator+(const Matrix& lhs, const Matrix& rhs)
+  {
     Matrix res(lhs);
     res += rhs;
     return res;
   }
 
-  Matrix operator-(const Matrix& lhs, const Matrix& rhs) {
+  Matrix operator-(const Matrix& lhs, const Matrix& rhs)
+  {
     Matrix res(lhs);
     res -= rhs;
     return res;
   }
 
-  Matrix operator*(double lhs, const Matrix& rhs) {
+  Matrix operator*(double lhs, const Matrix& rhs)
+  {
     Matrix res(rhs);
 
     for (std::size_t li = 0; li < res.line_count(); ++li) {
@@ -109,7 +123,8 @@ namespace sched {
     return res;
   }
 
-  Matrix operator*(const Matrix& lhs, const Matrix& rhs) {
+  Matrix operator*(const Matrix& lhs, const Matrix& rhs)
+  {
     Matrix res(lhs.line_count(), rhs.column_count());
 
     if (lhs.column_count() != rhs.line_count()) {

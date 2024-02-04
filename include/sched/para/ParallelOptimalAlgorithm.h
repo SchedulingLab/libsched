@@ -2,10 +2,11 @@
 #define SCHED_PARA_PARALLEL_OPTIMAL_ALGORITHM_H
 
 #include <cassert>
+
 #include <vector>
 
-#include <lqp/Problem.h>
 #include <lqp/GlpkSolver.h>
+#include <lqp/Problem.h>
 
 #include <sched/common/Api.h>
 #include <sched/common/Instance.h>
@@ -19,7 +20,8 @@ namespace sched::para {
   struct SCHED_API ParallelOptimalAlgorithm {
 
     template<typename Instance>
-    ParallelSchedule operator()(const Instance& instance) {
+    ParallelSchedule operator()(const Instance& instance)
+    {
       std::vector<ParallelJob> jobs;
 
       for (auto job : sched::jobs(instance)) {
@@ -38,10 +40,10 @@ namespace sched::para {
        */
 
       auto x_i_j = [machine_count](JobId job, std::size_t machine) {
-        return lqp::VariableId{to_index(job) * machine_count + machine};
+        return lqp::VariableId{ to_index(job) * machine_count + machine };
       };
 
-      for (auto & job : jobs) {
+      for (auto& job : jobs) {
         for (std::size_t machine = 0; machine < machine_count; ++machine) {
           [[maybe_unused]] auto variable = problem.add_variable(lqp::VariableCategory::Binary, "x_" + std::to_string(to_index(job.id)) + "_" + std::to_string(machine));
           assert(x_i_j(job.id, machine) == variable);
@@ -55,7 +57,7 @@ namespace sched::para {
        * - sum_{i} x_i_j * p_i <= c_max (c_max is greater than the sum of the processing times of all tasks present on machine j)
        */
 
-      for (auto & job : jobs) {
+      for (auto& job : jobs) {
         lqp::QExpr sum;
 
         for (std::size_t machine = 0; machine < machine_count; ++machine) {
@@ -68,7 +70,7 @@ namespace sched::para {
       for (std::size_t machine = 0; machine < machine_count; ++machine) {
         lqp::QExpr sum;
 
-        for (auto & job : jobs) {
+        for (auto& job : jobs) {
           sum += job.processing_time * x_i_j(job.id, machine);
         }
 
@@ -89,7 +91,7 @@ namespace sched::para {
       ParallelSchedule schedule;
       std::vector<Time> machines(machine_count, 0);
 
-      for (auto & job : jobs) {
+      for (auto& job : jobs) {
         [[maybe_unused]] bool unique = false;
 
         for (std::size_t machine = 0; machine < machine_count; ++machine) {
@@ -101,7 +103,7 @@ namespace sched::para {
 
             ParallelTask task = {};
             task.job = job.id;
-            task.machine = MachineId{machine};
+            task.machine = MachineId{ machine };
             task.start = machines[machine];
             task.completion = task.start + job.processing_time;
             schedule.append(task);
@@ -113,7 +115,6 @@ namespace sched::para {
 
       return schedule;
     }
-
   };
 
 }

@@ -20,19 +20,21 @@ namespace sched::shop {
   };
 
   template<typename AssignmentInput, typename ScheduleInput>
-  inline
-  bool operator==(const FlexibleSplitInput<AssignmentInput, ScheduleInput>& lhs, const FlexibleSplitInput<AssignmentInput, ScheduleInput>& rhs) {
+  inline bool operator==(const FlexibleSplitInput<AssignmentInput, ScheduleInput>& lhs, const FlexibleSplitInput<AssignmentInput, ScheduleInput>& rhs)
+  {
     return lhs.assignment == rhs.assignment && lhs.schedule == rhs.schedule;
   }
 
   template<typename AssignmentInput, typename ScheduleInput>
   struct InputTraits<FlexibleSplitInput<AssignmentInput, ScheduleInput>> {
-    static std::string name() {
+    static std::string name()
+    {
       return InputTraits<AssignmentInput>::name() + '_' + InputTraits<ScheduleInput>::name();
     }
 
     template<typename Instance>
-    static FlexibleSplitInput<AssignmentInput, ScheduleInput> generate_input(const Instance& instance) {
+    static FlexibleSplitInput<AssignmentInput, ScheduleInput> generate_input(const Instance& instance)
+    {
       FlexibleSplitInput<AssignmentInput, ScheduleInput> input;
       input.assignment = InputTraits<AssignmentInput>::generate_input(instance);
       input.schedule = InputTraits<ScheduleInput>::generate_input(instance);
@@ -40,7 +42,8 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static FlexibleSplitInput<AssignmentInput, ScheduleInput> generate_random(const Instance& instance, Random& random) {
+    static FlexibleSplitInput<AssignmentInput, ScheduleInput> generate_random(const Instance& instance, Random& random)
+    {
       FlexibleSplitInput<AssignmentInput, ScheduleInput> input;
       input.assignment = InputTraits<AssignmentInput>::generate_random(instance, random);
       input.schedule = InputTraits<ScheduleInput>::generate_random(instance, random);
@@ -48,13 +51,13 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static FlexibleSplitInput<AssignmentInput, ScheduleInput> generate_feasible(const Instance& instance, Random& random) {
+    static FlexibleSplitInput<AssignmentInput, ScheduleInput> generate_feasible(const Instance& instance, Random& random)
+    {
       FlexibleSplitInput<AssignmentInput, ScheduleInput> input;
       input.assignment = InputTraits<AssignmentInput>::generate_feasible(instance, random);
       input.schedule = InputTraits<ScheduleInput>::generate_feasible(instance, random);
       return input;
     }
-
   };
 
   /*
@@ -81,7 +84,8 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static TransportSplitInput<ScheduleInput, TransportInput> generate_input(const Instance& instance) {
+    static TransportSplitInput<ScheduleInput, TransportInput> generate_input(const Instance& instance)
+    {
       TransportSplitInput<ScheduleInput, TransportInput> input;
       input.schedule = InputTraits<ScheduleInput>::generate_input(instance);
       input.transport = InputTraits<TransportInput>::generate_input(instance);
@@ -89,7 +93,8 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static TransportSplitInput<ScheduleInput, TransportInput> generate_random(const Instance& instance, Random& random) {
+    static TransportSplitInput<ScheduleInput, TransportInput> generate_random(const Instance& instance, Random& random)
+    {
       TransportSplitInput<ScheduleInput, TransportInput> input;
       input.schedule = InputTraits<ScheduleInput>::generate_random(instance, random);
       input.transport = InputTraits<TransportInput>::generate_random(instance, random);
@@ -97,16 +102,14 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static TransportSplitInput<ScheduleInput, TransportInput> generate_feasible(const Instance& instance, Random& random) {
+    static TransportSplitInput<ScheduleInput, TransportInput> generate_feasible(const Instance& instance, Random& random)
+    {
       TransportSplitInput<ScheduleInput, TransportInput> input;
       input.schedule = InputTraits<ScheduleInput>::generate_feasible(instance, random);
       input.transport = InputTraits<TransportInput>::generate_feasible(instance, random);
       return input;
     }
-
   };
-
-
 
 }
 

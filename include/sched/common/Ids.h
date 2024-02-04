@@ -2,6 +2,7 @@
 #define SCHED_IDS_H
 
 #include <cstddef>
+
 #include <iosfwd>
 #include <limits>
 
@@ -16,18 +17,18 @@ namespace sched {
   enum MachineId : std::size_t {
   };
 
-  constexpr
-  MachineId machine(std::size_t i) {
-    return MachineId{i};
+  constexpr MachineId machine(std::size_t i)
+  {
+    return MachineId{ i };
   }
 
-  constexpr
-  std::size_t to_index(MachineId id) {
+  constexpr std::size_t to_index(MachineId id)
+  {
     return static_cast<std::size_t>(id);
   }
 
-  constexpr MachineId AnyMachine = MachineId{RawAnyId};
-  constexpr MachineId NoMachine = MachineId{RawNoId};
+  constexpr MachineId AnyMachine = MachineId{ RawAnyId };
+  constexpr MachineId NoMachine = MachineId{ RawNoId };
 
   /*
    * JobId
@@ -36,18 +37,18 @@ namespace sched {
   enum JobId : std::size_t {
   };
 
-  constexpr
-  JobId job(std::size_t i) {
-    return JobId{i};
+  constexpr JobId job(std::size_t i)
+  {
+    return JobId{ i };
   }
 
-  constexpr
-  std::size_t to_index(JobId id) {
+  constexpr std::size_t to_index(JobId id)
+  {
     return static_cast<std::size_t>(id);
   }
 
-  constexpr JobId AnyJob = JobId{RawAnyId};
-  constexpr JobId NoJob = JobId{RawNoId};
+  constexpr JobId AnyJob = JobId{ RawAnyId };
+  constexpr JobId NoJob = JobId{ RawNoId };
 
   /*
    * OperationId
@@ -58,13 +59,13 @@ namespace sched {
     std::size_t index;
   };
 
-  constexpr
-  OperationId operation(JobId job, std::size_t index) {
+  constexpr OperationId operation(JobId job, std::size_t index)
+  {
     return { job, index };
   }
 
-  constexpr
-  bool operator<(const OperationId& lhs, const OperationId& rhs) {
+  constexpr bool operator<(const OperationId& lhs, const OperationId& rhs)
+  {
     if (lhs.job == rhs.job) {
       return lhs.index < rhs.index;
     }
@@ -72,13 +73,13 @@ namespace sched {
     return lhs.job < rhs.job;
   }
 
-  constexpr
-  bool operator==(const OperationId& lhs, const OperationId& rhs) {
+  constexpr bool operator==(const OperationId& lhs, const OperationId& rhs)
+  {
     return lhs.job == rhs.job && lhs.index == rhs.index;
   }
 
-  constexpr
-  bool operator!=(const OperationId& lhs, const OperationId& rhs) {
+  constexpr bool operator!=(const OperationId& lhs, const OperationId& rhs)
+  {
     return !(lhs == rhs);
   }
 
@@ -89,8 +90,8 @@ namespace sched {
   enum TransportationId : std::size_t {
   };
 
-  constexpr
-  std::size_t to_index(TransportationId id) {
+  constexpr std::size_t to_index(TransportationId id)
+  {
     return static_cast<std::size_t>(id);
   }
 
@@ -100,18 +101,18 @@ namespace sched {
 
   namespace literals {
 
-    constexpr
-    MachineId operator "" _m(unsigned long long val) {
+    constexpr MachineId operator"" _m(unsigned long long val)
+    {
       return static_cast<MachineId>(val);
     }
 
-    constexpr
-    JobId operator "" _j(unsigned long long val) {
+    constexpr JobId operator"" _j(unsigned long long val)
+    {
       return static_cast<JobId>(val);
     }
 
-    constexpr
-    TransportationId operator "" _t(unsigned long long val) {
+    constexpr TransportationId operator"" _t(unsigned long long val)
+    {
       return static_cast<TransportationId>(val);
     }
 

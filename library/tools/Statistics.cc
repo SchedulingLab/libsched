@@ -1,10 +1,13 @@
+// clang-format off: main header
 #include <sched/tools/Statistics.h>
+// clang-format on
 
 #include <algorithm>
 
 namespace sched {
 
-  void Statistics::reset() {
+  void Statistics::reset()
+  {
     m_count = 0;
     m_mean.reset();
     m_m2.reset();
@@ -14,7 +17,8 @@ namespace sched {
 
   // https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm
 
-  void Statistics::add(double x) {
+  void Statistics::add(double x)
+  {
     ++m_count;
     double delta = x - m_mean.get_result();
     m_mean.add(delta / static_cast<double>(m_count));
@@ -31,4 +35,3 @@ namespace sched {
   }
 
 }
-

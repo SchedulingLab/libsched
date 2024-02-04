@@ -2,6 +2,7 @@
 #define SCHED_PARA_SLACK_ALGORITHM_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <vector>
 
@@ -17,7 +18,8 @@ namespace sched::para {
   struct SCHED_API SlackAlgorithm {
 
     template<typename Instance>
-    ParallelSchedule operator()(const Instance& instance) {
+    ParallelSchedule operator()(const Instance& instance)
+    {
       std::vector<ParallelJob> jobs;
 
       for (auto job : sched::jobs(instance)) {
@@ -58,7 +60,7 @@ namespace sched::para {
 
       jobs.clear();
 
-      for (auto & group : groups) {
+      for (auto& group : groups) {
         for (auto job : group) {
           if (job.id != NoJob) {
             jobs.push_back(job);
@@ -69,7 +71,6 @@ namespace sched::para {
       const EarliestFinishTime eft;
       return eft(instance, jobs);
     }
-
   };
 
 }

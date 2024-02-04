@@ -31,14 +31,15 @@ namespace sched::shop {
     }
 
     template<typename Instance, typename Termination>
-    auto operator()(const Instance& instance, Random& random, std::size_t population_size, Termination termination) {
+    auto operator()(const Instance& instance, Random& random, std::size_t population_size, Termination termination)
+    {
       LogScope log0;
 
       const std::size_t offsprings_size_max = population_size * 9 / 10;
 
       using Solution = Solution<Engine, Criterion, Instance>;
 
-      auto compute_solution = [this,instance](Input&& input) {
+      auto compute_solution = [this, instance](Input&& input) {
         Solution solution;
         solution.input = std::move(input);
         solution.schedule = engine(instance, solution.input);
@@ -54,7 +55,7 @@ namespace sched::shop {
 
       // initial population
 
-//       Log::println("Initial population");
+      //       Log::println("Initial population");
 
       std::vector<Solution> population;
 
@@ -76,7 +77,7 @@ namespace sched::shop {
 
         // selection
 
-//         Log::println("Selection");
+        //         Log::println("Selection");
 
         auto selected = selection(population, population_size / 2, random); // TODO: selection size
         assert(selected.size() > 1);
@@ -89,7 +90,7 @@ namespace sched::shop {
 
         // crossover
 
-//         Log::println("Crossover");
+        //         Log::println("Crossover");
 
         std::bernoulli_distribution crossover_distribution(crossover_probability);
 
@@ -104,7 +105,7 @@ namespace sched::shop {
             j = selected_distribution(random);
           }
 
-          auto [ child0, child1 ] = crossover(selected[i].input, selected[j].input, random);
+          auto [child0, child1] = crossover(selected[i].input, selected[j].input, random);
 
           offsprings.push_back(compute_solution(std::move(child0)));
           offsprings.push_back(compute_solution(std::move(child1)));
@@ -112,7 +113,7 @@ namespace sched::shop {
 
         // mutation
 
-//         Log::println("Mutation");
+        //         Log::println("Mutation");
 
         std::bernoulli_distribution mutation_distribution(mutation_probability);
 
@@ -121,13 +122,12 @@ namespace sched::shop {
             continue;
           }
 
-          auto & solution = selected[i];
+          auto& solution = selected[i];
           auto mutant = mutation(solution.input, random);
           offsprings.push_back(compute_solution(std::move(mutant)));
         }
 
         // replacement
-
 
         if (offsprings.size() > offsprings_size_max) {
           std::sort(offsprings.begin(), offsprings.end(), solution_compare);
@@ -152,7 +152,6 @@ namespace sched::shop {
 
         Log::println("#{}: {} with {} (last: {} with {})", generation, display_criterion(population.front().fitness), population.front().input, display_criterion(population.back().fitness), population.back().input);
 
-
         termination.step();
         ++generation;
       }
@@ -160,11 +159,13 @@ namespace sched::shop {
       return population;
     }
 
-    static std::string input_name() {
+    static std::string input_name()
+    {
       return InputTraits<Input>::name();
     }
 
-    static std::string mutation_name() {
+    static std::string mutation_name()
+    {
       return MutationTraits<Mutation>::name();
     }
 
@@ -176,7 +177,6 @@ namespace sched::shop {
     double crossover_probability;
     double mutation_probability;
   };
-
 
 }
 

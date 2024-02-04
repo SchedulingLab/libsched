@@ -2,8 +2,8 @@
 #define SCHED_ENUMERATOR_H
 
 #include <algorithm>
-#include <limits>
 #include <fstream>
+#include <limits>
 #include <map>
 #include <vector>
 
@@ -14,7 +14,8 @@ namespace sched::shop {
   template<typename Instance, typename Input, typename Engine, typename Neighborhood, typename Criterion>
   struct Enumerator {
 
-    std::map<JobShopSchedule, std::vector<Input>> operator()(const Instance& instance) {
+    std::map<JobShopSchedule, std::vector<Input>> operator()(const Instance& instance)
+    {
       Input input = engine.generate_input(instance);
       std::size_t count = 0;
       std::size_t feasible = 0;
@@ -35,13 +36,14 @@ namespace sched::shop {
         }
       } while (enumerate_next(input));
 
-//       std::cout << count << ' ' << feasible << ' '  << scheds.size() << '\n';
+      //       std::cout << count << ' ' << feasible << ' '  << scheds.size() << '\n';
 
       scheds.emplace(JobShopSchedule{}, std::move(infeasible));
       return scheds;
     }
 
-    void to_dot(const Instance& instance, const std::map<JobShopSchedule, std::vector<Input>>& scheds, const std::string& filename) {
+    void to_dot(const Instance& instance, const std::map<JobShopSchedule, std::vector<Input>>& scheds, const std::string& filename)
+    {
       struct Report {
         std::size_t id;
         Time time;
@@ -51,7 +53,7 @@ namespace sched::shop {
       std::size_t id = 0;
       Time opt = std::numeric_limits<Time>::max();
 
-      for (auto& [ sched, inputs ] : scheds) {
+      for (auto& [sched, inputs] : scheds) {
         Report report;
         report.id = id++;
         report.time = criterion(instance, sched);
@@ -67,7 +69,7 @@ namespace sched::shop {
 
       out << "graph JobShop {\tnode [ style=filled ];\n";
 
-      for (auto& [ sched, inputs ] : scheds) {
+      for (auto& [sched, inputs] : scheds) {
 
         out << '\t' << reports[sched].id << " [label=" << inputs.size();
 
@@ -82,8 +84,8 @@ namespace sched::shop {
 
       std::vector<int> distribution;
 
-      for (auto& [ sched0, inputs0 ] : scheds) {
-        for (auto& [ sched1, inputs1 ] : scheds) {
+      for (auto& [sched0, inputs0] : scheds) {
+        for (auto& [sched1, inputs1] : scheds) {
           if (sched1 < sched0 || sched1 == sched0) {
             continue;
           }
@@ -107,8 +109,8 @@ namespace sched::shop {
       std::sort(distribution.begin(), distribution.end());
       int limit = distribution[0.9 * distribution.size()];
 
-      for (auto& [ sched0, inputs0 ] : scheds) {
-        for (auto& [ sched1, inputs1 ] : scheds) {
+      for (auto& [sched0, inputs0] : scheds) {
+        for (auto& [sched1, inputs1] : scheds) {
           if (sched1 < sched0 || sched1 == sched0) {
             continue;
           }
@@ -148,5 +150,3 @@ namespace sched::shop {
 }
 
 #endif // SCHED_ENUMERATOR_H
-
-

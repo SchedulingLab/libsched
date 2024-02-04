@@ -1,4 +1,6 @@
+// clang-format off: main header
 #include <sched/common/Random.h>
+// clang-format on
 
 #include <cinttypes>
 
@@ -6,19 +8,20 @@ namespace sched {
 
   namespace {
 
-    constexpr uint64_t rotl(const uint64_t x, int k) {
+    constexpr uint64_t rotl(const uint64_t x, int k)
+    {
       return (x << k) | (x >> (64 - k));
     }
 
     // https://prng.di.unimi.it/splitmix64.c
     struct SplitMix64 {
-      constexpr
-      SplitMix64(uint64_t seed)
+      constexpr SplitMix64(uint64_t seed)
       : m_state(seed)
       {
       }
 
-      uint64_t next() {
+      uint64_t next()
+      {
         uint64_t z = (m_state += UINT64_C(0x9e3779b97f4a7c15));
         z = (z ^ (z >> 30)) * UINT64_C(0xbf58476d1ce4e5b9);
         z = (z ^ (z >> 27)) * UINT64_C(0x94d049bb133111eb);
@@ -34,17 +37,19 @@ namespace sched {
   {
     SplitMix64 sm(seed);
 
-    for (auto & state : m_state) {
+    for (auto& state : m_state) {
       state = sm.next();
     }
   }
 
-  auto Random::operator()() -> result_type {
+  auto Random::operator()() -> result_type
+  {
     return next();
   }
 
   // https://prng.di.unimi.it/xoshiro256plusplus.c
-  uint64_t Random::next() {
+  uint64_t Random::next()
+  {
     const uint64_t result = rotl(m_state[0] + m_state[3], 23) + m_state[0];
     const uint64_t t = m_state[1] << 17;
 
@@ -60,7 +65,8 @@ namespace sched {
     return result;
   }
 
-  void Random::jump() {
+  void Random::jump()
+  {
     static constexpr uint64_t Jump[] = {
       UINT64_C(0x180ec6d33cfd0aba),
       UINT64_C(0xd5a61266f0c9392c),
@@ -73,8 +79,8 @@ namespace sched {
     uint64_t s2 = 0;
     uint64_t s3 = 0;
 
-    for(auto jump : Jump) {
-      for(int b = 0; b < 64; b++) {
+    for (auto jump : Jump) {
+      for (int b = 0; b < 64; b++) {
         if (jump & UINT64_C(1) << b) {
           s0 ^= m_state[0];
           s1 ^= m_state[1];
@@ -92,7 +98,8 @@ namespace sched {
     m_state[3] = s3;
   }
 
-  void Random::long_jump() {
+  void Random::long_jump()
+  {
     static constexpr uint64_t Jump[] = {
       UINT64_C(0x76e15d3efefdcbbf),
       UINT64_C(0xc5004e441c522fb3),
@@ -105,8 +112,8 @@ namespace sched {
     uint64_t s2 = 0;
     uint64_t s3 = 0;
 
-    for(auto jump : Jump) {
-      for(int b = 0; b < 64; b++) {
+    for (auto jump : Jump) {
+      for (int b = 0; b < 64; b++) {
         if (jump & UINT64_C(1) << b) {
           s0 ^= m_state[0];
           s1 ^= m_state[1];

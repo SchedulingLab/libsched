@@ -2,6 +2,7 @@
 #define SCHED_TIME_H
 
 #include <cstdint>
+
 #include <limits>
 
 namespace sched {

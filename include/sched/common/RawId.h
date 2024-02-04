@@ -2,6 +2,7 @@
 #define SCHED_COMMON_RAW_ID_H
 
 #include <cstddef>
+
 #include <limits>
 
 namespace sched {

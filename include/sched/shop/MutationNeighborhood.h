@@ -5,9 +5,9 @@
 
 #include <sched/common/Random.h>
 
+#include "MutationTraits.h"
 #include "NeighborhoodHelper.h"
 #include "NeighborhoodTraits.h"
-#include "MutationTraits.h"
 
 namespace sched::shop {
 
@@ -15,24 +15,25 @@ namespace sched::shop {
   struct MutationNeighborhood : private Mutation {
 
     template<typename Input, typename Schedule>
-    Input operator()(const Input& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
+    Input operator()(const Input& input, [[maybe_unused]] const Schedule& schedule, Random& random)
+    {
       return Mutation::operator()(input, random);
     }
 
     template<typename Input, typename Schedule>
-    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
+    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count)
+    {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
-
   };
 
   template<typename Mutation>
   struct NeighborhoodTraits<MutationNeighborhood<Mutation>> {
 
-    static std::string name() {
+    static std::string name()
+    {
       return MutationTraits<Mutation>::name();
     }
-
   };
 
 }

@@ -2,13 +2,14 @@
 #define SCHED_SHOP_SPLIT_NEIGHBORHOOD_H
 
 #include <cassert>
+
 #include <string>
 #include <vector>
 
 #include <sched/common/Random.h>
 
-#include "SplitInput.h"
 #include "NeighborhoodTraits.h"
+#include "SplitInput.h"
 
 namespace sched::shop {
 
@@ -21,7 +22,8 @@ namespace sched::shop {
   struct FlexibleSplitNeighborhood {
 
     template<typename AssignmentInput, typename ScheduleInput, typename Schedule>
-    FlexibleSplitInput<AssignmentInput, ScheduleInput> operator()(const FlexibleSplitInput<AssignmentInput, ScheduleInput>& input, const Schedule& schedule, Random& random) {
+    FlexibleSplitInput<AssignmentInput, ScheduleInput> operator()(const FlexibleSplitInput<AssignmentInput, ScheduleInput>& input, const Schedule& schedule, Random& random)
+    {
       FlexibleSplitInput<AssignmentInput, ScheduleInput> neighbor = input;
 
       if constexpr (Kind == SplitNeighborhoodKind::One) {
@@ -41,7 +43,8 @@ namespace sched::shop {
     }
 
     template<typename AssignmentInput, typename ScheduleInput, typename Schedule>
-    std::vector<FlexibleSplitInput<AssignmentInput, ScheduleInput>> generate_many(const FlexibleSplitInput<AssignmentInput, ScheduleInput>& input, const Schedule& schedule, Random& random, std::size_t count) {
+    std::vector<FlexibleSplitInput<AssignmentInput, ScheduleInput>> generate_many(const FlexibleSplitInput<AssignmentInput, ScheduleInput>& input, const Schedule& schedule, Random& random, std::size_t count)
+    {
       auto assignment_neighbors = assignment_neighborhood.generate_many(input.assignment, schedule, random, count);
       assert(assignment_neighbors.size() == count);
       auto schedule_neighbors = schedule_neighborhood.generate_many(input.schedule, schedule, random, count);
@@ -72,19 +75,18 @@ namespace sched::shop {
 
   template<SplitNeighborhoodKind Kind, typename AssignmentNeighborhood, typename ScheduleNeighborhood>
   struct NeighborhoodTraits<FlexibleSplitNeighborhood<Kind, AssignmentNeighborhood, ScheduleNeighborhood>> {
-    static std::string name() {
-      return NeighborhoodTraits<AssignmentNeighborhood>::name() + '_'
-          + NeighborhoodTraits<ScheduleNeighborhood>::name() + '-'
-          + (Kind == SplitNeighborhoodKind::One ? "one" : "all");
+    static std::string name()
+    {
+      return NeighborhoodTraits<AssignmentNeighborhood>::name() + '_' + NeighborhoodTraits<ScheduleNeighborhood>::name() + '-' + (Kind == SplitNeighborhoodKind::One ? "one" : "all");
     }
   };
-
 
   template<SplitNeighborhoodKind Kind, typename ScheduleNeighborhood, typename TransportNeighborhood>
   struct TransportSplitNeighborhood {
 
     template<typename ScheduleInput, typename TransportInput, typename Schedule>
-    TransportSplitInput<ScheduleInput, TransportInput> operator()(const TransportSplitInput<ScheduleInput, TransportInput>& input, const Schedule& schedule, Random& random) {
+    TransportSplitInput<ScheduleInput, TransportInput> operator()(const TransportSplitInput<ScheduleInput, TransportInput>& input, const Schedule& schedule, Random& random)
+    {
       auto neighbor = input;
 
       if constexpr (Kind == SplitNeighborhoodKind::One) {
@@ -104,7 +106,8 @@ namespace sched::shop {
     }
 
     template<typename ScheduleInput, typename TransportInput, typename Schedule>
-    std::vector<TransportSplitInput<ScheduleInput, TransportInput>> generate_many(const TransportSplitInput<ScheduleInput, TransportInput>& input, const Schedule& schedule, Random& random, std::size_t count) {
+    std::vector<TransportSplitInput<ScheduleInput, TransportInput>> generate_many(const TransportSplitInput<ScheduleInput, TransportInput>& input, const Schedule& schedule, Random& random, std::size_t count)
+    {
       auto schedule_neighbors = schedule_neighborhood.generate_many(input.schedule, schedule, random, count);
       assert(schedule_neighbors.size() == count);
       auto transport_neighbors = transport_neighborhood.generate_many(input.transport, schedule, random, count);
@@ -135,10 +138,9 @@ namespace sched::shop {
 
   template<SplitNeighborhoodKind Kind, typename ScheduleNeighborhood, typename TransportNeighborhood>
   struct NeighborhoodTraits<TransportSplitNeighborhood<Kind, ScheduleNeighborhood, TransportNeighborhood>> {
-    static std::string name() {
-      return NeighborhoodTraits<ScheduleNeighborhood>::name() + '_'
-          + NeighborhoodTraits<TransportNeighborhood>::name() + '-'
-          + (Kind == SplitNeighborhoodKind::One ? "one" : "all");
+    static std::string name()
+    {
+      return NeighborhoodTraits<ScheduleNeighborhood>::name() + '_' + NeighborhoodTraits<TransportNeighborhood>::name() + '-' + (Kind == SplitNeighborhoodKind::One ? "one" : "all");
     }
   };
 

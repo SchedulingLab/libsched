@@ -1,4 +1,4 @@
-# format style for gf2
+# format style
 AccessModifierOffset: -2
 AlignAfterOpenBracket: DontAlign
 AlignArrayOfStructures: Right
@@ -25,11 +25,8 @@ IncludeCategories:
   # c++ headers
   - Regex: '^<(algorithm|any|array|atomic|bitset|charconv|chrono|complex|condition_variable|deque|exception|execution|filesystem|forward_list|fstream|functional|future|initializer_list|iomanip|ios|iosfwd|iostream|istream|iterator|limits|list|locale|map|memory|memory_resource|mutex|new|numeric|optional|ostream|queue|random|ratio|regex|set|shared_mutex|scoped_allocator|sstream|stack|stdexcept|streambuf|string|string_view|system_error|thread|tuple|type_traits|typeindex|typeinfo|unordered_map|unordered_set|utility|valarray|variant|vector)>$'
     Priority: 2
-  # gf2 core headers
-  - Regex: '^<gf2\/core\/'
-    Priority: 4
-  # gf2 other headers
-  - Regex: '^<gf2\/'
+  # sched headers
+  - Regex: '^<sched\/'
     Priority: 5
   # other headers
   - Regex: '^<'

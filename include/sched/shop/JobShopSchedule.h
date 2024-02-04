@@ -4,9 +4,9 @@
 #include <vector>
 
 #include <sched/common/Api.h>
+#include <sched/common/GenericSchedule.h>
 #include <sched/common/Ids.h>
 #include <sched/common/Time.h>
-#include <sched/common/GenericSchedule.h>
 
 namespace sched::shop {
 

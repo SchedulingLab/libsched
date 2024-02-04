@@ -17,19 +17,19 @@ namespace sched::shop {
     using Input = FloatListInput;
 
     template<typename Instance>
-    std::vector<TransportationId> operator()(const Instance& instance, const FloatListInput& input) {
+    std::vector<TransportationId> operator()(const Instance& instance, const FloatListInput& input)
+    {
       const std::size_t transportation_count = instance.transportation_count();
       std::vector<TransportationId> assignment;
 
       for (auto value : input) {
         auto id = static_cast<std::size_t>(value * transportation_count);
         assert(id < transportation_count);
-        assignment.push_back(TransportationId{id});
+        assignment.push_back(TransportationId{ id });
       }
 
       return assignment;
     }
-
   };
 
 }

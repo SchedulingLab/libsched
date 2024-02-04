@@ -2,13 +2,13 @@
 #define SCHED_SHOP_ORDER_CROSSOVER_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <array>
 #include <tuple>
 #include <type_traits>
 
 #include <sched/common/Random.h>
-
 #include <sched/tools/Log.h>
 
 namespace sched::shop {
@@ -17,7 +17,8 @@ namespace sched::shop {
   struct OrderCrossover {
 
     template<typename Input>
-    std::tuple<Input, Input> operator()(const Input& parent0, const Input& parent1, Random& random) {
+    std::tuple<Input, Input> operator()(const Input& parent0, const Input& parent1, Random& random)
+    {
       LogScope scope;
 
       const std::size_t size = parent0.size();
@@ -36,16 +37,16 @@ namespace sched::shop {
         return false;
       };
 
-//       Log::println("Generate points");
+      //       Log::println("Generate points");
 
       for (std::size_t i = 0; i < points.size(); ++i) {
         do {
-          points[i] = random.compute_uniform_integer(std::size_t{0}, size - 1);
-//           Log::println("{} : {}", i, points[i]);
+          points[i] = random.compute_uniform_integer(std::size_t{ 0 }, size - 1);
+          //           Log::println("{} : {}", i, points[i]);
         } while (already_present(points[i], i));
       }
 
-//       Log::println("Sort points");
+      //       Log::println("Sort points");
 
       std::sort(points.begin(), points.end());
 
@@ -56,7 +57,7 @@ namespace sched::shop {
       std::vector<Element> missing0;
       std::vector<Element> missing1;
 
-//       Log::println("Compute missing");
+      //       Log::println("Compute missing");
 
       {
         bool swap = false;
@@ -88,7 +89,7 @@ namespace sched::shop {
         return input.size();
       };
 
-//       Log::println("Sort missing");
+      //       Log::println("Sort missing");
 
       std::sort(missing0.begin(), missing0.end(), [&](Element lhs, Element rhs) {
         return index_of(lhs, parent1) < index_of(rhs, parent1);
@@ -98,13 +99,13 @@ namespace sched::shop {
         return index_of(lhs, parent0) < index_of(rhs, parent0);
       });
 
-//       {
-//         sched::LogScope scope;
-//         sched::Log::println("missing0: {}", missing0);
-//         sched::Log::println("missing1: {}", missing1);
-//       }
-//
-//       Log::println("Compute children");
+      //       {
+      //         sched::LogScope scope;
+      //         sched::Log::println("missing0: {}", missing0);
+      //         sched::Log::println("missing1: {}", missing1);
+      //       }
+      //
+      //       Log::println("Compute children");
 
       {
         bool swap = false;
@@ -124,11 +125,11 @@ namespace sched::shop {
           }
         }
 
-//         sched::LogScope scope;
-//         sched::Log::println("parent0: {}", parent0);
-//         sched::Log::println("parent1: {}", parent1);
-//         sched::Log::println("child0:  {}", child0);
-//         sched::Log::println("child1:  {}", child1);
+        //         sched::LogScope scope;
+        //         sched::Log::println("parent0: {}", parent0);
+        //         sched::Log::println("parent1: {}", parent1);
+        //         sched::Log::println("child0:  {}", child0);
+        //         sched::Log::println("child1:  {}", child1);
       }
 
       assert(child0.size() == size);
@@ -144,7 +145,6 @@ namespace sched::shop {
 
       return std::make_tuple(child0, child1);
     }
-
   };
 
 }

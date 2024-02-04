@@ -5,13 +5,13 @@
 
 namespace sched {
 
-  inline
-  std::ostream& sep(std::ostream& os) {
+  inline std::ostream& sep(std::ostream& os)
+  {
     return os << ',';
   }
 
-  inline
-  std::ostream& nl(std::ostream& os) {
+  inline std::ostream& nl(std::ostream& os)
+  {
     return os << '\n';
   }
 

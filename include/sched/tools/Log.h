@@ -12,8 +12,9 @@ namespace sched {
   struct SCHED_API Log {
     Log() = delete;
 
-    template<typename ... T>
-    static void println(fmt::format_string<T...> fmt, T&&... args) {
+    template<typename... T>
+    static void println(fmt::format_string<T...> fmt, T&&... args)
+    {
       if (current_indent_depth() > g_max_scope) {
         return;
       }
@@ -36,14 +37,16 @@ namespace sched {
   };
 
   struct SCHED_API LogScope {
-    LogScope() {
+    LogScope()
+    {
       Log::open_scope();
     }
 
     LogScope(const LogScope&) = delete;
     LogScope(LogScope&&) = delete;
 
-    ~LogScope() {
+    ~LogScope()
+    {
       Log::close_scope();
     }
 
@@ -52,6 +55,5 @@ namespace sched {
   };
 
 }
-
 
 #endif // SCHED_LOG_H

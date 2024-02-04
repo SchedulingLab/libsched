@@ -17,7 +17,8 @@ namespace sched::shop {
     using Input = typename Assignment::Input;
 
     template<typename Instance>
-    std::optional<JobShopSchedule> operator()(const Instance& instance, const Input& input) {
+    std::optional<JobShopSchedule> operator()(const Instance& instance, const Input& input)
+    {
       auto operations_assignment = assignment(instance, input);
 
       JobShopStates<Instance> states(instance);

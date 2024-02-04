@@ -3,17 +3,18 @@
 
 #include <cmath>
 
+#include <vector>
+
 #include <sched/common/Api.h>
 #include <sched/tools/Statistics.h>
-
-#include <vector>
 
 namespace sched::shop {
 
   struct SCHED_API AutocorrelationAnalysis {
 
     template<typename Fitness>
-    std::vector<double> operator()(const std::vector<Fitness>& walk, std::size_t count) {
+    std::vector<double> operator()(const std::vector<Fitness>& walk, std::size_t count)
+    {
       std::vector<double> results;
 
       for (std::size_t offset = 1; offset <= count; ++offset) {

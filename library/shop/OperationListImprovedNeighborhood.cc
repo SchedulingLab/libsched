@@ -1,7 +1,8 @@
+// clang-format off: main header
 #include <sched/shop/OperationListImprovedNeighborhood.h>
+// clang-format on
 
 #include <sched/common/Extent.h>
-
 #include <sched/shop/InsertNeighborhood.h>
 #include <sched/shop/ReverseNeighborhood.h>
 #include <sched/shop/SwapNeighborhood.h>
@@ -10,7 +11,8 @@ namespace sched::shop {
 
   namespace {
 
-    Extent<std::size_t> compute_extent(const OperationListInput& input, std::size_t origin) {
+    Extent<std::size_t> compute_extent(const OperationListInput& input, std::size_t origin)
+    {
       Extent<std::size_t> extent = { origin, origin };
 
       while (extent.lo > 0 && input[extent.lo - 1].job != input[origin].job) {
@@ -28,7 +30,8 @@ namespace sched::shop {
 
   // OperationSwapNeighborhood
 
-  OperationListInput OperationSwapNeighborhood::compute(const OperationListInput& input, Random& random) {
+  OperationListInput OperationSwapNeighborhood::compute(const OperationListInput& input, Random& random)
+  {
     assert(!input.empty());
 
     std::size_t max = input.size() - 1;
@@ -36,7 +39,7 @@ namespace sched::shop {
     std::size_t n1 = 0;
 
     do { // NOLINT(cppcoreguidelines-avoid-do-while)
-      n0 = random.compute_uniform_integer(std::size_t{0}, max);
+      n0 = random.compute_uniform_integer(std::size_t{ 0 }, max);
       Extent<std::size_t> extent = compute_extent(input, n0);
       n1 = random.compute_uniform_integer(extent.lo, extent.hi);
     } while (n0 == n1 || !compute_extent(input, n1).contains(n1));
@@ -48,7 +51,8 @@ namespace sched::shop {
 
   // OperationInsertNeighborhood
 
-  OperationListInput OperationInsertNeighborhood::compute(const OperationListInput& input, Random& random) {
+  OperationListInput OperationInsertNeighborhood::compute(const OperationListInput& input, Random& random)
+  {
     assert(!input.empty());
 
     std::size_t max = input.size() - 1;
@@ -59,7 +63,7 @@ namespace sched::shop {
       std::size_t dest = 0;
 
       do { // NOLINT(cppcoreguidelines-avoid-do-while)
-        orig = random.compute_uniform_integer(std::size_t{0}, max);
+        orig = random.compute_uniform_integer(std::size_t{ 0 }, max);
         Extent<std::size_t> extent = compute_extent(input, orig);
         dest = random.compute_uniform_integer(extent.lo, extent.hi);
       } while (orig == dest);
@@ -80,13 +84,13 @@ namespace sched::shop {
       neighbor[dest] = val;
     }
 
-
     return neighbor;
   }
 
   // OperationReverseNeighborhood
 
-  OperationListInput OperationReverseNeighborhood::compute(const OperationListInput& input, Random& random) {
+  OperationListInput OperationReverseNeighborhood::compute(const OperationListInput& input, Random& random)
+  {
     assert(!input.empty());
 
     std::size_t max = input.size() - 1;
@@ -96,7 +100,7 @@ namespace sched::shop {
       std::size_t endpoints[2];
 
       do { // NOLINT(cppcoreguidelines-avoid-do-while)
-        endpoints[0] = random.compute_uniform_integer(std::size_t{0}, max);
+        endpoints[0] = random.compute_uniform_integer(std::size_t{ 0 }, max);
         Extent<std::size_t> extent = compute_extent(input, endpoints[0]);
         endpoints[1] = random.compute_uniform_integer(extent.lo, extent.hi);
       } while (endpoints[0] == endpoints[1] || !compute_extent(input, endpoints[1]).contains(endpoints[0]));
@@ -111,10 +115,10 @@ namespace sched::shop {
     return neighbor;
   }
 
-
   // OperationCappedReverseNeighborhood
 
-  OperationListInput OperationCappedReverseNeighborhood::compute(const OperationListInput& input, Random& random) {
+  OperationListInput OperationCappedReverseNeighborhood::compute(const OperationListInput& input, Random& random)
+  {
     assert(!input.empty());
 
     std::size_t max = input.size() - 1;
@@ -124,7 +128,7 @@ namespace sched::shop {
       std::size_t endpoints[2];
 
       do { // NOLINT(cppcoreguidelines-avoid-do-while)
-        endpoints[0] = random.compute_uniform_integer(std::size_t{0}, max);
+        endpoints[0] = random.compute_uniform_integer(std::size_t{ 0 }, max);
         Extent<std::size_t> extent = compute_extent(input, endpoints[0]);
         endpoints[1] = random.compute_uniform_integer(extent.lo, extent.hi);
 

@@ -2,6 +2,7 @@
 #define SCHED_SCRAMBLE_MUTATION_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <string>
 
@@ -15,7 +16,8 @@ namespace sched::shop {
   struct SCHED_API ScrambleMutation {
 
     template<typename Input>
-    Input operator()(const Input& input, Random& random) {
+    Input operator()(const Input& input, Random& random)
+    {
       assert(!input.empty());
 
       std::size_t max = input.size() - 1;
@@ -25,8 +27,8 @@ namespace sched::shop {
         std::size_t endpoints[2];
 
         do {
-          endpoints[0] = random.compute_uniform_integer(std::size_t{0}, max);
-          endpoints[1] = random.compute_uniform_integer(std::size_t{0}, max);
+          endpoints[0] = random.compute_uniform_integer(std::size_t{ 0 }, max);
+          endpoints[1] = random.compute_uniform_integer(std::size_t{ 0 }, max);
         } while (endpoints[0] == endpoints[1]);
 
         if (endpoints[0] > endpoints[1]) {
@@ -39,12 +41,12 @@ namespace sched::shop {
 
       return neighbor;
     }
-
   };
 
   template<>
   struct MutationTraits<ScrambleMutation> {
-    static std::string name() {
+    static std::string name()
+    {
       return "scr";
     }
   };

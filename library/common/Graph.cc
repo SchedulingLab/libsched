@@ -1,4 +1,6 @@
+// clang-format off: main header
 #include <sched/common/Graph.h>
+// clang-format on
 
 #include <cassert>
 
@@ -12,28 +14,33 @@ namespace sched {
     }
   }
 
-  VertexId Graph::add_vertex() {
+  VertexId Graph::add_vertex()
+  {
     auto id = VertexId{ m_next_vertex_id++ };
     m_vertices.push_back({ id });
-    m_in_edges.emplace_back( );
-    m_out_edges.emplace_back( );
+    m_in_edges.emplace_back();
+    m_out_edges.emplace_back();
     ++m_vertex_count;
     return id;
   }
 
-  VertexRange Graph::vertices() const {
+  VertexRange Graph::vertices() const
+  {
     return VertexRange{ m_vertices.size() };
   }
 
-  std::size_t Graph::vertex_count() const {
+  std::size_t Graph::vertex_count() const
+  {
     return m_vertex_count;
   }
 
-  bool Graph::is_valid(VertexId v) const {
+  bool Graph::is_valid(VertexId v) const
+  {
     return m_vertices[to_index(v)].id != NoVertex;
   }
 
-  void Graph::remove_vertex(VertexId v) {
+  void Graph::remove_vertex(VertexId v)
+  {
     assert(is_valid(v));
     m_vertices[to_index(v)].id = NoVertex;
 
@@ -50,7 +57,8 @@ namespace sched {
     m_out_edges[to_index(v)].clear();
   }
 
-  EdgeId Graph::add_edge(VertexId source, VertexId target) {
+  EdgeId Graph::add_edge(VertexId source, VertexId target)
+  {
     auto id = EdgeId{ m_next_edge_id++ };
     m_edges.push_back({ id, source, target });
     m_in_edges[to_index(target)].insert(id);
@@ -59,19 +67,23 @@ namespace sched {
     return id;
   }
 
-  EdgeRange Graph::edges() const {
+  EdgeRange Graph::edges() const
+  {
     return EdgeRange{ m_edges.size() };
   }
 
-  std::size_t Graph::edge_count() const {
+  std::size_t Graph::edge_count() const
+  {
     return m_edge_count;
   }
 
-  bool Graph::is_valid(EdgeId e) const {
+  bool Graph::is_valid(EdgeId e) const
+  {
     return m_edges[to_index(e)].id != NoEdge;
   }
 
-  void Graph::remove_edge(EdgeId e) {
+  void Graph::remove_edge(EdgeId e)
+  {
     assert(is_valid(e));
     [[maybe_unused]] std::size_t erased = 0;
     Edge& edge = m_edges[to_index(e)];
@@ -82,23 +94,28 @@ namespace sched {
     erase_edge(edge);
   }
 
-  VertexId Graph::source(EdgeId e) const {
+  VertexId Graph::source(EdgeId e) const
+  {
     return m_edges[to_index(e)].source;
   }
 
-  VertexId Graph::target(EdgeId e) const {
+  VertexId Graph::target(EdgeId e) const
+  {
     return m_edges[to_index(e)].target;
   }
 
-  auto Graph::in_edges(VertexId v) const -> InEdgeRange {
+  auto Graph::in_edges(VertexId v) const -> InEdgeRange
+  {
     return make_iterator_range(m_in_edges[to_index(v)]);
   }
 
-  auto Graph::out_edges(VertexId v) const -> OutEdgeRange {
+  auto Graph::out_edges(VertexId v) const -> OutEdgeRange
+  {
     return make_iterator_range(m_out_edges[to_index(v)]);
   }
 
-  void Graph::clear() {
+  void Graph::clear()
+  {
     m_next_vertex_id = 0;
     m_next_edge_id = 0;
     m_vertices.clear();
@@ -107,7 +124,8 @@ namespace sched {
     m_out_edges.clear();
   }
 
-  void Graph::erase_edge(Edge& edge) {
+  void Graph::erase_edge(Edge& edge)
+  {
     if (edge.id == NoEdge) {
       return;
     }

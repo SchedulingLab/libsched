@@ -16,7 +16,8 @@ namespace sched::para {
   struct SCHED_API LongestProcessingTimeAlgorithm {
 
     template<typename Instance>
-    ParallelSchedule operator()(const Instance& instance) {
+    ParallelSchedule operator()(const Instance& instance)
+    {
       std::vector<ParallelJob> jobs;
 
       for (auto job : sched::jobs(instance)) {
@@ -30,7 +31,6 @@ namespace sched::para {
       const EarliestFinishTime eft;
       return eft(instance, jobs);
     }
-
   };
 
   using LptAlgorithm = LongestProcessingTimeAlgorithm;

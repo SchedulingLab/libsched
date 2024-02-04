@@ -13,13 +13,13 @@ namespace sched {
    * VertexId
    */
 
-  enum class VertexId : std::size_t { };
+  enum class VertexId : std::size_t {};
   using VertexRange = Range<VertexId>;
 
-  constexpr VertexId NoVertex = VertexId{RawNoId};
+  constexpr VertexId NoVertex = VertexId{ RawNoId };
 
-  constexpr
-  std::size_t to_index(VertexId id) {
+  constexpr std::size_t to_index(VertexId id)
+  {
     return static_cast<std::size_t>(id);
   }
 
@@ -27,13 +27,13 @@ namespace sched {
    * EdgeId
    */
 
-  enum class EdgeId : std::size_t { };
+  enum class EdgeId : std::size_t {};
   using EdgeRange = Range<EdgeId>;
 
-  constexpr EdgeId NoEdge = EdgeId{RawNoId};
+  constexpr EdgeId NoEdge = EdgeId{ RawNoId };
 
-  constexpr
-  std::size_t to_index(EdgeId id) {
+  constexpr std::size_t to_index(EdgeId id)
+  {
     return static_cast<std::size_t>(id);
   }
 
@@ -103,7 +103,6 @@ namespace sched {
     std::vector<std::set<EdgeId>> m_out_edges;
   };
 
-
   template<typename V, typename E>
   class DataGraph : public Graph {
   public:
@@ -116,31 +115,37 @@ namespace sched {
       }
     }
 
-    VertexId add_vertex(V v) {
+    VertexId add_vertex(V v)
+    {
       auto id = Graph::add_vertex();
       m_vertex_data.push_back(std::move(v));
       return id;
     }
 
-    V& operator()(VertexId id) {
+    V& operator()(VertexId id)
+    {
       return m_vertex_data[to_index(id)];
     }
 
-    const V& operator()(VertexId id) const {
+    const V& operator()(VertexId id) const
+    {
       return m_vertex_data[to_index(id)];
     }
 
-    EdgeId add_edge(VertexId source, VertexId target, E e) {
+    EdgeId add_edge(VertexId source, VertexId target, E e)
+    {
       auto id = Graph::add_edge(source, target);
       m_edge_data.push_back(std::move(e));
       return id;
     }
 
-    E& operator()(EdgeId id) {
+    E& operator()(EdgeId id)
+    {
       return m_edge_data[to_index(id)];
     }
 
-    const E& operator()(EdgeId id) const {
+    const E& operator()(EdgeId id) const
+    {
       return m_edge_data[to_index(id)];
     }
 

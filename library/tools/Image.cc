@@ -1,10 +1,14 @@
+// clang-format off: main header
 #include <sched/tools/Image.h>
+// clang-format on
 
 #include <cassert>
-#include <cstdint>
 #include <cinttypes>
+#include <cstdint>
+
 #include <iostream>
 #include <map>
+
 
 namespace sched {
   namespace {
@@ -24,7 +28,8 @@ namespace sched {
         m_colors[Color::Black] = { 0, 0, 0 };
       }
 
-      RGB get_rgb(Color color) {
+      RGB get_rgb(Color color)
+      {
         auto it = m_colors.find(color);
 
         if (it != m_colors.end()) {
@@ -36,7 +41,7 @@ namespace sched {
         RGB rgb;
         rgb.r = static_cast<uint8_t>(m_state >> 24);
         rgb.g = static_cast<uint8_t>(m_state >> 16);
-        rgb.b = static_cast<uint8_t>(m_state >>  8);
+        rgb.b = static_cast<uint8_t>(m_state >> 8);
 
         m_colors.insert({ color, rgb });
 
@@ -63,15 +68,18 @@ namespace sched {
   {
   }
 
-  void Image::set_color(std::size_t row, std::size_t col, Color color) {
+  void Image::set_color(std::size_t row, std::size_t col, Color color)
+  {
     get(row, col) = color;
   }
 
-  Color Image::get_color(std::size_t row, std::size_t col) const {
+  Color Image::get_color(std::size_t row, std::size_t col) const
+  {
     return get(row, col);
   }
 
-  void Image::export_to(std::ostream& out) {
+  void Image::export_to(std::ostream& out)
+  {
     out << "P3\n";
     out << m_width << ' ' << m_height << ' ' << 255 << '\n';
 
@@ -87,7 +95,8 @@ namespace sched {
     }
   }
 
-  Color& Image::get(std::size_t row, std::size_t col) {
+  Color& Image::get(std::size_t row, std::size_t col)
+  {
     assert(row < m_height);
 
     if (col >= m_width) {
@@ -99,11 +108,11 @@ namespace sched {
     return m_data[col * m_height + row];
   }
 
-  const Color& Image::get(std::size_t row, std::size_t col) const {
+  const Color& Image::get(std::size_t row, std::size_t col) const
+  {
     assert(row < m_height);
     assert(col < m_width);
     return m_data[col * m_height + row];
   }
 
 }
-

@@ -1,12 +1,16 @@
+// clang-format off: main header
 #include <sched/shop/JobShopSchedule.h>
+// clang-format on
 
 #include <cassert>
+
 #include <algorithm>
 #include <tuple>
 
 namespace sched::shop {
 
-  bool is_schedule_valid(const JobShopSchedule& schedule) {
+  bool is_schedule_valid(const JobShopSchedule& schedule)
+  {
     auto task_range = schedule.tasks();
     std::vector<JobShopTask> tasks(task_range.begin(), task_range.end());
 
@@ -18,7 +22,7 @@ namespace sched::shop {
     std::size_t machine_count = 0;
     std::size_t job_count = 0;
 
-    for (auto & task : tasks) {
+    for (auto& task : tasks) {
       machine_count = std::max(machine_count, to_index(task.machine) + 1);
       job_count = std::max(job_count, to_index(task.operation.job) + 1);
     }
@@ -29,9 +33,9 @@ namespace sched::shop {
     };
 
     std::vector<JobState> jobs(job_count, JobState{});
-    std::vector<Time> machines(machine_count, Time{0});
+    std::vector<Time> machines(machine_count, Time{ 0 });
 
-    for (auto & task : tasks) {
+    for (auto& task : tasks) {
       auto job_index = to_index(task.operation.job);
       assert(job_index < job_count);
       auto machine_index = to_index(task.machine);
@@ -53,7 +57,8 @@ namespace sched::shop {
     return true;
   }
 
-  JobShopSchedule make_schedule_active(const JobShopSchedule& original_schedule) {
+  JobShopSchedule make_schedule_active(const JobShopSchedule& original_schedule)
+  {
     auto task_range = original_schedule.tasks();
     std::vector<JobShopTask> tasks(task_range.begin(), task_range.end());
 
@@ -65,17 +70,17 @@ namespace sched::shop {
     std::size_t job_count = 0;
     std::size_t machine_count = 0;
 
-    for (auto & task : tasks) {
+    for (auto& task : tasks) {
       job_count = std::max(job_count, to_index(task.operation.job) + 1);
       machine_count = std::max(machine_count, to_index(task.machine) + 1);
     }
 
-    std::vector<Time> jobs(job_count, Time{0});
-    std::vector<Time> machines(machine_count, Time{0});
+    std::vector<Time> jobs(job_count, Time{ 0 });
+    std::vector<Time> machines(machine_count, Time{ 0 });
 
     JobShopSchedule schedule;
 
-    for (auto & task : tasks) {
+    for (auto& task : tasks) {
       auto job_index = to_index(task.operation.job);
       assert(job_index < job_count);
       auto machine_index = to_index(task.machine);
@@ -98,6 +103,5 @@ namespace sched::shop {
     assert(is_schedule_valid(schedule));
     return schedule;
   }
-
 
 }

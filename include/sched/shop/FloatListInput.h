@@ -8,8 +8,8 @@
 #include <sched/common/Random.h>
 #include <sched/common/Range.h>
 
-#include "InputTraits.h"
 #include "InputSize.h"
+#include "InputTraits.h"
 
 namespace sched::shop {
 
@@ -17,17 +17,20 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<FloatListInput> {
-    static std::string name() {
+    static std::string name()
+    {
       return "flt";
     }
 
     template<typename Instance>
-    static FloatListInput generate_input(const Instance& instance) {
+    static FloatListInput generate_input(const Instance& instance)
+    {
       return { input_size_for(instance), 0.0 };
     }
 
     template<typename Instance>
-    static FloatListInput generate_random(const Instance& instance, Random& random) {
+    static FloatListInput generate_random(const Instance& instance, Random& random)
+    {
       FloatListInput input = generate_input(instance);
 
       std::uniform_real_distribution<double> dist(0.0, 1.0);
@@ -40,10 +43,10 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static FloatListInput generate_feasible(const Instance& instance, Random& random) {
+    static FloatListInput generate_feasible(const Instance& instance, Random& random)
+    {
       return generate_random(instance, random);
     }
-
   };
 }
 

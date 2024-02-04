@@ -25,13 +25,15 @@ namespace sched::shop {
   class JobShopTransportSchedule : public JobShopSchedule {
   public:
 
-    void append_transportation_task(const TransportationTask& transportation_task) {
+    void append_transportation_task(const TransportationTask& transportation_task)
+    {
       m_transportation_tasks.push_back(transportation_task);
     }
 
     using ConstTransportationTaskRange = IteratorRange<std::vector<TransportationTask>::const_iterator>;
 
-    ConstTransportationTaskRange transportation_tasks() const {
+    ConstTransportationTaskRange transportation_tasks() const
+    {
       return make_iterator_range(m_transportation_tasks);
     }
 

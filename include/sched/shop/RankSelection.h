@@ -2,8 +2,9 @@
 #define SCHED_SCHOP_RANK_SELECTION_H
 
 #include <cassert>
-#include <sched/common/Random.h>
+
 #include <sched/common/Fixed.h>
+#include <sched/common/Random.h>
 
 namespace sched::shop {
 
@@ -11,7 +12,8 @@ namespace sched::shop {
   struct RankSelection {
 
     template<typename Solution>
-    std::vector<Solution> operator()(const std::vector<Solution>& solutions, std::size_t selected_count, Random& random) {
+    std::vector<Solution> operator()(const std::vector<Solution>& solutions, std::size_t selected_count, Random& random)
+    {
       using Fixed = BasicFixed<1000>;
 
       const std::size_t count = solutions.size();
@@ -33,7 +35,6 @@ namespace sched::shop {
 
       return selected;
     }
-
   };
 
 }

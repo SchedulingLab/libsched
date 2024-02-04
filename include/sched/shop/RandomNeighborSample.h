@@ -2,6 +2,7 @@
 #define SCHED_RANDOM_NEIGHBOR_SAMPLE_H
 
 #include <cassert>
+
 #include <vector>
 
 #include <sched/common/Random.h>
@@ -15,7 +16,8 @@ namespace sched::shop {
     using Input = typename Engine::Input;
 
     template<typename Instance>
-    std::vector<Input> operator()(const Instance& instance, const Input& start, Random& random, std::size_t count = 1000) {
+    std::vector<Input> operator()(const Instance& instance, const Input& start, Random& random, std::size_t count = 1000)
+    {
       auto maybe_schedule = engine(instance, start);
       assert(maybe_schedule);
       auto schedule = *maybe_schedule;
@@ -23,7 +25,8 @@ namespace sched::shop {
       std::vector<Input> result;
 
       while (result.size() < count) {
-        Input neighbor = neighborhood(start, schedule, random);;
+        Input neighbor = neighborhood(start, schedule, random);
+        ;
 
         if (engine(instance, neighbor)) {
           result.push_back(std::move(neighbor));

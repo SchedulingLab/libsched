@@ -16,7 +16,8 @@ namespace sched::shop {
     using Input = MachineListInput;
 
     template<typename Instance>
-    std::optional<JobShopSchedule> operator()(const Instance& instance, const MachineListInput& input) {
+    std::optional<JobShopSchedule> operator()(const Instance& instance, const MachineListInput& input)
+    {
       JobShopStates<Instance> states(instance);
       JobShopSchedule schedule;
 

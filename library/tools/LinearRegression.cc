@@ -1,29 +1,32 @@
+// clang-format off: main header
 #include <sched/tools/LinearRegression.h>
+// clang-format on
 
 #include <cassert>
 
-#include <sched/tools/Matrix.h>
 #include <sched/tools/KahanSum.h>
+#include <sched/tools/Matrix.h>
 #include <sched/tools/Statistics.h>
 
 namespace sched {
 
   namespace {
 
-    Matrix inverse(const Matrix& mat) {
+    Matrix inverse(const Matrix& mat)
+    {
       assert(mat.line_count() == 3);
       assert(mat.column_count() == 3);
 
       Matrix res(3, 3);
 
       res(0, 0) = mat(1, 1) * mat(2, 2) - mat(1, 2) * mat(2, 1);
-      res(0, 1) = - (mat(0, 1) * mat(2, 2) - mat(0, 2) * mat(2, 1));
+      res(0, 1) = -(mat(0, 1) * mat(2, 2) - mat(0, 2) * mat(2, 1));
       res(0, 2) = mat(0, 1) * mat(1, 2) - mat(0, 2) * mat(1, 1);
-      res(1, 0) = - (mat(1, 0) * mat(2, 2) - mat(1, 2) * mat(2, 0));
+      res(1, 0) = -(mat(1, 0) * mat(2, 2) - mat(1, 2) * mat(2, 0));
       res(1, 1) = mat(0, 0) * mat(2, 2) - mat(0, 2) * mat(2, 0);
-      res(1, 2) = - (mat(0, 0) * mat(1, 2) - mat(0, 2) * mat(1, 0));
+      res(1, 2) = -(mat(0, 0) * mat(1, 2) - mat(0, 2) * mat(1, 0));
       res(2, 0) = mat(1, 0) * mat(2, 1) - mat(1, 1) * mat(2, 0);
-      res(2, 1) = - (mat(0, 0) * mat(2, 1) - mat(0, 1) * mat(2, 0));
+      res(2, 1) = -(mat(0, 0) * mat(2, 1) - mat(0, 1) * mat(2, 0));
       res(2, 2) = mat(0, 0) * mat(1, 1) - mat(0, 1) * mat(1, 0);
 
       double det = mat(0, 0) * res(0, 0) + mat(1, 0) * res(0, 1) + mat(2, 0) * res(0, 2);
@@ -32,7 +35,8 @@ namespace sched {
       return res;
     }
 
-    double norm2(const Matrix& mat) {
+    double norm2(const Matrix& mat)
+    {
       assert(mat.column_count() == 1);
 
       KahanSum sum;
@@ -46,11 +50,13 @@ namespace sched {
 
   }
 
-  void LinearRegression2D::add(double x0, double x1, double y) {
+  void LinearRegression2D::add(double x0, double x1, double y)
+  {
     m_data.push_back({ x0, x1, y });
   }
 
-  auto LinearRegression2D::compute_regression() const -> Result {
+  auto LinearRegression2D::compute_regression() const -> Result
+  {
     constexpr std::size_t p = 2;
     Matrix x(m_data.size(), p + 1);
     Matrix y(m_data.size(), 1);

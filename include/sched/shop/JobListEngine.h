@@ -2,6 +2,7 @@
 #define SCHED_SHOP_JOB_LIST_ENGINE_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <optional>
 #include <vector>
@@ -19,7 +20,8 @@ namespace sched::shop {
     using Input = JobListInput;
 
     template<typename Instance>
-    std::optional<JobShopSchedule> operator()(const Instance& instance, const JobListInput& input) {
+    std::optional<JobShopSchedule> operator()(const Instance& instance, const JobListInput& input)
+    {
       JobShopStates<Instance> states(instance);
       JobShopSchedule schedule;
 

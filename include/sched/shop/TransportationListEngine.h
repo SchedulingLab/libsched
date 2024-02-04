@@ -2,6 +2,7 @@
 #define SCHED_SHOP_TRANSPORTATION_LIST_ENGINE_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <optional>
 #include <vector>
@@ -10,9 +11,9 @@
 #include <sched/common/Ids.h>
 #include <sched/common/Instance.h>
 
+#include "JobShopTaskComparator.h"
 #include "JobShopTransportSchedule.h"
 #include "JobShopTransportStates.h"
-#include "JobShopTaskComparator.h"
 #include "TransportationListInput.h"
 
 namespace sched::shop {
@@ -22,7 +23,8 @@ namespace sched::shop {
     using Input = TransportationListInput;
 
     template<typename Instance>
-    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const TransportationListInput& input) {
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const TransportationListInput& input)
+    {
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
       Comparator comparator;
@@ -70,7 +72,6 @@ namespace sched::shop {
 
       return schedule;
     }
-
   };
 
   using TransportationListEngineEST = TransportationListEngine<JobShopTaskEarliestStartingTime>;

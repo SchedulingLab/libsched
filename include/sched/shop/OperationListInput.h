@@ -17,20 +17,24 @@ namespace sched::shop {
 
   template<>
   struct InputTraits<OperationListInput> {
-    static std::string name() {
+    static std::string name()
+    {
       return "ope";
     }
 
-    static void enumerate_start(OperationListInput& input) {
+    static void enumerate_start(OperationListInput& input)
+    {
       std::sort(input.begin(), input.end());
     }
 
-    static bool enumerate_next(OperationListInput& input) {
+    static bool enumerate_next(OperationListInput& input)
+    {
       return std::next_permutation(input.begin(), input.end());
     }
 
     template<typename Instance>
-    static OperationListInput generate_input(const Instance& instance) {
+    static OperationListInput generate_input(const Instance& instance)
+    {
       OperationListInput input;
 
       for (auto job : sched::jobs(instance)) {
@@ -44,14 +48,16 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-    static OperationListInput generate_random(const Instance& instance, Random& random) {
+    static OperationListInput generate_random(const Instance& instance, Random& random)
+    {
       OperationListInput input = generate_input(instance);
       std::shuffle(input.begin(), input.end(), random);
       return input;
     }
 
     template<typename Instance>
-    static OperationListInput generate_feasible(const Instance& instance, Random& random) {
+    static OperationListInput generate_feasible(const Instance& instance, Random& random)
+    {
       // generate a job list
       std::vector<JobId> ids;
 
@@ -80,7 +86,6 @@ namespace sched::shop {
 
       return input;
     }
-
   };
 
 }

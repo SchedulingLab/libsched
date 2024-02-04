@@ -5,10 +5,10 @@
 
 #include <sched/common/Api.h>
 
-#include "InputConversion.h"
-#include "JobShopTransportSchedule.h"
-#include "JobShopTaskComparator.h"
 #include "GeneralJobListEngine.h"
+#include "InputConversion.h"
+#include "JobShopTaskComparator.h"
+#include "JobShopTransportSchedule.h"
 #include "OperationListInput.h"
 
 namespace sched::shop {
@@ -18,7 +18,8 @@ namespace sched::shop {
     using Input = OperationListInput;
 
     template<typename Instance>
-    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const OperationListInput& input) {
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const OperationListInput& input)
+    {
       auto maybe_job_list = to_job_list(input, instance);
 
       if (!maybe_job_list) {

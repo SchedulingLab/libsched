@@ -8,7 +8,8 @@ namespace sched {
     T lo; // inclusive
     T hi; // inclusive
 
-    bool contains(T value) const noexcept {
+    bool contains(T value) const noexcept
+    {
       return lo <= value && value <= hi;
     }
   };

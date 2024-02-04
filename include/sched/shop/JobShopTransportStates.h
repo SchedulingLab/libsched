@@ -31,7 +31,8 @@ namespace sched::shop {
 
     using States::update_schedule; // necessary for overloading
 
-    JobShopTransportTaskPacket create_packet(OperationId operation, MachineId machine, TransportationId transportation) const {
+    JobShopTransportTaskPacket create_packet(OperationId operation, MachineId machine, TransportationId transportation) const
+    {
       const JobState& job_state = States::jobs[to_index(operation.job)];
       const TransportationState& transportation_state = transportations[to_index(transportation)];
       const MachineState& machine_state = States::machines[to_index(machine)];
@@ -66,7 +67,8 @@ namespace sched::shop {
       return packet;
     }
 
-    void update_schedule(const JobShopTransportTaskPacket& packet, JobShopTransportSchedule& schedule) {
+    void update_schedule(const JobShopTransportTaskPacket& packet, JobShopTransportSchedule& schedule)
+    {
       JobId job = packet.task.operation.job;
       JobState& job_state = States::jobs[to_index(job)];
 

@@ -2,6 +2,7 @@
 #define SCHED_TOOLS_RUNNER_H
 
 #include <cstdlib>
+
 #include <atomic>
 #include <functional>
 #include <thread>
@@ -22,7 +23,8 @@ namespace sched {
     {
     }
 
-    void run(Executor executor) const {
+    void run(Executor executor) const
+    {
       int concurrency = std::thread::hardware_concurrency() - 1;
 
       if (concurrency > 1 && std::getenv("SCHED_SINGLE") == nullptr) {
@@ -30,7 +32,7 @@ namespace sched {
 
         ConcurrentQueue<Work> input;
 
-        for (auto & work : m_works) {
+        for (auto& work : m_works) {
           input.push(work);
         }
 
@@ -56,14 +58,14 @@ namespace sched {
           });
         }
 
-        for (auto & thread : threads) {
+        for (auto& thread : threads) {
           thread.join();
         }
       } else {
         sched::Log::println("Running sequentially...");
         int index = 1;
 
-        for (auto & work : m_works) {
+        for (auto& work : m_works) {
           sched::Log::println("[{}/{}] {}", index++, m_works.size(), work);
           executor(work);
         }

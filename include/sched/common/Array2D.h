@@ -18,29 +18,35 @@ namespace sched {
     {
     }
 
-    T& operator[](std::size_t index) {
+    T& operator[](std::size_t index)
+    {
       assert(index < m_size);
       return m_ptr[index];
     }
 
-    const T& operator[](std::size_t index) const {
+    const T& operator[](std::size_t index) const
+    {
       assert(index < m_size);
       return m_ptr[index];
     }
 
-    T* begin() {
+    T* begin()
+    {
       return m_ptr;
     }
 
-    const T* begin() const {
+    const T* begin() const
+    {
       return m_ptr;
     }
 
-    T* end() {
+    T* end()
+    {
       return m_ptr + m_size;
     }
 
-    const T* end() const {
+    const T* end() const
+    {
       return m_ptr + m_size;
     }
 
@@ -50,10 +56,10 @@ namespace sched {
   };
 
   template<typename T>
-  Span<T> span(T* ptr, std::size_t size) {
+  Span<T> span(T* ptr, std::size_t size)
+  {
     return Span<T>(ptr, size);
   }
-
 
   template<typename T>
   class Array2D {
@@ -84,7 +90,7 @@ namespace sched {
       return m_rows;
     }
 
-    std::size_t  cols() const noexcept
+    std::size_t cols() const noexcept
     {
       return m_cols;
     }
@@ -111,11 +117,13 @@ namespace sched {
       return m_data[linearize(row, col)];
     }
 
-    auto operator[](std::size_t row) {
+    auto operator[](std::size_t row)
+    {
       return span(m_data.data() + row * m_cols, m_cols);
     }
 
-    auto operator[](std::size_t row) const {
+    auto operator[](std::size_t row) const
+    {
       return span(m_data.data() + row * m_cols, m_cols);
     }
 

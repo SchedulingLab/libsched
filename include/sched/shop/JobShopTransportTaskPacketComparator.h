@@ -1,15 +1,16 @@
 #ifndef SCHED_SHOP_JOB_SHOP_TRANSPORT_TASK_PACKET_COMPARATOR_H
 #define SCHED_SHOP_JOB_SHOP_TRANSPORT_TASK_PACKET_COMPARATOR_H
 
-#include "JobShopTransportStates.h"
 #include "JobShopTaskComparator.h"
+#include "JobShopTransportStates.h"
 
 namespace sched::shop {
 
   template<typename TaskComparator>
   struct JobShopTransportTaskPacketWrapperComparator {
 
-    bool operator()(const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
+    bool operator()(const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs)
+    {
       return cmp(lhs.task, rhs.task);
     }
 

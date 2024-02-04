@@ -11,10 +11,10 @@
 #include <sched/common/Ids.h>
 #include <sched/common/Instance.h>
 
+#include "FloatListInput.h"
 #include "JobShopTaskComparator.h"
 #include "JobShopTransportSchedule.h"
 #include "JobShopTransportStates.h"
-#include "FloatListInput.h"
 
 namespace sched::shop {
 
@@ -23,7 +23,8 @@ namespace sched::shop {
     using Input = FloatListInput;
 
     template<typename Instance>
-    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const FloatListInput& input) {
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const FloatListInput& input)
+    {
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
       Comparator comparator;
@@ -115,7 +116,6 @@ namespace sched::shop {
             MachineId machine = instance.assigned_machine_for_operation(operation);
             assert(to_index(machine) < machine_assignment.size());
             machine_assignment[to_index(machine)].emplace_back(operation, input[index++]);
-
           }
         }
       }
@@ -130,7 +130,6 @@ namespace sched::shop {
 
       return machine_assignment;
     }
-
   };
 
   using GeneralMachineListEngineEST = GeneralMachineListEngine<JobShopTaskEarliestStartingTime>;

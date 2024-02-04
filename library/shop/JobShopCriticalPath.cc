@@ -1,12 +1,16 @@
+// clang-format off: main header
 #include <sched/shop/JobShopCriticalPath.h>
+// clang-format on
 
 #include <cassert>
+
 #include <algorithm>
 #include <tuple>
 
 namespace sched::shop {
 
-  std::vector<JobShopTask> critical_path(const JobShopSchedule& schedule) {
+  std::vector<JobShopTask> critical_path(const JobShopSchedule& schedule)
+  {
     auto task_range = schedule.tasks();
     std::vector<JobShopTask> tasks(task_range.begin(), task_range.end());
 
@@ -50,7 +54,7 @@ namespace sched::shop {
 
       assert(k < n);
       assert(tasks[k].operation.job == tasks[i].operation.job);
-//       assert(tasks[k].completion == tasks[i].start);
+      //       assert(tasks[k].completion == tasks[i].start);
       result.push_back(tasks[k]);
       i = k;
     }

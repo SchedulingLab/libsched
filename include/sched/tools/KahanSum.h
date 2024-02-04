@@ -12,7 +12,8 @@ namespace sched {
     void reset();
     void add(double x);
 
-    double get_result() const {
+    double get_result() const
+    {
       return m_sum + m_c;
     }
 

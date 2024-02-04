@@ -2,6 +2,7 @@
 #define SCHED_SHOP_ALTERNATE_NEIGHBORHOOD_H
 
 #include <cassert>
+
 #include <string>
 
 #include <sched/common/Random.h>
@@ -14,7 +15,8 @@ namespace sched::shop {
   struct AlternateNeighborhood {
 
     template<typename Input, typename Schedule>
-    Input operator()(const Input& input, const Schedule& schedule, Random& random) {
+    Input operator()(const Input& input, const Schedule& schedule, Random& random)
+    {
       std::bernoulli_distribution dist(0.5);
       Input neighbor;
 
@@ -28,7 +30,8 @@ namespace sched::shop {
     }
 
     template<typename Input, typename Schedule>
-    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count) {
+    std::vector<Input> generate_many(const Input& input, const Schedule& schedule, Random& random, std::size_t count)
+    {
       auto neighbors0 = neighborhood0.generate_many(input, schedule, random, count);
       assert(neighbors0.size() == count);
       auto neighbors1 = neighborhood1.generate_many(input, schedule, random, count);
@@ -54,7 +57,8 @@ namespace sched::shop {
 
   template<typename Neighborhood0, typename Neighborhood1>
   struct NeighborhoodTraits<AlternateNeighborhood<Neighborhood0, Neighborhood1>> {
-    static std::string name() {
+    static std::string name()
+    {
       return NeighborhoodTraits<Neighborhood0>::name() + "_or_" + NeighborhoodTraits<Neighborhood1>::name();
     }
   };

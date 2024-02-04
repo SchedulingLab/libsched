@@ -1,17 +1,21 @@
+// clang-format off: main header
 #include <sched/shop/Export.h>
+// clang-format on
 
 #include <sched/tools/Image.h>
 
 namespace sched::shop {
   namespace {
 
-    constexpr Color to_color(JobId id) {
+    constexpr Color to_color(JobId id)
+    {
       return static_cast<Color>(static_cast<int>(static_cast<std::size_t>(id)));
     }
 
   }
 
-  void export_schedule(const JobShopSchedule& schedule, std::size_t machines, std::ostream& out) {
+  void export_schedule(const JobShopSchedule& schedule, std::size_t machines, std::ostream& out)
+  {
     static constexpr std::size_t MachineHeight = 20;
     static constexpr std::size_t TimeWidth = 1;
 
@@ -29,4 +33,3 @@ namespace sched::shop {
   }
 
 }
-

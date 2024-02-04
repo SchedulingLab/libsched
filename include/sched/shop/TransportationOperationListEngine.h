@@ -7,9 +7,9 @@
 
 #include "InputConversion.h"
 #include "JobShopTransportSchedule.h"
-#include "TransportationJobListEngine.h"
 #include "OperationListInput.h"
 #include "SplitInput.h"
+#include "TransportationJobListEngine.h"
 
 namespace sched::shop {
 
@@ -18,7 +18,8 @@ namespace sched::shop {
     using Input = TransportSplitInput<OperationListInput, typename TransportationAssignment::Input>;
 
     template<typename Instance>
-    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input) {
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
+    {
       auto maybe_job_list = to_job_list(input.schedule, instance);
 
       if (!maybe_job_list) {

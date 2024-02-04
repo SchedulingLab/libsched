@@ -19,7 +19,8 @@ namespace sched::shop {
     using Input = typename Engine::Input;
 
     template<typename Instance>
-    std::vector<Input> operator()(const Instance& instance, Random& random, std::size_t count = 1000) {
+    std::vector<Input> operator()(const Instance& instance, Random& random, std::size_t count = 1000)
+    {
       std::vector<Input> result;
 
       while (result.size() < count) {
@@ -44,6 +45,5 @@ namespace sched::shop {
   };
 
 }
-
 
 #endif // SCHED_RANDOM_SAMPLE_H

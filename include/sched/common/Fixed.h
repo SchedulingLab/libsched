@@ -19,61 +19,74 @@ namespace sched {
     {
     }
 
-    constexpr int64_t as_int() const {
+    constexpr int64_t as_int() const
+    {
       return m_data / Factor;
     }
 
-    constexpr double as_float() const {
+    constexpr double as_float() const
+    {
       return static_cast<double>(m_data) / static_cast<double>(Factor);
     }
 
-    constexpr int64_t as_raw() const {
+    constexpr int64_t as_raw() const
+    {
       return m_data;
     }
 
-    constexpr BasicFixed& operator+=(BasicFixed other) {
+    constexpr BasicFixed& operator+=(BasicFixed other)
+    {
       m_data += other.m_data;
       return *this;
     }
 
-    constexpr BasicFixed& operator-=(BasicFixed other) {
+    constexpr BasicFixed& operator-=(BasicFixed other)
+    {
       m_data -= other.m_data;
       return *this;
     }
 
-    constexpr BasicFixed& operator*=(BasicFixed other) {
+    constexpr BasicFixed& operator*=(BasicFixed other)
+    {
       m_data *= other.m_data;
       m_data /= Factor;
       return *this;
     }
 
-    constexpr BasicFixed& operator/=(BasicFixed other) {
+    constexpr BasicFixed& operator/=(BasicFixed other)
+    {
       m_data *= Factor;
       m_data /= other.m_data;
       return *this;
     }
 
-    constexpr bool operator==(BasicFixed other) const {
+    constexpr bool operator==(BasicFixed other) const
+    {
       return m_data == other.m_data;
     }
 
-    constexpr bool operator!=(BasicFixed other) const {
+    constexpr bool operator!=(BasicFixed other) const
+    {
       return m_data != other.m_data;
     }
 
-    constexpr bool operator<(BasicFixed other) const {
+    constexpr bool operator<(BasicFixed other) const
+    {
       return m_data < other.m_data;
     }
 
-    constexpr bool operator<=(BasicFixed other) const {
+    constexpr bool operator<=(BasicFixed other) const
+    {
       return m_data <= other.m_data;
     }
 
-    constexpr bool operator>(BasicFixed other) const {
+    constexpr bool operator>(BasicFixed other) const
+    {
       return m_data > other.m_data;
     }
 
-    constexpr bool operator>=(BasicFixed other) const {
+    constexpr bool operator>=(BasicFixed other) const
+    {
       return m_data >= other.m_data;
     }
 
@@ -82,40 +95,76 @@ namespace sched {
   };
 
   template<int64_t Factor>
-  constexpr BasicFixed<Factor> operator+(BasicFixed<Factor> lhs, BasicFixed<Factor> rhs) { return lhs += rhs; }
+  constexpr BasicFixed<Factor> operator+(BasicFixed<Factor> lhs, BasicFixed<Factor> rhs)
+  {
+    return lhs += rhs;
+  }
 
   template<int64_t Factor, typename T>
-  constexpr BasicFixed<Factor> operator+(T lhs, BasicFixed<Factor> rhs) { return BasicFixed<Factor>(lhs) + rhs; }
+  constexpr BasicFixed<Factor> operator+(T lhs, BasicFixed<Factor> rhs)
+  {
+    return BasicFixed<Factor>(lhs) + rhs;
+  }
 
   template<int64_t Factor, typename T>
-  constexpr BasicFixed<Factor> operator+(BasicFixed<Factor> lhs, T rhs) { return lhs + BasicFixed<Factor>(rhs); }
+  constexpr BasicFixed<Factor> operator+(BasicFixed<Factor> lhs, T rhs)
+  {
+    return lhs + BasicFixed<Factor>(rhs);
+  }
 
   template<int64_t Factor>
-  constexpr BasicFixed<Factor> operator-(BasicFixed<Factor> lhs, BasicFixed<Factor> rhs) { return lhs -= rhs; }
+  constexpr BasicFixed<Factor> operator-(BasicFixed<Factor> lhs, BasicFixed<Factor> rhs)
+  {
+    return lhs -= rhs;
+  }
 
   template<int64_t Factor, typename T>
-  constexpr BasicFixed<Factor> operator-(T lhs, BasicFixed<Factor> rhs) { return BasicFixed<Factor>(lhs) - rhs; }
+  constexpr BasicFixed<Factor> operator-(T lhs, BasicFixed<Factor> rhs)
+  {
+    return BasicFixed<Factor>(lhs) - rhs;
+  }
 
   template<int64_t Factor, typename T>
-  constexpr BasicFixed<Factor> operator-(BasicFixed<Factor> lhs, T rhs) { return lhs - BasicFixed<Factor>(rhs); }
+  constexpr BasicFixed<Factor> operator-(BasicFixed<Factor> lhs, T rhs)
+  {
+    return lhs - BasicFixed<Factor>(rhs);
+  }
 
   template<int64_t Factor>
-  constexpr BasicFixed<Factor> operator*(BasicFixed<Factor> lhs, BasicFixed<Factor> rhs) { return lhs *= rhs; }
+  constexpr BasicFixed<Factor> operator*(BasicFixed<Factor> lhs, BasicFixed<Factor> rhs)
+  {
+    return lhs *= rhs;
+  }
 
   template<int64_t Factor, typename T>
-  constexpr BasicFixed<Factor> operator*(T lhs, BasicFixed<Factor> rhs) { return BasicFixed<Factor>(lhs) * rhs; }
+  constexpr BasicFixed<Factor> operator*(T lhs, BasicFixed<Factor> rhs)
+  {
+    return BasicFixed<Factor>(lhs) * rhs;
+  }
 
   template<int64_t Factor, typename T>
-  constexpr BasicFixed<Factor> operator*(BasicFixed<Factor> lhs, T rhs) { return lhs * BasicFixed<Factor>(rhs); }
+  constexpr BasicFixed<Factor> operator*(BasicFixed<Factor> lhs, T rhs)
+  {
+    return lhs * BasicFixed<Factor>(rhs);
+  }
 
   template<int64_t Factor>
-  constexpr BasicFixed<Factor> operator/(BasicFixed<Factor> lhs, BasicFixed<Factor> rhs) { return lhs /= rhs; }
+  constexpr BasicFixed<Factor> operator/(BasicFixed<Factor> lhs, BasicFixed<Factor> rhs)
+  {
+    return lhs /= rhs;
+  }
 
   template<int64_t Factor, typename T>
-  constexpr BasicFixed<Factor> operator/(T lhs, BasicFixed<Factor> rhs) { return BasicFixed<Factor>(lhs) / rhs; }
+  constexpr BasicFixed<Factor> operator/(T lhs, BasicFixed<Factor> rhs)
+  {
+    return BasicFixed<Factor>(lhs) / rhs;
+  }
 
   template<int64_t Factor, typename T>
-  constexpr BasicFixed<Factor> operator/(BasicFixed<Factor> lhs, T rhs) { return lhs / BasicFixed<Factor>(rhs); }
+  constexpr BasicFixed<Factor> operator/(BasicFixed<Factor> lhs, T rhs)
+  {
+    return lhs / BasicFixed<Factor>(rhs);
+  }
 
   using Fixed = BasicFixed<1000000>;
 

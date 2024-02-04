@@ -20,7 +20,8 @@ namespace sched::para {
     {
     }
 
-    ParallelInstance operator()(Random& random) const {
+    ParallelInstance operator()(Random& random) const
+    {
       const Time range = m_max - m_min;
       const Time lower = range - range / 10; // should be m_min + range - range / 10
       const Time upper = range / 5;          // should be m_min + range / 5

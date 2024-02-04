@@ -2,6 +2,7 @@
 #define SCHED_COMMON_TERMINATION_H
 
 #include <cstddef>
+
 #include <chrono>
 
 namespace sched {
@@ -13,21 +14,23 @@ namespace sched {
   template<typename Duration>
   class TimeTermination {
   public:
-    constexpr
-    TimeTermination(Duration duration)
+    constexpr TimeTermination(Duration duration)
     : m_duration(duration)
     {
     }
 
-    void start() {
+    void start()
+    {
       m_start = std::chrono::steady_clock::now();
     }
 
-    void step() {
+    void step()
+    {
       // nothing to do
     }
 
-    bool satisfied() const {
+    bool satisfied() const
+    {
       return (std::chrono::steady_clock::now() - m_start) >= m_duration;
     }
 
@@ -37,7 +40,8 @@ namespace sched {
   };
 
   template<typename Duration>
-  TimeTermination<Duration> terminate_after(Duration duration) {
+  TimeTermination<Duration> terminate_after(Duration duration)
+  {
     return TimeTermination<Duration>(duration);
   }
 
@@ -47,21 +51,23 @@ namespace sched {
 
   class IterationCountTermination {
   public:
-    constexpr
-    IterationCountTermination(std::size_t count)
+    constexpr IterationCountTermination(std::size_t count)
     : m_count(count)
     {
     }
 
-    void start() {
+    void start()
+    {
       m_iteration = 0;
     }
 
-    void step() {
+    void step()
+    {
       ++m_iteration;
     }
 
-    bool satisfied() const {
+    bool satisfied() const
+    {
       return m_iteration >= m_count;
     }
 
@@ -71,8 +77,7 @@ namespace sched {
   };
 
   struct IterationCountValue {
-    constexpr
-    IterationCountValue(std::size_t count)
+    constexpr IterationCountValue(std::size_t count)
     : count(count)
     {
     }
@@ -82,15 +87,15 @@ namespace sched {
 
   namespace literals {
 
-    constexpr
-    IterationCountValue operator "" _iterations(unsigned long long count) {
+    constexpr IterationCountValue operator"" _iterations(unsigned long long count)
+    {
       return { count };
     }
 
   }
 
-  constexpr
-  IterationCountTermination terminate_after(IterationCountValue value) {
+  constexpr IterationCountTermination terminate_after(IterationCountValue value)
+  {
     return { value.count };
   }
 

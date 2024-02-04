@@ -15,27 +15,33 @@ namespace sched {
     void reset();
     void add(double x);
 
-    std::size_t get_count() const {
+    std::size_t get_count() const
+    {
       return m_count;
     }
 
-    double get_mean() const {
+    double get_mean() const
+    {
       return m_mean.get_result();
     }
 
-    double get_variance() const {
+    double get_variance() const
+    {
       return m_m2.get_result() / static_cast<double>(m_count);
     }
 
-    double get_sample_variance() const {
+    double get_sample_variance() const
+    {
       return m_m2.get_result() / static_cast<double>(m_count - 1);
     }
 
-    double get_min() const {
+    double get_min() const
+    {
       return m_min;
     }
 
-    double get_max() const {
+    double get_max() const
+    {
       return m_max;
     }
 

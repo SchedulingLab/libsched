@@ -2,6 +2,7 @@
 #define SCHED_PARA_PARALLEL_INSTANCE_H
 
 #include <cassert>
+
 #include <vector>
 
 #include <sched/common/Api.h>
@@ -24,15 +25,18 @@ namespace sched::para {
     {
     }
 
-    std::size_t machine_count() const noexcept {
+    std::size_t machine_count() const noexcept
+    {
       return m_machines;
     }
 
-    std::size_t job_count() const noexcept {
+    std::size_t job_count() const noexcept
+    {
       return m_jobs.size();
     }
 
-    Time processing_time(JobId job, [[maybe_unused]] MachineId machine) const {
+    Time processing_time(JobId job, [[maybe_unused]] MachineId machine) const
+    {
       assert(machine == AnyMachine);
       return m_jobs[to_index(job)];
     }
@@ -42,8 +46,6 @@ namespace sched::para {
     std::vector<Time> m_jobs;
   };
 
-
 }
-
 
 #endif // SCHED_PARA_PARALLEL_INSTANCE_H

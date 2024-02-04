@@ -2,6 +2,7 @@
 #define SCHED_PARA_LISTFIT_ALGORITHM_H
 
 #include <cassert>
+
 #include <algorithm>
 #include <vector>
 
@@ -9,8 +10,8 @@
 #include <sched/common/Instance.h>
 #include <sched/common/MakespanCriterion.h>
 
-#include "MultifitAlgorithm.h"
 #include "LptAlgorithm.h"
+#include "MultifitAlgorithm.h"
 #include "ParallelJob.h"
 #include "ParallelSchedule.h"
 
@@ -19,7 +20,8 @@ namespace sched::para {
   struct SCHED_API ListfitAlgorithm {
 
     template<typename Instance>
-    ParallelSchedule operator()(const Instance& instance) {
+    ParallelSchedule operator()(const Instance& instance)
+    {
       const LptAlgorithm lpt;
       MultifitAlgorithm multifit;
 
@@ -104,7 +106,6 @@ namespace sched::para {
 
       return schedule;
     }
-
   };
 
 }

@@ -14,12 +14,14 @@ namespace sched::shop {
   struct SCHED_API OperationSwapNeighborhood {
 
     template<typename Schedule>
-    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
+    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random)
+    {
       return compute(input, random);
     }
 
     template<typename Schedule>
-    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
+    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count)
+    {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
@@ -29,7 +31,8 @@ namespace sched::shop {
 
   template<>
   struct NeighborhoodTraits<OperationSwapNeighborhood> {
-    static std::string name() {
+    static std::string name()
+    {
       return "swp";
     }
   };
@@ -37,12 +40,14 @@ namespace sched::shop {
   struct SCHED_API OperationInsertNeighborhood {
 
     template<typename Schedule>
-    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
+    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random)
+    {
       return compute(input, random);
     }
 
     template<typename Schedule>
-    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
+    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count)
+    {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
@@ -52,7 +57,8 @@ namespace sched::shop {
 
   template<>
   struct NeighborhoodTraits<OperationInsertNeighborhood> {
-    static std::string name() {
+    static std::string name()
+    {
       return "ins";
     }
   };
@@ -60,12 +66,14 @@ namespace sched::shop {
   struct SCHED_API OperationReverseNeighborhood {
 
     template<typename Schedule>
-    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
+    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random)
+    {
       return compute(input, random);
     }
 
     template<typename Schedule>
-    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
+    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count)
+    {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
@@ -75,7 +83,8 @@ namespace sched::shop {
 
   template<>
   struct NeighborhoodTraits<OperationReverseNeighborhood> {
-    static std::string name() {
+    static std::string name()
+    {
       return "rev";
     }
   };
@@ -83,12 +92,14 @@ namespace sched::shop {
   struct SCHED_API OperationCappedReverseNeighborhood {
 
     template<typename Schedule>
-    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random) {
+    OperationListInput operator()(const OperationListInput& input, [[maybe_unused]] const Schedule& schedule, Random& random)
+    {
       return compute(input, random);
     }
 
     template<typename Schedule>
-    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count) {
+    std::vector<OperationListInput> generate_many(const OperationListInput& input, const Schedule& schedule, Random& random, std::size_t count)
+    {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
@@ -98,12 +109,12 @@ namespace sched::shop {
 
   template<>
   struct NeighborhoodTraits<OperationCappedReverseNeighborhood> {
-    static std::string name() {
+    static std::string name()
+    {
       return "crv";
     }
   };
 
 }
-
 
 #endif // SCHED_SHOP_OPERATION_LIST_IMPROVED_NEIGHBORHOOD_H

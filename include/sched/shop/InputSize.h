@@ -43,5 +43,4 @@ namespace sched::shop {
 
 }
 
-
 #endif // SCHED_SHOP_INPUT_SIZE_H

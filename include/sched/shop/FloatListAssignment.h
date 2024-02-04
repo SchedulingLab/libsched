@@ -2,6 +2,7 @@
 #define SCHED_SHOP_FLOAT_LIST_ASSIGNMENT_H
 
 #include <cassert>
+
 #include <map>
 
 #include <sched/common/Api.h>
@@ -16,7 +17,8 @@ namespace sched::shop {
     using Input = FloatListInput;
 
     template<typename Instance>
-    std::map<OperationId, MachineId> operator()(const Instance& instance, const FloatListInput& input) {
+    std::map<OperationId, MachineId> operator()(const Instance& instance, const FloatListInput& input)
+    {
       static_assert(Instance::flexible, "Instance should be flexible.");
       std::map<OperationId, MachineId> assignment;
       std::size_t input_index = 0;
@@ -34,7 +36,7 @@ namespace sched::shop {
           auto machine_index = static_cast<std::size_t>(input[input_index] * static_cast<double>(machine_count));
           assert(machine_index < machine_count);
 
-          [[maybe_unused]] auto [ iterator, inserted ] = assignment.insert({ operation, available[machine_index] });
+          [[maybe_unused]] auto [iterator, inserted] = assignment.insert({ operation, available[machine_index] });
           assert(inserted);
 
           ++input_index;
@@ -43,7 +45,6 @@ namespace sched::shop {
 
       return assignment;
     }
-
   };
 
 }

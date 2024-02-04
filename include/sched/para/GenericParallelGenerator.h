@@ -20,7 +20,8 @@ namespace sched::para {
     {
     }
 
-    ParallelInstance operator()(Random& random) {
+    ParallelInstance operator()(Random& random)
+    {
       std::vector<Time> times;
 
       for (std::size_t i = 0; i < m_jobs; ++i) {
@@ -35,7 +36,6 @@ namespace sched::para {
     std::size_t m_jobs;
     Distribution m_distribution;
   };
-
 
   struct SCHED_API UniformParallelGenerator : GenericParallelGenerator<std::uniform_int_distribution<Time>> {
     UniformParallelGenerator(std::size_t machines, std::size_t jobs, Time min, Time max)

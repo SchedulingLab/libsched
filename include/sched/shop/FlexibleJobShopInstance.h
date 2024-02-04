@@ -2,6 +2,7 @@
 #define SCHED_FLEXIBLE_JOBSHOP_INSTANCE_H
 
 #include <cassert>
+
 #include <limits>
 #include <vector>
 
@@ -36,27 +37,33 @@ namespace sched::shop {
       assert(is_valid());
     }
 
-    std::size_t machine_count() const noexcept {
+    std::size_t machine_count() const noexcept
+    {
       return m_machines;
     }
 
-    std::size_t job_count() const noexcept {
+    std::size_t job_count() const noexcept
+    {
       return m_jobs.size();
     }
 
-    std::size_t operation_count(JobId job) const {
+    std::size_t operation_count(JobId job) const
+    {
       return get_job(job).operations.size();
     }
 
-    constexpr Time release_date([[maybe_unused]] JobId job) const noexcept {
+    constexpr Time release_date([[maybe_unused]] JobId job) const noexcept
+    {
       return 0;
     }
 
-    constexpr Time due_date([[maybe_unused]] JobId job) const noexcept {
+    constexpr Time due_date([[maybe_unused]] JobId job) const noexcept
+    {
       return TimeMax;
     }
 
-    std::vector<MachineId> machines_for_operation(OperationId op) const {
+    std::vector<MachineId> machines_for_operation(OperationId op) const
+    {
       std::vector<MachineId> machines;
 
       for (auto& choice : get_job(op.job).operations[op.index].choices) {
@@ -66,8 +73,9 @@ namespace sched::shop {
       return machines;
     }
 
-    Time processing_time(OperationId op, [[maybe_unused]] MachineId machine) const {
-      for (auto & choice : get_job(op.job).operations[op.index].choices) {
+    Time processing_time(OperationId op, [[maybe_unused]] MachineId machine) const
+    {
+      for (auto& choice : get_job(op.job).operations[op.index].choices) {
         if (choice.machine == machine) {
           return choice.processing;
         }
@@ -78,16 +86,18 @@ namespace sched::shop {
     }
 
   private:
-    const JobDesc& get_job(JobId id) const {
+    const JobDesc& get_job(JobId id) const
+    {
       auto index = sched::to_index(id);
       assert(index < m_jobs.size());
       return m_jobs[index];
     }
 
-    bool is_valid() const noexcept {
-      for (auto & job : m_jobs) {
-        for (auto & op : job.operations) {
-          for (auto & choice : op.choices) {
+    bool is_valid() const noexcept
+    {
+      for (auto& job : m_jobs) {
+        for (auto& op : job.operations) {
+          for (auto& choice : op.choices) {
             if (sched::to_index(choice.machine) >= m_machines) {
               return false;
             }
@@ -103,6 +113,5 @@ namespace sched::shop {
   };
 
 }
-
 
 #endif // SCHED_FLEXIBLE_JOB_SHOP_INSTANCE_H

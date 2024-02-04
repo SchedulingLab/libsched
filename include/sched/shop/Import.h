@@ -5,9 +5,9 @@
 
 #include <sched/common/Api.h>
 
-#include "JobShopInstance.h"
 #include "FlexibleJobShopInstance.h"
 #include "FlexibleJobShopTransportInstance.h"
+#include "JobShopInstance.h"
 
 namespace sched::shop {
 
@@ -61,7 +61,5 @@ namespace sched::shop {
   };
 
 }
-
-
 
 #endif // SCHED_IMPORT_H

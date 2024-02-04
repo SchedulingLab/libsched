@@ -2,6 +2,7 @@
 #define SCHED_RANDOM_H
 
 #include <cstdint>
+
 #include <limits>
 #include <random>
 
@@ -16,11 +17,13 @@ namespace sched {
 
     Random(result_type seed);
 
-    static constexpr result_type min() {
+    static constexpr result_type min()
+    {
       return std::numeric_limits<result_type>::min();
     }
 
-    static constexpr result_type max() {
+    static constexpr result_type max()
+    {
       return std::numeric_limits<result_type>::max();
     }
 
@@ -30,7 +33,8 @@ namespace sched {
     void long_jump();
 
     template<typename Integer>
-    Integer compute_uniform_integer(Integer a, Integer b) {
+    Integer compute_uniform_integer(Integer a, Integer b)
+    {
       std::uniform_int_distribution<Integer> dist(a, b);
       return dist(*this);
     }

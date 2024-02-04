@@ -16,10 +16,10 @@ namespace sched::shop {
     using Input = TransportationListInput;
 
     template<typename Instance>
-    std::vector<TransportationId> operator()([[maybe_unused]] const Instance& instance, const TransportationListInput& input) {
+    std::vector<TransportationId> operator()([[maybe_unused]] const Instance& instance, const TransportationListInput& input)
+    {
       return input;
     }
-
   };
 
 }

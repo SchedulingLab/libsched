@@ -13,10 +13,11 @@ namespace sched {
     using Fitness = Time;
 
     template<typename Instance, typename Schedule>
-    Fitness operator()([[maybe_unused]] const Instance& instance, const Schedule& schedule) {
+    Fitness operator()([[maybe_unused]] const Instance& instance, const Schedule& schedule)
+    {
       Time completion = 0;
 
-      for (auto & task : schedule.tasks()) {
+      for (auto& task : schedule.tasks()) {
         completion = std::max(completion, task.completion);
       }
 
@@ -24,7 +25,8 @@ namespace sched {
     }
 
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-    constexpr Comparison compare(Fitness lhs, Fitness rhs) {
+    constexpr Comparison compare(Fitness lhs, Fitness rhs)
+    {
       if (lhs < rhs) {
         return Comparison::Better;
       }
@@ -36,10 +38,10 @@ namespace sched {
       return Comparison::Equivalent;
     }
 
-    static Fitness worst() {
+    static Fitness worst()
+    {
       return TimeMax;
     }
-
   };
 
 }
