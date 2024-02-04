@@ -78,7 +78,7 @@ namespace sched::shop {
       OperationListInput input;
 
       for (auto job : ids) {
-        OperationId op;
+        OperationId op = {};
         op.job = job;
         op.index = jobs[sched::to_index(job)]++;
         input.push_back(op);

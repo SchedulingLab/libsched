@@ -44,7 +44,6 @@ namespace sched {
     double& value_at(std::size_t li, std::size_t co);
     std::size_t linearize(std::size_t li, std::size_t co) const;
 
-  private:
     std::size_t m_lines;
     std::size_t m_columns;
     std::vector<double> m_data;

@@ -8,7 +8,7 @@
 template<>
 struct fmt::formatter<sched::MachineId> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  constexpr auto parse(format_parse_context& ctx) { return ctx.end(); }
+  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator { return ctx.end(); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   auto format(sched::MachineId id, format_context& ctx) const -> format_context::iterator
@@ -20,7 +20,7 @@ struct fmt::formatter<sched::MachineId> {
 template<>
 struct fmt::formatter<sched::JobId> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  constexpr auto parse(format_parse_context& ctx) { return ctx.end(); }
+  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator { return ctx.end(); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   auto format(sched::JobId id, format_context& ctx) const -> format_context::iterator
@@ -36,7 +36,7 @@ struct fmt::formatter<sched::JobId> {
 template<>
 struct fmt::formatter<sched::OperationId> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.end()) { return ctx.end(); }
+  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator { return ctx.end(); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   auto format(sched::OperationId id, format_context& ctx) const -> format_context::iterator

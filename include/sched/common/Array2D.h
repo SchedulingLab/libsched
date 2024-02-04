@@ -5,8 +5,6 @@
 
 #include <vector>
 
-#include "Range.h"
-
 namespace sched {
 
   template<typename T>

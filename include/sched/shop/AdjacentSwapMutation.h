@@ -21,12 +21,12 @@ namespace sched::shop {
 
       const std::size_t max = input.size() - 1;
       std::size_t index = 0;
+      assert(index < input.size() - 1);
 
-      // NOLINTNEXTLINE(cppcoreguidelines-avoid-do-while)
-      do {
+      while (input[index] == input[index + 1]) {
         index = random.compute_uniform_integer(std::size_t{ 0 }, max - 1);
         assert(index < input.size() - 1);
-      } while (input[index] == input[index + 1]);
+      }
 
       Input mutant = input;
       std::swap(mutant[index], mutant[index + 1]);

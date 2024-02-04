@@ -20,24 +20,23 @@ namespace sched::shop {
     {
       assert(!input.empty());
 
-      std::size_t max = input.size() - 1;
-      Input neighbor;
+      const std::size_t max = input.size() - 1;
+      Input neighbor = input;
 
-      do {
-        std::size_t endpoints[2];
+      while (neighbor == input) {
+        std::size_t endpoints[2] = { 0, 0 };
 
-        do {
-          endpoints[0] = random.compute_uniform_integer(std::size_t{ 0 }, max);
-          endpoints[1] = random.compute_uniform_integer(std::size_t{ 0 }, max);
-        } while (endpoints[0] == endpoints[1]);
+        while (endpoints[0] == endpoints[1]) {
+          endpoints[0] = random.compute_uniform_integer(std::size_t(0), max);
+          endpoints[1] = random.compute_uniform_integer(std::size_t(0), max);
+        }
 
         if (endpoints[0] > endpoints[1]) {
           std::swap(endpoints[0], endpoints[1]);
         }
 
-        neighbor = input;
         std::shuffle(&neighbor[endpoints[0]], &neighbor[endpoints[1]] + 1, random);
-      } while (neighbor == input);
+      }
 
       return neighbor;
     }

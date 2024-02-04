@@ -7,7 +7,6 @@
 
 #include "JobShopSchedule.h"
 #include "MachineListInput.h"
-#include "NeighborhoodHelper.h"
 #include "NeighborhoodTraits.h"
 #include "OperationListInput.h"
 

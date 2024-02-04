@@ -29,7 +29,7 @@ namespace sched::shop {
         if constexpr (Policy == RandomSamplePolicy::Uniform) {
           input = InputTraits<Input>::generate_random(instance, random);
         } else {
-          static_assert(Policy == RandomSamplePolicy::Feasible, "");
+          static_assert(Policy == RandomSamplePolicy::Feasible);
           input = InputTraits<Input>::generate_feasible(instance, random);
         }
 

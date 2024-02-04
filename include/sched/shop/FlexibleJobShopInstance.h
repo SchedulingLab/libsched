@@ -3,7 +3,6 @@
 
 #include <cassert>
 
-#include <limits>
 #include <vector>
 
 #include <sched/common/Api.h>
@@ -66,7 +65,7 @@ namespace sched::shop {
     {
       std::vector<MachineId> machines;
 
-      for (auto& choice : get_job(op.job).operations[op.index].choices) {
+      for (const auto& choice : get_job(op.job).operations[op.index].choices) {
         machines.push_back(choice.machine);
       }
 
@@ -75,7 +74,7 @@ namespace sched::shop {
 
     Time processing_time(OperationId op, [[maybe_unused]] MachineId machine) const
     {
-      for (auto& choice : get_job(op.job).operations[op.index].choices) {
+      for (const auto& choice : get_job(op.job).operations[op.index].choices) {
         if (choice.machine == machine) {
           return choice.processing;
         }
@@ -95,9 +94,9 @@ namespace sched::shop {
 
     bool is_valid() const noexcept
     {
-      for (auto& job : m_jobs) {
-        for (auto& op : job.operations) {
-          for (auto& choice : op.choices) {
+      for (const auto& job : m_jobs) {
+        for (const auto& op : job.operations) {
+          for (const auto& choice : op.choices) {
             if (sched::to_index(choice.machine) >= m_machines) {
               return false;
             }

@@ -40,10 +40,6 @@ namespace sched::shop {
       return NeighborhoodHelper::generate_many(*this, input, schedule, random, count);
     }
 
-    bool are_neighbors([[maybe_unused]] const TimeListInput& input0, [[maybe_unused]] const TimeListInput& input1)
-    {
-      return true;
-    }
   };
 
   template<>

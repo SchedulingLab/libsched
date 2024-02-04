@@ -30,13 +30,12 @@ namespace sched {
     void set_color(std::size_t row, std::size_t col, Color color);
     Color get_color(std::size_t row, std::size_t col) const;
 
-    void export_to(std::ostream& out);
+    void export_to(std::ostream& out) const;
 
   private:
     Color& get(std::size_t row, std::size_t col);
     const Color& get(std::size_t row, std::size_t col) const;
 
-  private:
     std::size_t m_width;
     std::size_t m_height;
     std::vector<Color> m_data;

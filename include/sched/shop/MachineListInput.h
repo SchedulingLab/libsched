@@ -25,24 +25,6 @@ namespace sched::shop {
       return "mch";
     }
 
-    static void enumerate_start(MachineListInput& input)
-    {
-      for (auto& machine : input) {
-        std::sort(machine.begin(), machine.end());
-      }
-    }
-
-    static bool enumerate_next(MachineListInput& input)
-    {
-      for (auto& machine : input) {
-        if (std::next_permutation(machine.begin(), machine.end())) {
-          return true;
-        }
-      }
-
-      return false;
-    }
-
     template<typename Instance>
     static MachineListInput generate_input(const Instance& instance)
     {
@@ -53,7 +35,7 @@ namespace sched::shop {
         std::size_t operation_count = instance.operation_count(job);
 
         for (std::size_t i = 0; i < operation_count; ++i) {
-          OperationId op = { job, i };
+          const OperationId op = { job, i };
           auto machine = instance.assigned_machine_for_operation(op);
           input[sched::to_index(machine)].push_back(op);
         }

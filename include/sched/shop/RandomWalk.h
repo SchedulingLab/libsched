@@ -29,17 +29,19 @@ namespace sched::shop {
       fitness.push_back(criterion(instance, schedule));
 
       for (std::size_t i = 0; i < count; ++i) {
-        Input next;
-        decltype(maybe_schedule) maybe_next_schedule;
+        for (;;) {
+          auto next = neighborhood(current, schedule, random);
+          auto maybe_next_schedule = engine(instance, next);
 
-        do {
-          next = neighborhood(current, schedule, random);
-          maybe_next_schedule = engine(instance, next);
-        } while (!maybe_next_schedule);
+          if (!maybe_next_schedule) {
+            continue;
+          }
 
-        current = next;
-        schedule = *maybe_next_schedule;
-        fitness.push_back(criterion(instance, schedule));
+          current = next;
+          schedule = *maybe_next_schedule;
+          fitness.push_back(criterion(instance, schedule));
+          break;
+        }
       }
 
       return fitness;

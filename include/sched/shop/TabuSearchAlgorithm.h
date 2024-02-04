@@ -3,6 +3,7 @@
 
 #include <cmath>
 
+#include <algorithm>
 #include <deque>
 #include <optional>
 #include <tuple>
@@ -27,13 +28,8 @@ namespace sched::shop {
       const std::size_t n = instance.job_count();
       const std::size_t m = instance.machine_count();
 
-      std::size_t o = 0;
-
-      for (auto job : jobs(instance)) {
-        o += instance.operation_count(job);
-      }
-
-      const std::size_t tabu_duration = static_cast<std::size_t>((n + m / 2.0) * std::exp(-1.0 * n / (5.0 * m)) + o / 2.0 * std::exp(-(5.0 * m) / n));
+      auto operation_count = input_size_for(instance);
+      auto tabu_duration = static_cast<std::size_t>((n + m / 2.0) * std::exp(-1.0 * n / (5.0 * m)) + operation_count / 2.0 * std::exp(-(5.0 * m) / n));
 
       Input best_input = start;
       auto best_schedule = *engine(instance, best_input);
@@ -53,13 +49,7 @@ namespace sched::shop {
       std::deque<Tabu> tabu_list;
 
       auto is_tabu = [&](const Input& input) {
-        for (auto& tabu : tabu_list) {
-          if (input == tabu.input) {
-            return true;
-          }
-        }
-
-        return false;
+        return std::find(tabu_list.begin(), tabu_list.end(), input) != tabu_list.end();
       };
 
       termination.start();

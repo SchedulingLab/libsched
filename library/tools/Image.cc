@@ -3,7 +3,6 @@
 // clang-format on
 
 #include <cassert>
-#include <cinttypes>
 #include <cstdint>
 
 #include <iostream>
@@ -14,15 +13,14 @@ namespace sched {
   namespace {
 
     struct RGB {
-      uint8_t r;
-      uint8_t g;
-      uint8_t b;
+      uint8_t r = 0;
+      uint8_t g = 0;
+      uint8_t b = 0;
     };
 
     class Palette {
     public:
       Palette()
-      : m_state(42)
       {
         m_colors[Color::White] = { 255, 255, 255 };
         m_colors[Color::Black] = { 0, 0, 0 };
@@ -49,7 +47,7 @@ namespace sched {
       }
 
     private:
-      uint32_t m_state;
+      uint32_t m_state = 42;
       std::map<Color, RGB> m_colors;
     };
 
@@ -78,7 +76,7 @@ namespace sched {
     return get(row, col);
   }
 
-  void Image::export_to(std::ostream& out)
+  void Image::export_to(std::ostream& out) const
   {
     out << "P3\n";
     out << m_width << ' ' << m_height << ' ' << 255 << '\n';

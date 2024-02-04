@@ -64,7 +64,7 @@ namespace sched::shop {
 
     Time processing_time(OperationId op, [[maybe_unused]] MachineId machine) const
     {
-      auto& operation = get_job(op.job).operations[op.index];
+      const auto& operation = get_job(op.job).operations[op.index];
 
       if (operation.machine == machine) {
         return operation.processing;
@@ -83,8 +83,8 @@ namespace sched::shop {
 
     bool is_valid() const noexcept
     {
-      for (auto& job : m_jobs) {
-        for (auto& op : job.operations) {
+      for (const auto& job : m_jobs) {
+        for (const auto& op : job.operations) {
           if (sched::to_index(op.machine) >= m_machines) {
             return false;
           }
@@ -94,7 +94,7 @@ namespace sched::shop {
       return true;
     }
 
-    std::size_t m_machines;
+    std::size_t m_machines = 0;
     std::vector<JobDesc> m_jobs;
   };
 

@@ -2,8 +2,6 @@
 #include <sched/common/Random.h>
 // clang-format on
 
-#include <cinttypes>
-
 namespace sched {
 
   namespace {
@@ -34,6 +32,7 @@ namespace sched {
   }
 
   Random::Random(result_type seed)
+  : m_state{ 0, 0, 0, 0 }
   {
     SplitMix64 sm(seed);
 
@@ -81,7 +80,7 @@ namespace sched {
 
     for (auto jump : Jump) {
       for (int b = 0; b < 64; b++) {
-        if (jump & UINT64_C(1) << b) {
+        if ((jump & UINT64_C(1) << b) != 0) {
           s0 ^= m_state[0];
           s1 ^= m_state[1];
           s2 ^= m_state[2];
@@ -114,7 +113,7 @@ namespace sched {
 
     for (auto jump : Jump) {
       for (int b = 0; b < 64; b++) {
-        if (jump & UINT64_C(1) << b) {
+        if ((jump & UINT64_C(1) << b) != 0) {
           s0 ^= m_state[0];
           s1 ^= m_state[1];
           s2 ^= m_state[2];

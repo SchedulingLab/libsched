@@ -57,8 +57,8 @@ namespace sched {
 
   auto LinearRegression2D::compute_regression() const -> Result
   {
-    constexpr std::size_t p = 2;
-    Matrix x(m_data.size(), p + 1);
+    constexpr std::size_t P = 2;
+    Matrix x(m_data.size(), P + 1);
     Matrix y(m_data.size(), 1);
 
     for (std::size_t i = 0; i < m_data.size(); ++i) {
@@ -86,15 +86,15 @@ namespace sched {
     double y_mean = stats.get_mean();
     Matrix y_hat = x * mat;
 
-    double ssr = norm2(y_hat) - m_data.size() * y_mean * y_mean;
-    double sst = norm2(y) - m_data.size() * y_mean * y_mean;
+    double ssr = norm2(y_hat) - static_cast<double>(m_data.size()) * y_mean * y_mean;
+    double sst = norm2(y) - static_cast<double>(m_data.size()) * y_mean * y_mean;
 
     Result res;
     res.a0 = mat(0, 0);
     res.a1 = mat(1, 0);
     res.a2 = mat(2, 0);
     res.r_squared = ssr / sst;
-    res.adjusted_r_squared = 1.0 - (1.0 - res.r_squared) * (m_data.size() - 1.0) / (m_data.size() - p - 1.0);
+    res.adjusted_r_squared = 1.0 - (1.0 - res.r_squared) * (static_cast<double>(m_data.size()) - 1.0) / (static_cast<double>(m_data.size()) - P - 1.0);
     return res;
   }
 

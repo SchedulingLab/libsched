@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <iterator>
 #include <optional>
-#include <tuple>
 
 #include <sched/shop/JobShopCriticalPath.h>
 #include <sched/shop/OperationListImprovedNeighborhood.h>
@@ -53,7 +52,7 @@ namespace sched::shop {
       std::size_t iterations = 0;
       const std::size_t max_iterations = tasks.size() / 5 + 1;
 
-      do {
+      do { // NOLINT(cppcoreguidelines-avoid-do-while)
         std::size_t index = random.compute_uniform_integer(std::size_t{ 0 }, max - 1);
 
         if (tasks[index].machine == tasks[index + 1].machine && tasks[index].operation.job != tasks[index + 1].operation.job) {
@@ -115,6 +114,7 @@ namespace sched::shop {
     return fallback(input, schedule, random);
   }
 
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   std::vector<OperationListInput> OperationCriticalAdjacentSwapNeighborhood::generate_many(const OperationListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count)
   {
     auto critical_path = sched::shop::critical_path(schedule);
@@ -184,6 +184,7 @@ namespace sched::shop {
     return fallback(input, schedule, random);
   }
 
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   std::vector<MachineListInput> MachineCriticalAdjacentSwapNeighborhood::generate_many(const MachineListInput& input, const JobShopSchedule& schedule, Random& random, std::size_t count)
   {
     auto critical_path = sched::shop::critical_path(schedule);

@@ -1,8 +1,6 @@
 #ifndef SCHED_PARA_SCHEDULE_H
 #define SCHED_PARA_SCHEDULE_H
 
-#include <vector>
-
 #include <sched/common/Api.h>
 #include <sched/common/GenericSchedule.h>
 #include <sched/common/Ids.h>

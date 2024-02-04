@@ -19,18 +19,18 @@ namespace sched::shop {
     {
       assert(!input.empty());
 
-      std::size_t max = input.size() - 1;
-      Input neighbor;
+      const std::size_t max = input.size() - 1;
+      Input neighbor = input;
 
-      do {
-        std::size_t orig, dest;
+      while (neighbor == input) {
+        std::size_t orig = 0;
+        std::size_t dest = 0;
 
-        do {
-          orig = random.compute_uniform_integer(std::size_t{ 0 }, max);
-          dest = random.compute_uniform_integer(std::size_t{ 0 }, max);
-        } while (orig == dest);
+        while (orig == dest) {
+          orig = random.compute_uniform_integer(std::size_t(0), max);
+          dest = random.compute_uniform_integer(std::size_t(0), max);
+        }
 
-        neighbor = input;
         auto val = neighbor[orig];
 
         if (orig < dest) {
@@ -44,7 +44,7 @@ namespace sched::shop {
         }
 
         neighbor[dest] = val;
-      } while (neighbor == input);
+      }
 
       return neighbor;
     }

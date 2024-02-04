@@ -21,13 +21,14 @@ namespace sched::shop {
     {
       assert(!input.empty());
 
-      std::size_t max = input.size() - 1;
-      std::size_t index0, index1;
+      const std::size_t max = input.size() - 1;
+      std::size_t index0 = 0;
+      std::size_t index1 = 0;
 
-      do {
-        index0 = random.compute_uniform_integer(std::size_t{ 0 }, max);
-        index1 = random.compute_uniform_integer(std::size_t{ 0 }, max);
-      } while (index0 == index1 || input[index0] == input[index1]);
+      while (index0 == index1 || input[index0] == input[index1]) {
+        index0 = random.compute_uniform_integer(std::size_t(0), max);
+        index1 = random.compute_uniform_integer(std::size_t(0), max);
+      }
 
       Input neighbor = input;
       neighbor[index0] = neighbor[index1];

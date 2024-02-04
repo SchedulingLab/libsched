@@ -14,26 +14,48 @@
 namespace sched::shop {
 
   namespace {
-
-    std::vector<int64_t> read_numbers(std::istream& input)
-    {
-      std::vector<int64_t> numbers;
-
-      for (std::string line; std::getline(input, line);) {
-        if (line[0] == '#') {
-          continue;
+    struct InputFile {
+      InputFile(const std::filesystem::path& filename)
+      : input(filename)
+      {
+        if (!input) {
+          throw std::runtime_error("File not found: " + filename.string());
         }
 
-        int64_t value = 0;
-        std::istringstream line_input(line);
+        for (std::string line; std::getline(input, line);) {
+          if (line[0] == '#') {
+            continue;
+          }
 
-        while (line_input >> value) {
-          numbers.push_back(value);
+          int64_t value = 0;
+          std::istringstream line_input(line);
+
+          while (line_input >> value) {
+            data.push_back(value);
+          }
         }
+
+        iterator = data.cbegin();
       }
 
-      return numbers;
-    }
+      int64_t next()
+      {
+        if (iterator != data.cend()) {
+          return *iterator++;
+        }
+
+        throw std::runtime_error("Bad format!");
+      }
+
+      bool finished() const
+      {
+        return iterator == data.cend();
+      }
+
+      std::ifstream input;
+      std::vector<int64_t> data;
+      std::vector<int64_t>::const_iterator iterator;
+    };
 
   }
 
@@ -51,7 +73,7 @@ namespace sched::shop {
   })
   // clang-format on
 
-  static void from_json(const nlohmann::json& j, JobShopBenchmark& benchmark)
+  void from_json(const nlohmann::json& j, JobShopBenchmark& benchmark)
   {
     assert(!j.is_null());
     j.at("name").get_to(benchmark.name);
@@ -60,7 +82,7 @@ namespace sched::shop {
 
     if (j.at("optimum").is_null()) {
       benchmark.optimum = 0;
-      auto& bounds = j.at("bounds");
+      const auto& bounds = j.at("bounds");
 
       if (bounds.is_null()) {
         benchmark.upper_bound = 0;
@@ -107,8 +129,8 @@ namespace sched::shop {
       throw std::runtime_error("File not found: " + filename.string());
     }
 
-    std::size_t machine_count;
-    std::size_t job_count;
+    std::size_t machine_count = 0;
+    std::size_t job_count = 0;
 
     for (std::string line; std::getline(input, line);) {
       if (line[0] == '#') {
@@ -128,28 +150,27 @@ namespace sched::shop {
       data.str(line);
 
       JobShopInstance::JobDesc job;
-      std::size_t machine;
-      Time processing;
+      std::size_t machine = 0;
+      Time processing = 0;
 
       while (data >> machine >> processing) {
         JobShopInstance::OperationDesc op = { MachineId{ machine }, processing };
         job.operations.push_back(op);
       }
 
-      //       assert(job.operations.size() == machine_count);
       jobs.push_back(std::move(job));
     }
 
     assert(jobs.size() == job_count);
 
-    return JobShopInstance(machine_count, std::move(jobs));
+    return { machine_count, std::move(jobs) };
   }
 
   /*
    * fjsp
    */
 
-  static void from_json(const nlohmann::json& j, FlexibleJobShopBenchmark& benchmark)
+  void from_json(const nlohmann::json& j, FlexibleJobShopBenchmark& benchmark)
   {
     assert(!j.is_null());
     j.at("name").get_to(benchmark.name);
@@ -158,7 +179,7 @@ namespace sched::shop {
 
     if (j.at("optimum").is_null()) {
       benchmark.optimum = 0;
-      auto& bounds = j.at("bounds");
+      const auto& bounds = j.at("bounds");
 
       if (bounds.is_null()) {
         benchmark.upper_bound = 0;
@@ -199,8 +220,8 @@ namespace sched::shop {
       throw std::runtime_error("File not found: " + filename.string());
     }
 
-    std::size_t machine_count;
-    std::size_t job_count;
+    std::size_t machine_count = 0;
+    std::size_t job_count = 0;
 
     for (std::string line; std::getline(input, line);) {
       if (line[0] == '#') {
@@ -225,17 +246,17 @@ namespace sched::shop {
       std::istringstream data;
       data.str(line);
 
-      std::size_t operation_count;
+      std::size_t operation_count = 0;
       data >> operation_count;
       assert(operation_count > 0);
 
       FlexibleJobShopInstance::JobDesc job;
-      std::size_t operation_machine_count;
+      std::size_t operation_machine_count = 0;
 
       while (data >> operation_machine_count) {
         FlexibleJobShopInstance::OperationDesc operation;
-        std::size_t machine;
-        Time processing;
+        std::size_t machine = 0;
+        Time processing = 0;
 
         for (std::size_t j = 0; j < operation_machine_count; ++j) {
           data >> machine >> processing;
@@ -249,14 +270,14 @@ namespace sched::shop {
       jobs.push_back(std::move(job));
     }
 
-    return FlexibleJobShopInstance(machine_count, std::move(jobs));
+    return { machine_count, std::move(jobs) };
   }
 
   /*
    * fjspt
    */
 
-  static void from_json(const nlohmann::json& j, FlexibleJobShopTransportBenchmark& benchmark)
+  void from_json(const nlohmann::json& j, FlexibleJobShopTransportBenchmark& benchmark)
   {
     assert(!j.is_null());
     j.at("name").get_to(benchmark.name);
@@ -284,48 +305,30 @@ namespace sched::shop {
 
   FlexibleJobShopTransportInstance Import::load_fjspt(const std::filesystem::path& filename)
   {
-    std::ifstream input(filename);
+    InputFile input(filename);
 
-    if (!input) {
-      throw std::runtime_error("File not found: " + filename.string());
-    }
-
-    auto numbers = read_numbers(input);
-    auto iterator = numbers.begin();
-
-    // Log::println("numbers: {}", numbers.size());
-
-    auto next = [&iterator, &numbers]() -> int64_t {
-      if (iterator != numbers.end()) {
-        return *iterator++;
-      }
-
-      throw std::runtime_error("Bad format!");
-      return 0;
-    };
-
-    const std::size_t job_count = next();
-    const std::size_t machine_count = next();
+    const std::size_t job_count = input.next();
+    const std::size_t machine_count = input.next();
 
     // Log::println("machine_count: {}, job_count: {}", machine_count, job_count);
 
     std::vector<FlexibleJobShopTransportInstance::JobDesc> jobs;
 
     for (std::size_t i = 0; i < job_count; ++i) {
-      const std::size_t operation_count = next();
+      const std::size_t operation_count = input.next();
       // Log::println("[{}] operation_count: {}", i, operation_count);
 
       FlexibleJobShopTransportInstance::JobDesc job;
 
       for (std::size_t j = 0; j < operation_count; ++j) {
-        const std::size_t operation_machine_count = next();
+        const std::size_t operation_machine_count = input.next();
         // Log::println("[{}, {}] operation_machine_count: {}", i, j, operation_machine_count);
 
         FlexibleJobShopTransportInstance::FlexibleOperationDesc operation;
 
         for (std::size_t k = 0; k < operation_machine_count; ++k) {
-          const std::size_t machine = next();
-          const Time processing = next();
+          const std::size_t machine = input.next();
+          const Time processing = input.next();
           // Log::println("[{}, {}, {}] machine: {}, processing: {}", i, j, k, machine, processing);
           operation.choices.push_back({ MachineId{ machine }, processing });
         }
@@ -336,7 +339,7 @@ namespace sched::shop {
       jobs.push_back(std::move(job));
     }
 
-    const std::size_t transportation_resources = next();
+    const std::size_t transportation_resources = input.next();
 
     // Log::println("transportation_resources: {}", transportation_resources);
 
@@ -344,10 +347,11 @@ namespace sched::shop {
 
     for (std::size_t from = 0; from < machine_count; ++from) {
       for (std::size_t to = 0; to < machine_count; ++to) {
-        delays(from, to) = next();
+        delays(from, to) = input.next();
       }
     }
 
+    assert(input.finished());
     return { machine_count, std::move(jobs), transportation_resources, delays, delays };
   }
 

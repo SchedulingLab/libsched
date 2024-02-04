@@ -4,10 +4,6 @@
 #include <cmath>
 
 #include <algorithm>
-#include <chrono>
-#include <deque>
-#include <optional>
-#include <tuple>
 
 #include <sched/common/Comparison.h>
 #include <sched/common/Instance.h>

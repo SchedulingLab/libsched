@@ -22,16 +22,6 @@ namespace sched::shop {
       return "job";
     }
 
-    static void enumerate_start(JobListInput& input)
-    {
-      std::sort(input.begin(), input.end());
-    }
-
-    static bool enumerate_next(JobListInput& input)
-    {
-      return std::next_permutation(input.begin(), input.end());
-    }
-
     template<typename Instance>
     static JobListInput generate_input(const Instance& instance)
     {

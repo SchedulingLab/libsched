@@ -10,8 +10,6 @@
 #include <sched/common/Ids.h>
 #include <sched/common/Time.h>
 
-#include "Transportation.h"
-
 namespace sched::shop {
 
   struct SCHED_API FlexibleJobShopTransportInstance {
@@ -61,7 +59,7 @@ namespace sched::shop {
     {
       std::vector<MachineId> machines;
 
-      for (auto& choice : get_job(op.job).operations[op.index].choices) {
+      for (const auto& choice : get_job(op.job).operations[op.index].choices) {
         machines.push_back(choice.machine);
       }
 
@@ -80,7 +78,7 @@ namespace sched::shop {
 
     Time processing_time(OperationId op, [[maybe_unused]] MachineId machine) const
     {
-      for (auto& choice : get_job(op.job).operations[op.index].choices) {
+      for (const auto& choice : get_job(op.job).operations[op.index].choices) {
         if (choice.machine == machine) {
           return choice.processing;
         }
@@ -123,9 +121,9 @@ namespace sched::shop {
 
     bool is_valid() const noexcept
     {
-      for (auto& job : m_jobs) {
-        for (auto& op : job.operations) {
-          for (auto& choice : op.choices) {
+      for (const auto& job : m_jobs) {
+        for (const auto& op : job.operations) {
+          for (const auto& choice : op.choices) {
             if (sched::to_index(choice.machine) >= m_machines) {
               return false;
             }
@@ -146,7 +144,7 @@ namespace sched::shop {
 
     std::size_t m_machines = 0;
     std::vector<JobDesc> m_jobs;
-    std::size_t m_transportation_resources;
+    std::size_t m_transportation_resources = 0;
     Array2D<Time> m_delays_empty;
     Array2D<Time> m_delays_loaded;
   };

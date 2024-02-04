@@ -1,7 +1,6 @@
 #ifndef SCHED_SHOP_GENERAL_ASSIGNMENT_ENGINE_H
 #define SCHED_SHOP_GENERAL_ASSIGNMENT_ENGINE_H
 
-#include <algorithm>
 #include <optional>
 
 #include <sched/common/Api.h>

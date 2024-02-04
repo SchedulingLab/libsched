@@ -25,7 +25,11 @@ namespace sched {
 
     void run(Executor executor) const
     {
-      int concurrency = std::thread::hardware_concurrency() - 1;
+      unsigned concurrency = std::thread::hardware_concurrency();
+
+      if (concurrency > 0) {
+        --concurrency;
+      }
 
       if (concurrency > 1 && std::getenv("SCHED_SINGLE") == nullptr) {
         Log::println("Running in parallel using {} threads...", concurrency);
@@ -41,7 +45,7 @@ namespace sched {
         std::vector<std::thread> threads;
         std::atomic_size_t index = 1;
 
-        for (int i = 0; i < concurrency; ++i) {
+        for (unsigned i = 0; i < concurrency; ++i) {
           threads.emplace_back([&]() {
             for (;;) {
               auto maybe_work = input.pop();

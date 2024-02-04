@@ -17,8 +17,8 @@ namespace sched::shop {
     OperationListInput operation_list;
     std::vector<std::size_t> job_state(instance.job_count(), 0);
 
-    for (auto& job : job_list) {
-      OperationId operation;
+    for (const auto& job : job_list) {
+      OperationId operation = {};
       operation.job = job;
       operation.index = job_state[sched::to_index(job)]++;
       operation_list.push_back(operation);

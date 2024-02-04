@@ -22,10 +22,9 @@ namespace sched::shop {
     {
       assert(!input.empty());
       std::size_t rows = input.size() - 1;
-      Input neighbor;
+      Input neighbor = input;
 
-      do {
-        neighbor = input;
+      while (neighbor == input) {
         auto& row = neighbor[random.compute_uniform_integer(std::size_t{ 0 }, rows)];
 
         if (row.size() <= 1) {
@@ -33,7 +32,7 @@ namespace sched::shop {
         }
 
         row = BaseNeighborhood::operator()(row, schedule, random);
-      } while (neighbor == input);
+      }
 
       return neighbor;
     }

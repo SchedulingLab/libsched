@@ -12,10 +12,11 @@
 
 template<>
 struct fmt::formatter<sched::shop::JobListInput> {
-  constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.end()) { return ctx.end(); }
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator { return ctx.end(); }
 
-  template<typename FormatContext>
-  auto format(const sched::shop::JobListInput& input, FormatContext& ctx) const -> decltype(ctx.out())
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  auto format(const sched::shop::JobListInput& input, format_context& ctx) const -> format_context::iterator
   {
     format_to(ctx.out(), "[");
     format_to(ctx.out(), "{}", fmt::join(input, ", "));
@@ -25,10 +26,11 @@ struct fmt::formatter<sched::shop::JobListInput> {
 
 template<>
 struct fmt::formatter<sched::shop::OperationListInput> {
-  constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.end()) { return ctx.end(); }
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator { return ctx.end(); }
 
-  template<typename FormatContext>
-  auto format(const sched::shop::OperationListInput& input, FormatContext& ctx) const -> decltype(ctx.out())
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  auto format(const sched::shop::OperationListInput& input, format_context& ctx) const -> format_context::iterator
   {
     format_to(ctx.out(), "[");
     format_to(ctx.out(), "{}", fmt::join(input, ", "));
@@ -38,10 +40,11 @@ struct fmt::formatter<sched::shop::OperationListInput> {
 
 template<>
 struct fmt::formatter<sched::shop::MachineListInput> {
-  constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.end()) { return ctx.end(); }
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator { return ctx.end(); }
 
-  template<typename FormatContext>
-  auto format(const sched::shop::MachineListInput& input, FormatContext& ctx) const -> decltype(ctx.out())
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  auto format(const sched::shop::MachineListInput& input, format_context& ctx) const -> format_context::iterator
   {
     format_to(ctx.out(), "[");
     format_to(ctx.out(), "{}", fmt::join(input, "; "));

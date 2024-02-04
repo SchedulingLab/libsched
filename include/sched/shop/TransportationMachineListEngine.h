@@ -46,9 +46,17 @@ namespace sched::shop {
         for (auto machine : sched::machines(instance)) {
           auto& machine_state = states.machines[to_index(machine)];
 
-          if (machine_state.index == machine_assignment[to_index(machine)].size()) {
-            // there is no more operation to schedule on this machine
-            ++finished;
+          auto machine_finished = [&]() {
+            if (machine_state.index == machine_assignment[to_index(machine)].size()) {
+              // there is no more operation to schedule on this machine
+              ++finished;
+              return true;
+            }
+
+            return false;
+          };
+
+          if (machine_finished()) {
             continue;
           }
 
@@ -61,8 +69,7 @@ namespace sched::shop {
               // this operation has already been scheduled on another machine
               ++machine_state.index;
 
-              if (machine_state.index == machine_assignment[to_index(machine)].size()) {
-                ++finished;
+              if (machine_finished()) {
                 break;
               }
 

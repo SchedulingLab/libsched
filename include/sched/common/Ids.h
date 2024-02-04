@@ -3,9 +3,6 @@
 
 #include <cstddef>
 
-#include <iosfwd>
-#include <limits>
-
 #include "RawId.h"
 
 namespace sched {

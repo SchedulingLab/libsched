@@ -18,7 +18,7 @@ namespace sched::shop {
       std::size_t count = 0;
       std::size_t change = 0;
 
-      std::size_t same = 0;
+      [[maybe_unused]] std::size_t same = 0;
       std::size_t local_count = 0;
 
       Fitness previous;

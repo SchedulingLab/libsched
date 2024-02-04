@@ -12,7 +12,7 @@ namespace sched::shop {
   template<typename Instance>
   struct JobShopStates {
     JobShopStates(const Instance& instance)
-    : instance(instance)
+    : instance(&instance)
     , jobs(instance.job_count())
     , machines(instance.machine_count())
     {
@@ -21,7 +21,7 @@ namespace sched::shop {
     bool has_next_operation(JobId job) const
     {
       const JobState& job_state = jobs[to_index(job)];
-      return job_state.operation < instance.operation_count(job);
+      return job_state.operation < instance->operation_count(job);
     }
 
     OperationId next_operation(JobId job) const
@@ -39,8 +39,8 @@ namespace sched::shop {
       JobShopTask task = {};
       task.operation = operation;
       task.machine = machine;
-      task.start = std::max({ job_state.time, machine_state.time, instance.release_date(operation.job) });
-      task.completion = task.start + instance.processing_time(operation, machine);
+      task.start = std::max({ job_state.time, machine_state.time, instance->release_date(operation.job) });
+      task.completion = task.start + instance->processing_time(operation, machine);
 
       return task;
     }
@@ -71,7 +71,7 @@ namespace sched::shop {
       std::size_t index = 0;
     };
 
-    const Instance& instance;
+    const Instance* instance = nullptr;
     std::vector<JobState> jobs;
     std::vector<MachineState> machines;
   };

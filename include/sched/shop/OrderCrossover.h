@@ -19,8 +19,6 @@ namespace sched::shop {
     template<typename Input>
     std::tuple<Input, Input> operator()(const Input& parent0, const Input& parent1, Random& random)
     {
-      LogScope scope;
-
       const std::size_t size = parent0.size();
       assert(parent1.size() == size);
       assert(size >= N);
@@ -37,16 +35,11 @@ namespace sched::shop {
         return false;
       };
 
-      //       Log::println("Generate points");
-
       for (std::size_t i = 0; i < points.size(); ++i) {
-        do {
-          points[i] = random.compute_uniform_integer(std::size_t{ 0 }, size - 1);
-          //           Log::println("{} : {}", i, points[i]);
+        do { // NOLINT(cppcoreguidelines-avoid-do-while)
+          points[i] = random.compute_uniform_integer(std::size_t(0), size - 1);
         } while (already_present(points[i], i));
       }
-
-      //       Log::println("Sort points");
 
       std::sort(points.begin(), points.end());
 
@@ -56,8 +49,6 @@ namespace sched::shop {
       using Element = std::remove_cv_t<std::remove_reference_t<decltype(parent0[0])>>;
       std::vector<Element> missing0;
       std::vector<Element> missing1;
-
-      //       Log::println("Compute missing");
 
       {
         bool swap = false;
@@ -79,17 +70,13 @@ namespace sched::shop {
       }
 
       auto index_of = [](Element element, const Input& input) {
-        for (std::size_t i = 0; i < input.size(); ++i) {
-          if (element == input[i]) {
-            return i;
-          }
+        if (auto iterator = std::find(input.begin(), input.end(), element); iterator != input.end()) {
+          return std::distance(input.begin(), iterator);
         }
 
         assert(false && "are you sure your input is a permutation?");
         return input.size();
       };
-
-      //       Log::println("Sort missing");
 
       std::sort(missing0.begin(), missing0.end(), [&](Element lhs, Element rhs) {
         return index_of(lhs, parent1) < index_of(rhs, parent1);
@@ -98,14 +85,6 @@ namespace sched::shop {
       std::sort(missing1.begin(), missing1.end(), [&](Element lhs, Element rhs) {
         return index_of(lhs, parent0) < index_of(rhs, parent0);
       });
-
-      //       {
-      //         sched::LogScope scope;
-      //         sched::Log::println("missing0: {}", missing0);
-      //         sched::Log::println("missing1: {}", missing1);
-      //       }
-      //
-      //       Log::println("Compute children");
 
       {
         bool swap = false;
@@ -124,12 +103,6 @@ namespace sched::shop {
             ++k;
           }
         }
-
-        //         sched::LogScope scope;
-        //         sched::Log::println("parent0: {}", parent0);
-        //         sched::Log::println("parent1: {}", parent1);
-        //         sched::Log::println("child0:  {}", child0);
-        //         sched::Log::println("child1:  {}", child1);
       }
 
       assert(child0.size() == size);
