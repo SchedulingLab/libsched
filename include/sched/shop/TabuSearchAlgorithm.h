@@ -58,7 +58,7 @@ namespace sched::shop {
       while (!termination.satisfied()) {
         std::optional<Input> candidate;
         decltype(current_schedule) candidate_schedule;
-        decltype(current_fitness) candidate_fitness;
+        decltype(current_fitness) candidate_fitness = Criterion::worst();
 
         auto neighbors = neighborhood.generate_many(current_input, current_schedule, random, neighbors_count);
 
