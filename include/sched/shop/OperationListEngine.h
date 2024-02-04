@@ -24,7 +24,7 @@ namespace sched::shop {
         return std::nullopt;
       }
 
-      const JobListEngine engine;
+      JobListEngine engine;
       return engine(instance, *maybe_job_list);
     }
   };
