@@ -13,6 +13,7 @@
 #include <sched/common/Random.h>
 #include <sched/tools/Log.h>
 
+#include "InputSize.h"
 #include "InputTraits.h"
 #include "NeighborhoodTraits.h"
 
