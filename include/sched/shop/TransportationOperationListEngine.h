@@ -27,7 +27,7 @@ namespace sched::shop {
       }
 
       TransportationJobListEngine<Comparator, TransportationAssignment> engine;
-      return engine(instance, *maybe_job_list);
+      return engine(instance, { *maybe_job_list, input.transport });
     }
   };
 
