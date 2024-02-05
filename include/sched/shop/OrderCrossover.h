@@ -71,7 +71,7 @@ namespace sched::shop {
 
       auto index_of = [](Element element, const Input& input) {
         if (auto iterator = std::find(input.begin(), input.end(), element); iterator != input.end()) {
-          return std::distance(input.begin(), iterator);
+          return static_cast<std::size_t>(std::distance(input.begin(), iterator));
         }
 
         assert(false && "are you sure your input is a permutation?");
