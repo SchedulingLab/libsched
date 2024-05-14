@@ -13,52 +13,6 @@
 
 namespace sched::shop {
 
-  namespace {
-    struct InputFile {
-      InputFile(const std::filesystem::path& filename)
-      : input(filename)
-      {
-        if (!input) {
-          throw std::runtime_error("File not found: " + filename.string());
-        }
-
-        for (std::string line; std::getline(input, line);) {
-          if (line[0] == '#') {
-            continue;
-          }
-
-          int64_t value = 0;
-          std::istringstream line_input(line);
-
-          while (line_input >> value) {
-            data.push_back(value);
-          }
-        }
-
-        iterator = data.cbegin();
-      }
-
-      int64_t next()
-      {
-        if (iterator != data.cend()) {
-          return *iterator++;
-        }
-
-        throw std::runtime_error("Bad format!");
-      }
-
-      bool finished() const
-      {
-        return iterator == data.cend();
-      }
-
-      std::ifstream input;
-      std::vector<int64_t> data;
-      std::vector<int64_t>::const_iterator iterator;
-    };
-
-  }
-
   /*
    * jsp
    */
@@ -305,54 +259,15 @@ namespace sched::shop {
 
   FlexibleJobShopTransportInstance Import::load_fjspt(const std::filesystem::path& filename)
   {
-    InputFile input(filename);
+    FlexibleJobShopTransportData data;
 
-    const std::size_t job_count = input.next();
-    const std::size_t machine_count = input.next();
+    std::ifstream stream(filename);
+    nlohmann::json root;
+    stream >> root;
 
-    // Log::println("machine_count: {}, job_count: {}", machine_count, job_count);
+    root.get_to(data);
 
-    std::vector<FlexibleJobShopTransportInstance::JobDesc> jobs;
-
-    for (std::size_t i = 0; i < job_count; ++i) {
-      const std::size_t operation_count = input.next();
-      // Log::println("[{}] operation_count: {}", i, operation_count);
-
-      FlexibleJobShopTransportInstance::JobDesc job;
-
-      for (std::size_t j = 0; j < operation_count; ++j) {
-        const std::size_t operation_machine_count = input.next();
-        // Log::println("[{}, {}] operation_machine_count: {}", i, j, operation_machine_count);
-
-        FlexibleJobShopTransportInstance::FlexibleOperationDesc operation;
-
-        for (std::size_t k = 0; k < operation_machine_count; ++k) {
-          const std::size_t machine = input.next();
-          const Time processing = input.next();
-          // Log::println("[{}, {}, {}] machine: {}, processing: {}", i, j, k, machine, processing);
-          operation.choices.push_back({ MachineId{ machine }, processing });
-        }
-
-        job.operations.push_back(std::move(operation));
-      }
-
-      jobs.push_back(std::move(job));
-    }
-
-    const std::size_t transportation_resources = input.next();
-
-    // Log::println("transportation_resources: {}", transportation_resources);
-
-    Array2D<Time> delays(machine_count, machine_count);
-
-    for (std::size_t from = 0; from < machine_count; ++from) {
-      for (std::size_t to = 0; to < machine_count; ++to) {
-        delays(from, to) = input.next();
-      }
-    }
-
-    assert(input.finished());
-    return { machine_count, std::move(jobs), transportation_resources, delays, delays };
+    return { std::move(data) };
   }
 
 }

@@ -10,44 +10,29 @@
 #include <sched/common/Ids.h>
 #include <sched/common/Time.h>
 
+#include "JobShopData.h"
+
 namespace sched::shop {
 
   struct SCHED_API FlexibleJobShopTransportInstance {
     static constexpr bool flexible = true;
 
-    struct OperationDesc {
-      MachineId machine;
-      Time processing;
-    };
-
-    struct FlexibleOperationDesc {
-      std::vector<OperationDesc> choices;
-    };
-
-    struct JobDesc {
-      std::vector<FlexibleOperationDesc> operations;
-    };
-
     FlexibleJobShopTransportInstance() = default;
 
-    FlexibleJobShopTransportInstance(std::size_t machines, std::vector<JobDesc> jobs, std::size_t transportation_resources, Array2D<Time> delays_empty, Array2D<Time> delays_loaded)
-    : m_machines(machines)
-    , m_jobs(std::move(jobs))
-    , m_transportation_resources(transportation_resources)
-    , m_delays_empty(std::move(delays_empty))
-    , m_delays_loaded(std::move(delays_loaded))
+    FlexibleJobShopTransportInstance(FlexibleJobShopTransportData data)
+    : m_data(std::move(data))
     {
       assert(is_valid());
     }
 
     std::size_t machine_count() const noexcept
     {
-      return m_machines;
+      return m_data.machines;
     }
 
     std::size_t job_count() const noexcept
     {
-      return m_jobs.size();
+      return m_data.jobs.size();
     }
 
     std::size_t operation_count(JobId job) const
@@ -92,7 +77,7 @@ namespace sched::shop {
 
     constexpr std::size_t transportation_count() const noexcept
     {
-      return m_transportation_resources;
+      return m_data.vehicles;
     }
 
     Time transportation_time_empty(MachineId origin, MachineId target) const noexcept
@@ -101,7 +86,7 @@ namespace sched::shop {
         return Time{ 0 };
       }
 
-      return m_delays_empty(sched::to_index(origin), sched::to_index(target));
+      return m_data.empty(sched::to_index(origin), sched::to_index(target));
     }
 
     Time transportation_time_loaded(MachineId origin, MachineId target) const noexcept
@@ -110,45 +95,41 @@ namespace sched::shop {
         return Time{ 0 };
       }
 
-      return m_delays_loaded(sched::to_index(origin), sched::to_index(target));
+      return m_data.loaded(sched::to_index(origin), sched::to_index(target));
     }
 
   private:
-    const JobDesc& get_job(JobId id) const
+    const FlexibleJobData& get_job(JobId id) const
     {
       auto index = sched::to_index(id);
-      assert(index < m_jobs.size());
-      return m_jobs[index];
+      assert(index < m_data.jobs.size());
+      return m_data.jobs[index];
     }
 
     bool is_valid() const noexcept
     {
-      for (const auto& job : m_jobs) {
+      for (const auto& job : m_data.jobs) {
         for (const auto& op : job.operations) {
           for (const auto& choice : op.choices) {
-            if (sched::to_index(choice.machine) >= m_machines) {
+            if (sched::to_index(choice.machine) >= m_data.machines) {
               return false;
             }
           }
         }
       }
 
-      if (m_delays_empty.rows() != m_machines || m_delays_empty.cols() != m_machines) {
+      if (m_data.empty.rows() != m_data.machines || m_data.empty.cols() != m_data.machines) {
         return false;
       }
 
-      if (m_delays_loaded.rows() != m_machines || m_delays_loaded.cols() != m_machines) {
+      if (m_data.loaded.rows() != m_data.machines || m_data.loaded.cols() != m_data.machines) {
         return false;
       }
 
       return true;
     }
 
-    std::size_t m_machines = 0;
-    std::vector<JobDesc> m_jobs;
-    std::size_t m_transportation_resources = 0;
-    Array2D<Time> m_delays_empty;
-    Array2D<Time> m_delays_loaded;
+    FlexibleJobShopTransportData m_data = {};
   };
 
 }
