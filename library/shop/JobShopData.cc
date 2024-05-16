@@ -38,6 +38,7 @@ namespace sched::shop {
     json.at("machines").get_to(data.machines);
     json.at("jobs").get_to(data.jobs);
     json.at("vehicles").get_to(data.vehicles);
+    data.empty = data.loaded = Array2D<Time>(data.machines, data.machines);
     json.at("empty").get_to(data.empty);
     json.at("loaded").get_to(data.loaded);
   }
