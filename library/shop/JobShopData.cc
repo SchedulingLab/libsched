@@ -36,6 +36,8 @@ namespace sched::shop {
   void from_json(const nlohmann::json& json, FlexibleJobShopTransportData& data)
   {
     json.at("machines").get_to(data.machines);
+    json.at("load").get_to(data.load);
+    json.at("unload").get_to(data.unload);
     json.at("jobs").get_to(data.jobs);
     json.at("vehicles").get_to(data.vehicles);
     data.empty = data.loaded = Array2D<Time>(data.machines, data.machines);

@@ -11,6 +11,7 @@
 #include <sched/common/Time.h>
 
 #include "JobShopData.h"
+#include "Transportation.h"
 
 namespace sched::shop {
 
@@ -19,9 +20,27 @@ namespace sched::shop {
 
     FlexibleJobShopTransportInstance() = default;
 
-    FlexibleJobShopTransportInstance(FlexibleJobShopTransportData data)
+    FlexibleJobShopTransportInstance(FlexibleJobShopTransportData data, TransportationMode mode = TransportationMode::LoadUnload)
     : m_data(std::move(data))
     {
+      if (mode == TransportationMode::Load || mode == TransportationMode::LoadUnload) {
+        FlexibleOperationData load_operation;
+        load_operation.choices.push_back({ data.load, 0 });
+
+        for (auto& job : m_data.jobs) {
+          job.operations.insert(job.operations.begin(), load_operation);
+        }
+      }
+
+      if (mode == TransportationMode::Unload || mode == TransportationMode::LoadUnload) {
+        FlexibleOperationData unload_operation;
+        unload_operation.choices.push_back({ data.unload, 0 });
+
+        for (auto& job : m_data.jobs) {
+          job.operations.push_back(unload_operation);
+        }
+      }
+
       assert(is_valid());
     }
 

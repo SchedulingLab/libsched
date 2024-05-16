@@ -12,8 +12,8 @@
 namespace sched::shop {
 
   struct OperationData {
-    MachineId machine;
-    Time processing;
+    MachineId machine = NoMachine;
+    Time processing = 0;
   };
 
   struct FlexibleOperationData {
@@ -25,9 +25,11 @@ namespace sched::shop {
   };
 
   struct FlexibleJobShopTransportData {
-    std::size_t machines;
+    std::size_t machines = 0;
+    MachineId load = NoMachine;
+    MachineId unload = NoMachine;
     std::vector<FlexibleJobData> jobs;
-    std::size_t vehicles;
+    std::size_t vehicles = 0;
     Array2D<Time> empty;
     Array2D<Time> loaded;
   };

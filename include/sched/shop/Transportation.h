@@ -10,6 +10,13 @@ namespace sched::shop {
     Loaded,
   };
 
+  enum class TransportationMode : uint8_t {
+    None,
+    Load,
+    Unload,
+    LoadUnload,
+  };
+
 }
 
 #endif // SCHED_SHOP_TRANSPORTATION_H
