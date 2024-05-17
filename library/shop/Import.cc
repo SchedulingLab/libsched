@@ -237,7 +237,7 @@ namespace sched::shop {
     j.at("name").get_to(benchmark.name);
     j.at("jobs").get_to(benchmark.jobs);
     j.at("machines").get_to(benchmark.machines);
-    j.at("transportations").get_to(benchmark.transportations);
+    j.at("vehicles").get_to(benchmark.vehicles);
 
     std::string path_string;
     j.at("path").get_to(path_string);

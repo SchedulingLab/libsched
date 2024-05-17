@@ -47,7 +47,7 @@ namespace sched::shop {
     std::string name;
     int jobs;
     int machines;
-    int transportations;
+    int vehicles;
     std::filesystem::path path;
   };
 
