@@ -1,6 +1,7 @@
 #ifndef SCHED_SHOP_GENETIC_ALGORITHM_H
 #define SCHED_SHOP_GENETIC_ALGORITHM_H
 
+#include <cassert>
 #include <cmath>
 
 #include <algorithm>
@@ -146,7 +147,7 @@ namespace sched::shop {
           return fmt::format("{}", value);
         };
 
-        Log::println("#{}: {} with {} (last: {} with {})", generation, display_criterion(population.front().fitness), population.front().input, display_criterion(population.back().fitness), population.back().input);
+        // Log::println("#{}: {} with {} (last: {} with {})", generation, display_criterion(population.front().fitness), population.front().input, display_criterion(population.back().fitness), population.back().input);
 
         termination.step();
         ++generation;
