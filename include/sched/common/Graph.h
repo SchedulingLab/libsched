@@ -103,6 +103,10 @@ namespace sched {
     std::vector<std::set<EdgeId>> m_out_edges;
   };
 
+
+  std::vector<VertexId> topological_sort(const Graph& graph);
+
+
   template<typename V, typename E>
   class DataGraph : public Graph {
   public:
@@ -153,6 +157,8 @@ namespace sched {
     std::vector<V> m_vertex_data;
     std::vector<E> m_edge_data;
   };
+
+
 
 }
 

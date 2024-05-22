@@ -4,6 +4,9 @@
 
 #include <cassert>
 
+#include <algorithm>
+#include <stdexcept>
+
 namespace sched {
 
   Graph::Graph(std::size_t n)
@@ -134,6 +137,86 @@ namespace sched {
     edge.source = NoVertex;
     edge.target = NoVertex;
     --m_edge_count;
+  }
+
+
+  namespace {
+
+    class TopologicalSort {
+    public:
+      TopologicalSort(const Graph& graph)
+      : m_graph(graph)
+      {
+      }
+
+      std::vector<VertexId> operator()()
+      {
+        VertexRange range = m_graph.vertices();
+        m_color.clear();
+        m_color.resize(range.size, Color::White);
+
+        try {
+
+          std::vector<VertexId> vertices;
+
+          for (auto vertex : range) {
+            if (m_graph.is_valid(vertex) && m_color[to_index(vertex)] != Color::Black) {
+              visit(vertex, vertices);
+            }
+          }
+
+          std::reverse(vertices.begin(), vertices.end());
+          return vertices;
+
+        } catch (std::exception& ex) {
+        }
+
+        return {};
+      }
+
+    private:
+      enum class Color {
+        White,
+        Gray,
+        Black,
+      };
+
+      // NOLINTNEXTLINE(misc-no-recursion)
+      void visit(VertexId vertex, std::vector<VertexId>& vertices) {
+        assert(m_graph.is_valid(vertex));
+
+        Color& color = m_color[to_index(vertex)];
+
+        if (color == Color::Black) {
+          return;
+        }
+
+        if (color == Color::Gray) {
+          // a cycle has been detected
+          throw std::runtime_error("Not a DAG");
+        }
+
+        color = Color::Gray;
+
+        for (auto edge : m_graph.out_edges(vertex)) {
+          visit(m_graph.target(edge), vertices);
+        }
+
+        color = Color::Black;
+        vertices.push_back(vertex);
+      }
+
+      const Graph& m_graph; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+      std::vector<Color> m_color;
+    };
+
+  }
+
+
+  std::vector<VertexId> topological_sort(const Graph& graph)
+  {
+    TopologicalSort sort(graph);
+    return sort();
   }
 
 }
