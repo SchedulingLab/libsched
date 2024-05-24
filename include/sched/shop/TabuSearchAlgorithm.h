@@ -116,7 +116,7 @@ namespace sched::shop {
         }
 
         if (criterion.compare(current.fitness, best.fitness) == Comparison::Better) {
-          best = std::move(current);
+          best = current;
         }
 
         ++iteration;
