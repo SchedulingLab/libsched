@@ -39,11 +39,10 @@ namespace sched::shop {
       best.input = start;
 
       for (;;) {
-        auto maybe_schedule = engine(instance, best.input);
+        best.schedule = engine(instance, best.input);
 
-        if (maybe_schedule) {
-          best.schedule = *maybe_schedule;
-          best.fitness = criterion(instance, best.schedule);
+        if (best.schedule) {
+          best.fitness = criterion(instance, *best.schedule);
           break;
         }
 
@@ -72,18 +71,17 @@ namespace sched::shop {
 
         auto neighbors = neighborhood.generate_many(current.input, current.schedule, random, neighbors_count);
 
-        Solution neighbor;
 
         for (auto& neighbor_input : neighbors) {
-          auto maybe_schedule = engine(instance, neighbor_input);
+          Solution neighbor;
+          neighbor.input = std::move(neighbor_input);
+          neighbor.schedule = engine(instance, neighbor.input);
 
-          if (!maybe_schedule) {
+          if (!neighbor.schedule) {
             continue;
           }
 
-          neighbor.input = neighbor_input;
-          neighbor.schedule = *std::move(maybe_schedule);
-          neighbor.fitness = criterion(instance, neighbor.schedule);
+          neighbor.fitness = criterion(instance, *neighbor.schedule);
 
           if (!has_candidate || criterion.compare(neighbor.fitness, candidate.fitness) == Comparison::Better) {
 
@@ -91,7 +89,7 @@ namespace sched::shop {
               continue;
             }
 
-            candidate = neighbor;
+            candidate = std::move(neighbor);
             has_candidate = true;
           }
         }
@@ -108,11 +106,10 @@ namespace sched::shop {
 
           for (;;) {
             current.input = InputTraits<Input>::generate_feasible(instance, random);
-            auto maybe_schedule = engine(instance, current.input);
+            current.schedule = engine(instance, current.input);
 
-            if (maybe_schedule) {
-              current.schedule = *std::move(maybe_schedule);
-              current.fitness = criterion(instance, current.schedule);
+            if (current.schedule) {
+              current.fitness = criterion(instance, *current.schedule);
               break;
             }
           }
