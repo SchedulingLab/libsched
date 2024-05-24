@@ -69,7 +69,7 @@ namespace sched::shop {
         bool has_candidate = false;
         Solution candidate;
 
-        auto neighbors = neighborhood.generate_many(current.input, current.schedule, random, neighbors_count);
+        auto neighbors = neighborhood.generate_many(current.input, *current.schedule, random, neighbors_count);
 
 
         for (auto& neighbor_input : neighbors) {
