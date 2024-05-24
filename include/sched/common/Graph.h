@@ -110,7 +110,7 @@ namespace sched {
   template<typename V, typename E>
   class DataGraph : public Graph {
   public:
-    explicit DataGraph(std::size_t n)
+    explicit DataGraph(std::size_t n = 0)
     : Graph(n)
     {
       if (n > 0) {

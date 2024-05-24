@@ -16,6 +16,7 @@
 #include "InputSize.h"
 #include "InputTraits.h"
 #include "NeighborhoodTraits.h"
+#include "Solution.h"
 
 namespace sched::shop {
 
@@ -32,14 +33,24 @@ namespace sched::shop {
       auto operation_count = input_size_for(instance);
       auto tabu_duration = static_cast<std::size_t>((n + m / 2.0) * std::exp(-1.0 * n / (5.0 * m)) + operation_count / 2.0 * std::exp(-(5.0 * m) / n));
 
-      Input best_input = start;
-      auto best_schedule = *engine(instance, best_input);
-      auto best_fitness = criterion(instance, best_schedule);
+      using Solution = Solution<Engine, Criterion, Instance>;
 
-      Input current_input = best_input;
-      auto current_schedule = best_schedule;
-      auto current_fitness = best_fitness;
+      Solution best;
+      best.input = start;
 
+      for (;;) {
+        auto maybe_schedule = engine(instance, best.input);
+
+        if (maybe_schedule) {
+          best.schedule = *maybe_schedule;
+          best.fitness = criterion(instance, best.schedule);
+          break;
+        }
+
+        best.input = InputTraits<Input>::generate_feasible(instance, random);
+      }
+
+      Solution current = best;
       std::size_t iteration = 0;
 
       struct Tabu {
@@ -56,11 +67,12 @@ namespace sched::shop {
       termination.start();
 
       while (!termination.satisfied()) {
-        std::optional<Input> candidate;
-        decltype(current_schedule) candidate_schedule;
-        decltype(current_fitness) candidate_fitness = Criterion::worst();
+        bool has_candidate = false;
+        Solution candidate;
 
-        auto neighbors = neighborhood.generate_many(current_input, current_schedule, random, neighbors_count);
+        auto neighbors = neighborhood.generate_many(current.input, current.schedule, random, neighbors_count);
+
+        Solution neighbor;
 
         for (auto& neighbor_input : neighbors) {
           auto maybe_schedule = engine(instance, neighbor_input);
@@ -69,18 +81,18 @@ namespace sched::shop {
             continue;
           }
 
-          auto neighbor_schedule = *maybe_schedule;
-          auto neighbor_fitness = criterion(instance, neighbor_schedule);
+          neighbor.input = neighbor_input;
+          neighbor.schedule = *std::move(maybe_schedule);
+          neighbor.fitness = criterion(instance, neighbor.schedule);
 
-          if (!candidate || criterion.compare(neighbor_fitness, candidate_fitness) == Comparison::Better) {
+          if (!has_candidate || criterion.compare(neighbor.fitness, candidate.fitness) == Comparison::Better) {
 
-            if (is_tabu(neighbor_input) && criterion.compare(neighbor_fitness, current_fitness) != Comparison::Better) {
+            if (is_tabu(neighbor.input) && criterion.compare(neighbor.fitness, current.fitness) != Comparison::Better) {
               continue;
             }
 
-            candidate = neighbor_input;
-            candidate_schedule = neighbor_schedule;
-            candidate_fitness = neighbor_fitness;
+            candidate = neighbor;
+            has_candidate = true;
           }
         }
 
@@ -88,29 +100,33 @@ namespace sched::shop {
           tabu_list.pop_front();
         }
 
-        if (candidate) {
-          current_input = *candidate;
-          current_schedule = candidate_schedule;
-          current_fitness = candidate_fitness;
-          tabu_list.push_back({ std::move(*candidate), iteration });
+        if (has_candidate) {
+          current = candidate;
+          tabu_list.push_back({ std::move(*candidate.input), iteration });
         } else {
           tabu_list.clear();
-          current_input = InputTraits<Input>::generate_feasible(instance, random);
-          current_schedule = *engine(instance, current_input);
-          current_fitness = criterion(instance, current_schedule);
+
+          for (;;) {
+            current.input = InputTraits<Input>::generate_feasible(instance, random);
+            auto maybe_schedule = engine(instance, current.input);
+
+            if (maybe_schedule) {
+              current.schedule = *std::move(maybe_schedule);
+              current.fitness = criterion(instance, current.schedule);
+              break;
+            }
+          }
         }
 
-        if (criterion.compare(current_fitness, best_fitness) == Comparison::Better) {
-          best_input = current_input;
-          best_schedule = current_schedule;
-          best_fitness = current_fitness;
+        if (criterion.compare(current.fitness, best.fitness) == Comparison::Better) {
+          best = current;
         }
 
         ++iteration;
         termination.step();
       }
 
-      return std::make_tuple(best_input, best_fitness, best_schedule, iteration);
+      return std::make_tuple(best.input, best.fitness, best.schedule, iteration);
     }
 
     static std::string input_name()
