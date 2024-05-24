@@ -101,8 +101,8 @@ namespace sched::shop {
         }
 
         if (has_candidate) {
-          current = candidate;
-          tabu_list.push_back({ std::move(*candidate.input), iteration });
+          current = std::move(candidate);
+          tabu_list.push_back({ current.input, iteration });
         } else {
           tabu_list.clear();
 
@@ -119,7 +119,7 @@ namespace sched::shop {
         }
 
         if (criterion.compare(current.fitness, best.fitness) == Comparison::Better) {
-          best = current;
+          best = std::move(current);
         }
 
         ++iteration;
