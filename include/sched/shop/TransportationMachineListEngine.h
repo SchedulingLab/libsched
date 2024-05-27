@@ -21,6 +21,7 @@ namespace sched::shop {
   template<typename Comparator, typename TransportationAssignment>
   struct TransportationMachineListEngine {
     using Input = TransportSplitInput<FloatListInput, typename TransportationAssignment::Input>;
+    using Engine = JobShopTransportSchedule;
 
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)

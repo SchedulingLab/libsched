@@ -20,6 +20,7 @@ namespace sched::shop {
   template<typename Comparator>
   struct SCHED_API TransportationFloatListEngine {
     using Input = FloatListInput;
+    using Engine = JobShopTransportSchedule;
 
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const FloatListInput& input)

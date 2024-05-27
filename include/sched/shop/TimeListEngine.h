@@ -20,6 +20,7 @@ namespace sched::shop {
 
   struct SCHED_API TimeListEngine {
     using Input = TimeListInput;
+    using Schedule = JobShopSchedule;
 
     template<typename Instance>
     std::optional<JobShopSchedule> operator()(const Instance& instance, const TimeListInput& input)
