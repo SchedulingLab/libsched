@@ -14,6 +14,7 @@ namespace sched::shop {
   template<typename Assignment, typename Comparator>
   struct SCHED_API GeneralAssignmentEngine {
     using Input = typename Assignment::Input;
+    using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
