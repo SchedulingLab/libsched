@@ -1,11 +1,12 @@
 #ifndef SCHED_SHOP_MUTATION_TRAITS_H
 #define SCHED_SHOP_MUTATION_TRAITS_H
 
+#include "NeighborhoodTraits.h"
+
 namespace sched::shop {
 
   template<typename Mutation>
-  struct MutationTraits {
-  };
+  using MutationTraits = NeighborhoodTraits<Mutation>;
 
 }
 

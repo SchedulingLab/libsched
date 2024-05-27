@@ -5,7 +5,6 @@
 
 #include <algorithm>
 #include <deque>
-#include <optional>
 #include <tuple>
 
 #include <sched/common/Comparison.h>
