@@ -1,6 +1,8 @@
 #ifndef SCHED_SHOP_ASSIGNED_ENGINE_H
 #define SCHED_SHOP_ASSIGNED_ENGINE_H
 
+#include <optional>
+
 #include "AssignedInstance.h"
 #include "SplitInput.h"
 
@@ -12,7 +14,7 @@ namespace sched::shop {
     using Schedule = typename Engine::Schedule;
 
     template<typename Instance>
-    auto operator()(const Instance& instance, const Input& input)
+    std::optional<Schedule> operator()(const Instance& instance, const Input& input)
     {
       AssignedInstance assigned_instance(instance);
       assigned_instance.set_assignment(assignment(instance, input.assignment));
