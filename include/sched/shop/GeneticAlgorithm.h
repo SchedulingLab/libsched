@@ -120,7 +120,7 @@ namespace sched::shop {
           }
 
           auto& solution = selected[i];
-          auto mutant = mutation(solution.input, random);
+          auto mutant = mutation(solution.input, solution.schedule, random);
           offsprings.push_back(compute_solution(std::move(mutant)));
         }
 
