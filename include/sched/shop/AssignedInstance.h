@@ -15,6 +15,8 @@ namespace sched::shop {
   struct AssignedInstance {
     static constexpr bool Flexible = false;
 
+    AssignedInstance() = default;
+
     AssignedInstance(const Instance& instance)
     : m_instance(&instance)
     {
