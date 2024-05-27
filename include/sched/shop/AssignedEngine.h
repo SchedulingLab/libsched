@@ -9,6 +9,7 @@ namespace sched::shop {
   template<typename Assignment, typename Engine>
   struct AssignedEngine {
     using Input = FlexibleSplitInput<typename Assignment::Input, typename Engine::Input>;
+    using Schedule = typename Engine::Schedule;
 
     template<typename Instance>
     auto operator()(const Instance& instance, const Input& input)
