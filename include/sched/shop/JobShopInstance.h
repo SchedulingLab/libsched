@@ -12,7 +12,7 @@
 namespace sched::shop {
 
   struct SCHED_API JobShopInstance {
-    static constexpr bool flexible = false;
+    static constexpr bool Flexible = false;
 
     struct OperationDesc {
       MachineId machine;
