@@ -126,7 +126,7 @@ namespace sched::shop {
               assert(to_index(machine) < machine_assignment.size());
               machine_assignment[to_index(machine)].emplace_back(operation, input_element);
             }
-          } else { // !flexible
+          } else { // !Flexible
             MachineId machine = instance.assigned_machine_for_operation(operation);
             assert(to_index(machine) < machine_assignment.size());
             machine_assignment[to_index(machine)].emplace_back(operation, input_element);

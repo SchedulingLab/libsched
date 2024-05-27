@@ -66,7 +66,7 @@ namespace sched::shop {
             states.update_schedule(packet, schedule);
           }
 
-        } else { // !flexible
+        } else { // !Flexible
           MachineId machine = instance.assigned_machine_for_operation(operation);
 
           if (operation.index == 0) {

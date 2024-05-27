@@ -54,7 +54,7 @@ namespace sched::shop {
                 return states.create_packet(operation, machine, transportation);
               });
             }
-          } else { // !flexible
+          } else { // !Flexible
             MachineId machine = instance.assigned_machine_for_operation(operation);
 
             if (operation.index == 0) {

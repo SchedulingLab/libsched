@@ -13,7 +13,7 @@ namespace sched::shop {
 
   template<typename Instance>
   struct AssignedInstance {
-    static constexpr bool flexible = false;
+    static constexpr bool Flexible = false;
 
     AssignedInstance(const Instance& instance)
     : m_instance(&instance)
