@@ -5,7 +5,7 @@
 
 #include <concepts>
 
-namespace sched {
+namespace sched::concepts {
 
   template<typename I>
   concept Instance = std::semiregular<I> && requires(I instance) {

@@ -7,6 +7,7 @@
 
 #include <sched/common/Api.h>
 #include <sched/common/Random.h>
+#include <sched/common/InputConcepts.h>
 
 #include "NeighborhoodHelper.h"
 #include "NeighborhoodTraits.h"
@@ -16,6 +17,7 @@ namespace sched::shop {
   struct SCHED_API InsertNeighborhood {
 
     template<typename Input, typename Schedule>
+      requires(concepts::Input<Input>)
     Input operator()(const Input& input, [[maybe_unused]] const Schedule& schedule, Random& random)
     {
       assert(!input.empty());

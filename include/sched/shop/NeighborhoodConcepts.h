@@ -5,7 +5,7 @@
 
 #include <sched/common/Random.h>
 
-namespace sched::shop {
+namespace sched::concepts {
 
   namespace details {
 

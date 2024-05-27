@@ -24,7 +24,7 @@ namespace sched::shop {
     using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
-      requires(ShopTransportInstance<Instance>)
+      requires(concepts::ShopTransportInstance<Instance>)
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const JobListInput& input)
     {
       JobShopTransportStates<Instance> states(instance);

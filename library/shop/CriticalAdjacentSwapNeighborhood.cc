@@ -89,7 +89,7 @@ namespace sched::shop {
    * OperationCriticalAdjacentSwapNeighborhood
    */
 
-  static_assert(NeighborhoodFor<OperationCriticalAdjacentSwapNeighborhood, OperationListInput, JobShopSchedule>);
+  static_assert(concepts::NeighborhoodFor<OperationCriticalAdjacentSwapNeighborhood, OperationListInput, JobShopSchedule>);
 
   OperationListInput OperationCriticalAdjacentSwapNeighborhood::operator()(const OperationListInput& input, const JobShopSchedule& schedule, Random& random)
   {
@@ -158,7 +158,7 @@ namespace sched::shop {
    * MachineCriticalAdjacentSwapNeighborhood
    */
 
-  static_assert(NeighborhoodFor<MachineCriticalAdjacentSwapNeighborhood, MachineListInput, JobShopSchedule>);
+  static_assert(concepts::NeighborhoodFor<MachineCriticalAdjacentSwapNeighborhood, MachineListInput, JobShopSchedule>);
 
   MachineListInput MachineCriticalAdjacentSwapNeighborhood::operator()(const MachineListInput& input, const JobShopSchedule& schedule, Random& random)
   {

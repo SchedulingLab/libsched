@@ -4,7 +4,7 @@
 #include <concepts>
 #include <optional>
 
-namespace sched::shop {
+namespace sched::concepts {
 
   template<typename E, typename Instance>
   concept EngineFor = requires(E engine, Instance instance, E::Input input) {

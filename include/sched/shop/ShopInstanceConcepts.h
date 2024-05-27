@@ -10,7 +10,7 @@
 #include <sched/common/InstanceConcepts.h>
 #include <sched/common/Time.h>
 
-namespace sched::shop {
+namespace sched::concepts {
 
   template<typename I>
   concept ShopInstance = Instance<I> && requires(I instance, JobId job, OperationId operation, MachineId machine)  {

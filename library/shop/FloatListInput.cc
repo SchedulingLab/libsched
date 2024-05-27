@@ -2,4 +2,4 @@
 
 #include <sched/common/InputConcepts.h>
 
-static_assert(sched::IsInput<sched::shop::FloatListInput>);
+static_assert(sched::concepts::Input<sched::shop::FloatListInput>);

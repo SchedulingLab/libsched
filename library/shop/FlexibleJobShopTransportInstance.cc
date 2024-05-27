@@ -2,4 +2,4 @@
 
 #include <sched/shop/ShopInstanceConcepts.h>
 
-static_assert(sched::shop::ShopTransportInstance<sched::shop::FlexibleJobShopTransportInstance>);
+static_assert(sched::concepts::ShopTransportInstance<sched::shop::FlexibleJobShopTransportInstance>);

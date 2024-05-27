@@ -6,7 +6,7 @@
 #include <concepts>
 #include <type_traits>
 
-namespace sched {
+namespace sched::concepts {
 
   namespace details {
 
@@ -16,7 +16,7 @@ namespace sched {
   }
 
   template<typename I>
-  concept IsInput = std::regular<I> && requires(I input, std::size_t index) {
+  concept Input = std::regular<I> && requires(I input, std::size_t index) {
     { input.empty() } -> std::convertible_to<bool>;
     { input.size() } -> std::convertible_to<std::size_t>;
     { input[index] } -> details::ReferenceToRegular<>;
@@ -25,7 +25,7 @@ namespace sched {
   namespace details {
 
     template<typename T>
-    concept ReferenceToInput = std::is_reference_v<T> && IsInput<std::remove_reference_t<T>>;
+    concept ReferenceToInput = std::is_reference_v<T> && Input<std::remove_reference_t<T>>;
 
   }
 

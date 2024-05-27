@@ -25,7 +25,7 @@ namespace sched::shop {
     using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
-      requires(ShopTransportInstance<Instance>)
+      requires(concepts::ShopTransportInstance<Instance>)
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const FloatListInput& input)
     {
       JobShopTransportStates<Instance> states(instance);
@@ -94,7 +94,7 @@ namespace sched::shop {
     }
 
     template<typename Instance>
-      requires(ShopTransportInstance<Instance>)
+      requires(concepts::ShopTransportInstance<Instance>)
     std::vector<std::vector<std::tuple<OperationId, double>>> compute_machine_assignment(const Instance& instance, const FloatListInput& input)
     {
       std::vector<std::vector<std::tuple<OperationId, double>>> machine_assignment;

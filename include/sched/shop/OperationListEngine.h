@@ -18,7 +18,7 @@ namespace sched::shop {
     using Schedule = JobShopSchedule;
 
     template<typename Instance>
-      requires(ShopInstance<Instance>)
+      requires(concepts::ShopInstance<Instance>)
     std::optional<JobShopSchedule> operator()(const Instance& instance, const OperationListInput& input)
     {
       auto maybe_job_list = to_job_list(input, instance);
