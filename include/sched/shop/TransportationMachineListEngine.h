@@ -117,7 +117,7 @@ namespace sched::shop {
           auto input_element = input[index++];
           OperationId operation = { job, i };
 
-          if constexpr (Instance::flexible) {
+          if constexpr (Instance::Flexible) {
             const auto available = instance.machines_for_operation(operation);
             assert(!available.empty());
 

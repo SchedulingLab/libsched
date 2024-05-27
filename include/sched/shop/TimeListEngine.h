@@ -63,7 +63,7 @@ namespace sched::shop {
         const OperationId op = operation_state.operation;
         JobShopTask task = {};
 
-        if constexpr (Instance::flexible) {
+        if constexpr (Instance::Flexible) {
           auto available = instance.machines_for_operation(op);
           assert(!available.empty());
 

@@ -35,7 +35,7 @@ namespace sched::shop {
         assert(transportation_index < transportation.size());
         const OperationId operation = states.next_operation(job);
 
-        if constexpr (Instance::flexible) {
+        if constexpr (Instance::Flexible) {
           const auto available = instance.machines_for_operation(operation);
           assert(!available.empty());
 

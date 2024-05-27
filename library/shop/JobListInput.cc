@@ -2,4 +2,4 @@
 
 #include <sched/common/InputConcepts.h>
 
-static_assert(sched::InputConcept<sched::shop::JobListInput>);
+static_assert(sched::IsInput<sched::shop::JobListInput>);

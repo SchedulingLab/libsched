@@ -13,7 +13,8 @@
 namespace sched::shop {
 
   template<typename I>
-  concept ShopInstanceConcept = InstanceConcept<I> && requires(I instance, JobId job, OperationId operation, MachineId machine)  {
+  concept ShopInstance = Instance<I> && requires(I instance, JobId job, OperationId operation, MachineId machine)  {
+    I::Flexible;
     { instance.operation_count(job) } -> std::convertible_to<std::size_t>;
 
     (I::Flexible && requires(I instance, OperationId operation) {
@@ -30,7 +31,7 @@ namespace sched::shop {
 
 
   template<typename I>
-  concept ShopTransportInstanceConcept = ShopInstanceConcept<I> && requires(I instance, MachineId origin, MachineId target) {
+  concept ShopTransportInstance = ShopInstance<I> && requires(I instance, MachineId origin, MachineId target) {
     { instance.transportation_count() } -> std::convertible_to<std::size_t>;
     { instance.transportation_time_empty(origin, target) } -> std::same_as<Time>;
     { instance.transportation_time_loaded(origin, target) } -> std::same_as<Time>;

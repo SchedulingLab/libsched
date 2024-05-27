@@ -50,7 +50,7 @@ namespace sched::shop {
         for (std::size_t i = 0; i < operations; ++i) {
           const OperationId operation = { job, i };
 
-          if constexpr (Instance::flexible) {
+          if constexpr (Instance::Flexible) {
             const auto machines = instance.machines_for_operation(operation);
 
             for (auto& machine : machines) {

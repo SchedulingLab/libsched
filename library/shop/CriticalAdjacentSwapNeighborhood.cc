@@ -7,6 +7,7 @@
 #include <optional>
 
 #include <sched/shop/JobShopCriticalPath.h>
+#include <sched/shop/NeighborhoodConcepts.h>
 #include <sched/shop/OperationListImprovedNeighborhood.h>
 #include <sched/shop/RowNeighborhood.h>
 #include <sched/shop/SwapNeighborhood.h>
@@ -88,6 +89,8 @@ namespace sched::shop {
    * OperationCriticalAdjacentSwapNeighborhood
    */
 
+  static_assert(NeighborhoodFor<OperationCriticalAdjacentSwapNeighborhood, OperationListInput, JobShopSchedule>);
+
   OperationListInput OperationCriticalAdjacentSwapNeighborhood::operator()(const OperationListInput& input, const JobShopSchedule& schedule, Random& random)
   {
     auto critical_path = sched::shop::critical_path(schedule);
@@ -154,6 +157,8 @@ namespace sched::shop {
   /*
    * MachineCriticalAdjacentSwapNeighborhood
    */
+
+  static_assert(NeighborhoodFor<MachineCriticalAdjacentSwapNeighborhood, MachineListInput, JobShopSchedule>);
 
   MachineListInput MachineCriticalAdjacentSwapNeighborhood::operator()(const MachineListInput& input, const JobShopSchedule& schedule, Random& random)
   {

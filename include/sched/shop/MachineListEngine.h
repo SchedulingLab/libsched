@@ -9,13 +9,16 @@
 #include "JobShopSchedule.h"
 #include "JobShopStates.h"
 #include "MachineListInput.h"
+#include "ShopInstanceConcepts.h"
 
 namespace sched::shop {
 
   struct SCHED_API MachineListEngine {
     using Input = MachineListInput;
+    using Schedule = JobShopSchedule;
 
     template<typename Instance>
+      requires(ShopInstance<Instance>)
     std::optional<JobShopSchedule> operator()(const Instance& instance, const MachineListInput& input)
     {
       JobShopStates<Instance> states(instance);

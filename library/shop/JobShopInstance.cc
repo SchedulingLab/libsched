@@ -2,4 +2,4 @@
 
 #include <sched/shop/ShopInstanceConcepts.h>
 
-static_assert(sched::shop::ShopInstanceConcept<sched::shop::JobShopInstance>);
+static_assert(sched::shop::ShopInstance<sched::shop::JobShopInstance>);

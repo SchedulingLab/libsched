@@ -14,14 +14,17 @@
 #include "JobShopTaskComparator.h"
 #include "JobShopTransportSchedule.h"
 #include "JobShopTransportStates.h"
+#include "ShopInstanceConcepts.h"
 
 namespace sched::shop {
 
   template<typename Comparator>
   struct GeneralJobListEngine {
     using Input = JobListInput;
+    using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
+      requires(ShopTransportInstance<Instance>)
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const JobListInput& input)
     {
       JobShopTransportStates<Instance> states(instance);
@@ -31,7 +34,7 @@ namespace sched::shop {
       for (auto job : input) {
         const OperationId operation = states.next_operation(job);
 
-        if constexpr (Instance::flexible) {
+        if constexpr (Instance::Flexible) {
           const auto available = instance.machines_for_operation(operation);
           assert(!available.empty());
 

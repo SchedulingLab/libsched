@@ -50,7 +50,7 @@ namespace sched::shop {
   template<typename Instance>
   MachineListInput to_machine_list(const OperationListInput& operation_list, const Instance& instance)
   {
-    static_assert(!Instance::flexible, "MachineListInput does not work with flexible instances.");
+    static_assert(!Instance::Flexible, "MachineListInput does not work with flexible instances.");
     MachineListInput machine_list(instance.machine_count());
 
     for (auto operation : operation_list) {

@@ -8,7 +8,7 @@
 namespace sched {
 
   template<typename I>
-  concept InstanceConcept = std::semiregular<I> && requires(I instance) {
+  concept Instance = std::semiregular<I> && requires(I instance) {
     { instance.machine_count() } -> std::convertible_to<std::size_t>;
     { instance.job_count() } -> std::convertible_to<std::size_t>;
   };

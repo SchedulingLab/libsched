@@ -13,13 +13,16 @@
 #include "JobListInput.h"
 #include "JobShopSchedule.h"
 #include "JobShopStates.h"
+#include "ShopInstanceConcepts.h"
 
 namespace sched::shop {
 
   struct SCHED_API JobListEngine {
     using Input = JobListInput;
+    using Schedule = JobShopSchedule;
 
     template<typename Instance>
+      requires(ShopInstance<Instance>)
     std::optional<JobShopSchedule> operator()(const Instance& instance, const JobListInput& input)
     {
       JobShopStates<Instance> states(instance);
@@ -30,7 +33,7 @@ namespace sched::shop {
 
         JobShopTask task = {};
 
-        if constexpr (Instance::flexible) {
+        if constexpr (Instance::Flexible) {
           const auto available = instance.machines_for_operation(operation);
           assert(!available.empty());
 

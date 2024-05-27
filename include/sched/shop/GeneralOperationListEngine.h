@@ -10,14 +10,17 @@
 #include "JobShopTaskComparator.h"
 #include "JobShopTransportSchedule.h"
 #include "OperationListInput.h"
+#include "ShopInstanceConcepts.h"
 
 namespace sched::shop {
 
   template<typename Comparator>
   struct SCHED_API GeneralOperationListEngine {
     using Input = OperationListInput;
+    using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
+      requires(ShopTransportInstance<Instance>)
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const OperationListInput& input)
     {
       auto maybe_job_list = to_job_list(input, instance);

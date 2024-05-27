@@ -19,7 +19,7 @@ namespace sched::shop {
     template<typename Instance>
     std::map<OperationId, MachineId> operator()(const Instance& instance, const FloatListInput& input)
     {
-      static_assert(Instance::flexible, "Instance should be flexible.");
+      static_assert(Instance::Flexible, "Instance should be flexible.");
       std::map<OperationId, MachineId> assignment;
       std::size_t input_index = 0;
 

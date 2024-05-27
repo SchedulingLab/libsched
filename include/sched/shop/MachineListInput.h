@@ -28,7 +28,7 @@ namespace sched::shop {
     template<typename Instance>
     static MachineListInput generate_input(const Instance& instance)
     {
-      static_assert(!Instance::flexible, "MachineListInput does not work with flexible instances.");
+      static_assert(!Instance::Flexible, "MachineListInput does not work with flexible instances.");
       MachineListInput input(instance.machine_count());
 
       for (auto job : sched::jobs(instance)) {
@@ -47,7 +47,7 @@ namespace sched::shop {
     template<typename Instance>
     static MachineListInput generate_random(const Instance& instance, Random& random)
     {
-      static_assert(!Instance::flexible, "MachineListInput does not work with flexible instances.");
+      static_assert(!Instance::Flexible, "MachineListInput does not work with flexible instances.");
       MachineListInput input = generate_input(instance);
 
       for (auto& machine : input) {
@@ -60,7 +60,7 @@ namespace sched::shop {
     template<typename Instance>
     static MachineListInput generate_feasible(const Instance& instance, Random& random)
     {
-      static_assert(!Instance::flexible, "MachineListInput does not work with flexible instances.");
+      static_assert(!Instance::Flexible, "MachineListInput does not work with flexible instances.");
       std::vector<JobId> jobs;
 
       for (auto job : sched::jobs(instance)) {
