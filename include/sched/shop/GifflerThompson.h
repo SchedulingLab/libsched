@@ -20,7 +20,7 @@ namespace sched::shop {
 
     auto add_next_operation_if_available = [&states,&instance,&available_tasks](JobId job) {
       if (states.has_next_operation(job)) {
-        auto next_operation = states.next_operation(job);
+        auto operation = states.next_operation(job);
         MachineId machine = instance.assigned_machine_for_operation(operation);
         available_tasks.push_back(states.create_task(operation, machine));
       }
