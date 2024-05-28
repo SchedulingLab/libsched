@@ -16,26 +16,35 @@ namespace sched::shop {
     JobShopStates<Instance> states(instance);
     JobShopSchedule schedule;
 
+    std::vector<OperationId> available_operations;
     std::vector<JobShopTask> available_tasks;
+    std::vector<JobShopTask> conflicting_tasks;
 
-    auto add_next_operation_if_available = [&states,&instance,&available_tasks](JobId job) {
-      if (states.has_next_operation(job)) {
-        auto operation = states.next_operation(job);
+    for (;;) {
+      available_operations.clear();
+
+      for (auto job : jobs(instance)) {
+        if (states.has_next_operation(job)) {
+          available_operations.push_back(states.next_operation(job));
+        }
+      }
+
+      if (available_operations.empty()) {
+        break;
+      }
+
+      available_tasks.clear();
+
+      for (auto operation : available_operations) {
         MachineId machine = instance.assigned_machine_for_operation(operation);
         available_tasks.push_back(states.create_task(operation, machine));
       }
-    };
 
-    for (auto job : jobs(instance)) {
-      add_next_operation_if_available(job);
-    }
-
-    while (!available_tasks.empty()) {
       const JobShopTask earliest_completed_task = *std::min_element(available_tasks.begin(), available_tasks.end(), [](const JobShopTask& lhs, const JobShopTask& rhs) {
         return lhs.completion < rhs.completion;
       });
 
-      std::vector<JobShopTask> conflicting_tasks;
+      conflicting_tasks.clear();
 
       for (const auto& task : available_tasks) {
         if (task.operation == earliest_completed_task.operation) {
@@ -47,19 +56,13 @@ namespace sched::shop {
         }
       }
 
-      const JobShopTask chosen_task = conflicting_tasks.empty() ? earliest_completed_task : *std::min_element(conflicting_tasks.begin(), conflicting_tasks.end(), compare);
+      if (conflicting_tasks.empty()) {
+        states.update_schedule(earliest_completed_task, schedule);
+        continue;
+      }
+
+      const JobShopTask chosen_task = *std::min_element(conflicting_tasks.begin(), conflicting_tasks.end(), compare);
       states.update_schedule(chosen_task, schedule);
-
-      auto chosen_iterator = std::find_if(available_tasks.begin(), available_tasks.end(), [&chosen_task](const JobShopTask& task) {
-        return task.operation == chosen_task.operation;
-      });
-
-      // remove chosen task from the available tasks
-      auto last_iterator = --available_tasks.end();
-      std::iter_swap(chosen_iterator, last_iterator);
-      available_tasks.pop_back();
-
-      add_next_operation_if_available(chosen_task.operation.job);
     }
 
     return schedule;
