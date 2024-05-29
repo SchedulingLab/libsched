@@ -47,9 +47,9 @@ namespace sched::shop {
       conflicting_tasks.clear();
 
       for (const auto& task : available_tasks) {
-        if (task.operation == earliest_completed_task.operation) {
-          continue;
-        }
+        // if (task.operation == earliest_completed_task.operation) {
+        //   continue;
+        // }
 
         if (task.machine == earliest_completed_task.machine && task.start < earliest_completed_task.completion) {
           conflicting_tasks.push_back(task);
