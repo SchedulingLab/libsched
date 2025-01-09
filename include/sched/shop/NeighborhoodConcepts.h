@@ -1,9 +1,12 @@
 #ifndef SCHED_NEIGHBORHOOD_CONCEPTS_H
 #define SCHED_NEIGHBORHOOD_CONCEPTS_H
 
+#include <string>
 #include <vector>
 
 #include <sched/common/Random.h>
+
+#include "NeighborhoodTraits.h"
 
 namespace sched::concepts {
 
@@ -18,6 +21,7 @@ namespace sched::concepts {
   concept NeighborhoodFor = requires(N neighborhood, Input input, Schedule schedule, Random& random, std::size_t count) {
     { neighborhood(input, schedule, random) } -> std::same_as<Input>;
     { neighborhood.generate_many(input, schedule, random, count) } -> std::same_as<std::vector<Input>>;
+    { shop::NeighborhoodTraits<N>::name() } -> std::same_as<std::string>;
   };
 
 }
