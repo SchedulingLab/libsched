@@ -3,6 +3,7 @@
 // clang-format on
 
 #include <cassert>
+#include <cstdint>
 
 #include <algorithm>
 #include <stdexcept>
@@ -13,6 +14,7 @@ namespace sched {
   {
     if (n > 0) {
       m_vertices.reserve(n);
+      m_in_edges.reserve(n);
       m_out_edges.reserve(n);
     }
   }
@@ -165,17 +167,18 @@ namespace sched {
             }
           }
 
-          std::reverse(vertices.begin(), vertices.end());
+          std::ranges::reverse(vertices);
           return vertices;
 
-        } catch (std::exception& ex) {
+        } catch ([[maybe_unused]] std::exception& ex) {
+          return {};
         }
 
         return {};
       }
 
     private:
-      enum class Color {
+      enum class Color : uint8_t {
         White,
         Gray,
         Black,
