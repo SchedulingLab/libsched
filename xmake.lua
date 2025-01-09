@@ -20,6 +20,7 @@ set_policy("build.warning", true)
 set_warnings("allextra")
 set_languages("cxx20")
 set_encodings("utf-8")
+set_exceptions("cxx")
 
 if is_plat("windows") then
   add_cxflags("/wd4251") -- Disable warning: class needs to have dll-interface to be used by clients of class blah blah blah
@@ -27,8 +28,12 @@ if is_plat("windows") then
 end
 
 target("sched")
-    set_kind("shared")
-    add_defines("SCHED_BUILD")
+    set_kind("$(kind)")
+    if is_kind("static") then
+        add_defines("SCHED_STATIC", { public = true })
+    else
+        add_defines("SCHED_BUILD")
+    end
     add_files("library/**/*.cc")
     add_headerfiles("include/(sched/**/*.h)")
     add_includedirs("include", { public = true })
