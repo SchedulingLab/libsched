@@ -13,11 +13,11 @@
 namespace sched::concepts {
 
   template<typename I>
-  concept ShopInstance = Instance<I> && requires(I instance, JobId job, OperationId operation, MachineId machine)  {
+  concept ShopInstance = Instance<I> && requires(I instance, JobId job, OperationId operation, MachineId machine) {
     { I::Flexible } -> std::convertible_to<bool>;
     { instance.operation_count(job) } -> std::convertible_to<std::size_t>;
 
-    requires (I::Flexible && requires(I instance, OperationId operation) {
+    requires(I::Flexible && requires(I instance, OperationId operation) {
       { instance.machines_for_operation(operation) } -> std::same_as<std::vector<MachineId>>;
     }) || requires(I instance, OperationId operation, MachineId machine) {
       { instance.assigned_machine_for_operation(operation) } -> std::same_as<MachineId>;
@@ -28,7 +28,6 @@ namespace sched::concepts {
     { instance.release_date(job) } -> std::same_as<Time>;
     { instance.due_date(job) } -> std::same_as<Time>;
   };
-
 
   template<typename I>
   concept ShopTransportInstance = ShopInstance<I> && requires(I instance, MachineId origin, MachineId target) {

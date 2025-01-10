@@ -3,10 +3,10 @@
 
 #include <cassert>
 
-#include <set>
-#include <vector>
 #include <limits>
 #include <ranges>
+#include <set>
+#include <vector>
 
 #include <sched/support/Range.h>
 
@@ -16,7 +16,7 @@ namespace sched {
    * VertexId
    */
 
-  enum class VertexId : std::size_t {};
+  enum class VertexId : std::size_t { };
   using VertexRange = Range<VertexId>;
 
   constexpr VertexId NoVertex = VertexId{ std::numeric_limits<std::size_t>::max() };
@@ -30,7 +30,7 @@ namespace sched {
    * EdgeId
    */
 
-  enum class EdgeId : std::size_t {};
+  enum class EdgeId : std::size_t { };
   using EdgeRange = Range<EdgeId>;
 
   constexpr EdgeId NoEdge = EdgeId{ std::numeric_limits<std::size_t>::max() };
@@ -106,9 +106,7 @@ namespace sched {
     std::vector<std::set<EdgeId>> m_out_edges;
   };
 
-
   std::vector<VertexId> topological_sort(const Graph& graph);
-
 
   template<typename V, typename E>
   class DataGraph : public Graph {
@@ -160,8 +158,6 @@ namespace sched {
     std::vector<V> m_vertex_data;
     std::vector<E> m_edge_data;
   };
-
-
 
 }
 

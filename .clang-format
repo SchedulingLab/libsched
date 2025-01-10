@@ -23,7 +23,7 @@ IncludeCategories:
   - Regex: '^<(cassert|ccomplex|cctype|cerrno|cfenv|cfloat|cinttypes|ciso646|climits|clocale|cmath|csetjmp|csignal|cstdalign|cstdarg|cstdbool|cstddef|cstdint|cstdio|cstdlib|cstring|ctgmath|ctime|cuchar|cwchar|cwctype)>$'
     Priority: 1
   # c++ headers
-  - Regex: '^<(algorithm|any|array|atomic|bitset|charconv|chrono|complex|condition_variable|deque|exception|execution|filesystem|forward_list|fstream|functional|future|initializer_list|iomanip|ios|iosfwd|iostream|istream|iterator|limits|list|locale|map|memory|memory_resource|mutex|new|numeric|optional|ostream|queue|random|ratio|regex|set|shared_mutex|scoped_allocator|sstream|stack|stdexcept|streambuf|string|string_view|system_error|thread|tuple|type_traits|typeindex|typeinfo|unordered_map|unordered_set|utility|valarray|variant|vector)>$'
+  - Regex: '^<(algorithm|any|array|atomic|barrier|bit|bitset|charconv|chrono|compare|complex|concepts|condition_variable|coroutine|deque|exception|execution|filesystem|format|forward_list|fstream|functional|future|initializer_list|iomanip|ios|iosfwd|iostream|istream|iterator|latch|limits|list|locale|map|memory|memory_resource|mutex|new|numbers|numeric|optional|ostream|queue|random|ranges|ratio|regex|semaphore|set|shared_mutex|scoped_allocator|source_location|span|sstream|stack|stdexcept|stop_token|streambuf|string|string_view|syncstream|system_error|thread|tuple|type_traits|typeindex|typeinfo|unordered_map|unordered_set|utility|valarray|variant|vector|version)>$'
     Priority: 2
   # sched headers
   - Regex: '^<sched\/'
@@ -64,5 +64,5 @@ SpaceBeforeCaseColon: false
 SpaceBeforeParens: ControlStatements
 SpaceInEmptyBlock: true
 SpacesInContainerLiterals: true
-Standard: c++17
+Standard: c++20
 UseTab: Never
