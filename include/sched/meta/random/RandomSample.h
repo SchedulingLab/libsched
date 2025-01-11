@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
 #ifndef SCHED_RANDOM_SAMPLE_H
 #define SCHED_RANDOM_SAMPLE_H
 
@@ -8,7 +10,7 @@
 #include <sched/support/Random.h>
 #include <sched/types/InputTraits.h>
 
-namespace sched::shop {
+namespace sched {
 
   enum class RandomSamplePolicy : uint8_t {
     Uniform,

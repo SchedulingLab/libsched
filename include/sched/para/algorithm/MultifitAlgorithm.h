@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
 #ifndef SCHED_PARA_MULTIFIT_ALGORITHM_H
 #define SCHED_PARA_MULTIFIT_ALGORITHM_H
 
@@ -13,39 +15,6 @@
 #include <sched/para/schedule/ParallelSchedule.h>
 
 namespace sched::para {
-
-  namespace details {
-
-    // input must be sorted
-    inline std::vector<std::vector<ParallelJob>> compute_first_fit_decreasing(const std::vector<ParallelJob>& input, Time maximum)
-    {
-      std::vector<std::vector<ParallelJob>> boxes;
-      std::vector<Time> times;
-
-      for (const auto& job : input) {
-        bool packed = false;
-        const std::size_t count = boxes.size();
-
-        for (std::size_t i = 0; i < count; ++i) {
-          if (times[i] + job.processing_time <= maximum) {
-            boxes[i].push_back(job);
-            times[i] += job.processing_time;
-            packed = true;
-            break;
-          }
-        }
-
-        if (!packed) {
-          boxes.push_back({ job });
-          times.push_back(job.processing_time);
-        }
-      }
-
-      return boxes;
-    }
-
-
-  }
 
   struct SCHED_API MultifitAlgorithm {
 
@@ -82,7 +51,7 @@ namespace sched::para {
       for (int i = 0; i < Iterations; ++i) {
         const Time middle = lower + ((upper - lower) / 2);
 
-        auto boxes = details::compute_first_fit_decreasing(jobs, middle);
+        auto boxes = compute_first_fit_decreasing(jobs, middle);
 
         if (boxes.size() <= instance.machine_count()) {
           upper = middle;
@@ -93,7 +62,7 @@ namespace sched::para {
       }
 
       if (result.empty()) {
-        result = details::compute_first_fit_decreasing(jobs, upper);
+        result = compute_first_fit_decreasing(jobs, upper);
         assert(result.size() <= instance.machine_count());
       }
 

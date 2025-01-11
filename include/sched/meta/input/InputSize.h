@@ -1,5 +1,7 @@
-#ifndef SCHED_SHOP_INPUT_SIZE_H
-#define SCHED_SHOP_INPUT_SIZE_H
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
+#ifndef SCHED_INPUT_SIZE_H
+#define SCHED_INPUT_SIZE_H
 
 #include <cstddef>
 
@@ -43,4 +45,4 @@ namespace sched {
 
 }
 
-#endif // SCHED_SHOP_INPUT_SIZE_H
+#endif // SCHED_INPUT_SIZE_H

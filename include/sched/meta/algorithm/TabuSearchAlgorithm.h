@@ -1,5 +1,7 @@
-#ifndef SCHED_SHOP_TABU_SEARCH_ALGORITHM_H
-#define SCHED_SHOP_TABU_SEARCH_ALGORITHM_H
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
+#ifndef SCHED_TABU_SEARCH_ALGORITHM_H
+#define SCHED_TABU_SEARCH_ALGORITHM_H
 
 #include <cmath>
 
@@ -15,7 +17,7 @@
 #include <sched/types/InputTraits.h>
 #include <sched/types/NeighborhoodTraits.h>
 
-namespace sched::shop {
+namespace sched {
 
   template<typename Engine, typename Neighborhood, typename Criterion>
   struct TabuSearchAlgorithm {
@@ -140,4 +142,4 @@ namespace sched::shop {
 
 }
 
-#endif // SCHED_SHOP_TABU_SEARCH_ALGORITHM_H
+#endif // SCHED_TABU_SEARCH_ALGORITHM_H

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
 #ifndef SCHED_RANDOM_WALK_H
 #define SCHED_RANDOM_WALK_H
 
@@ -8,7 +10,7 @@
 #include <sched/support/Random.h>
 #include <sched/Time.h>
 
-namespace sched::shop {
+namespace sched {
 
   template<typename Engine, typename Neighborhood, typename Criterion>
   struct RandomWalk {

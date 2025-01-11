@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
 #ifndef SCHED_SIMPLE_DESCENT_H
 #define SCHED_SIMPLE_DESCENT_H
 
@@ -6,7 +8,7 @@
 #include <sched/meta/Solution.h>
 #include <sched/types/InputTraits.h>
 
-namespace sched::shop {
+namespace sched {
 
   template<typename Engine, typename Neighborhood, typename Criterion>
   struct SimpleDescent {

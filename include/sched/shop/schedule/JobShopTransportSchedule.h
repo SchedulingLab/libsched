@@ -1,5 +1,7 @@
-#ifndef SCHED_SHOP_GENERAL_FLEXIBLE_JOB_SHOP_SCHEDULE_H
-#define SCHED_SHOP_GENERAL_FLEXIBLE_JOB_SHOP_SCHEDULE_H
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
+#ifndef SCHED_SHOP_JOB_SHOP_TRANSPORT_SCHEDULE_H
+#define SCHED_SHOP_JOB_SHOP_TRANSPORT_SCHEDULE_H
 
 #include <ranges>
 #include <vector>
@@ -44,4 +46,4 @@ namespace sched::shop {
 
 }
 
-#endif // SCHED_SHOP_GENERAL_FLEXIBLE_JOB_SHOP_SCHEDULE_H
+#endif // SCHED_SHOP_JOB_SHOP_TRANSPORT_SCHEDULE_H

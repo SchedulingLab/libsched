@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
 #ifndef SCHED_SCHOP_RANK_SELECTION_H
 #define SCHED_SCHOP_RANK_SELECTION_H
 
@@ -6,7 +8,7 @@
 #include <sched/support/Fixed.h>
 #include <sched/support/Random.h>
 
-namespace sched::shop {
+namespace sched {
 
   template<int64_t Pressure>
   struct RankSelection {

@@ -1,6 +1,7 @@
-// clang-format off: main header
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
+
 #include <sched/support/Matrix.h>
-// clang-format on
 
 #include <cassert>
 

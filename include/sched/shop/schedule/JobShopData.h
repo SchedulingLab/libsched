@@ -1,5 +1,7 @@
-#ifndef SCHED_JOB_SHOP_DATA_H
-#define SCHED_JOB_SHOP_DATA_H
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
+#ifndef SCHED_SHOP_JOB_SHOP_DATA_H
+#define SCHED_SHOP_JOB_SHOP_DATA_H
 
 #include <vector>
 
@@ -38,4 +40,4 @@ namespace sched::shop {
 
 }
 
-#endif // SCHED_JOB_SHOP_DATA_H
+#endif // SCHED_SHOP_JOB_SHOP_DATA_H

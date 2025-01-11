@@ -1,5 +1,7 @@
-#ifndef SCHED_SHOP_ORDER_CROSSOVER_H
-#define SCHED_SHOP_ORDER_CROSSOVER_H
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
+#ifndef SCHED_ORDER_CROSSOVER_H
+#define SCHED_ORDER_CROSSOVER_H
 
 #include <cassert>
 
@@ -11,7 +13,7 @@
 #include <sched/support/Random.h>
 #include <sched/support/Log.h>
 
-namespace sched::shop {
+namespace sched {
 
   template<std::size_t N>
   struct OrderCrossover {
@@ -122,4 +124,4 @@ namespace sched::shop {
 
 }
 
-#endif // SCHED_SHOP_ORDER_CROSSOVER_H
+#endif // SCHED_ORDER_CROSSOVER_H
