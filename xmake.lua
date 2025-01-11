@@ -34,8 +34,8 @@ target("sched")
     else
         add_defines("SCHED_BUILD")
     end
-    add_files("library/**/*.cc")
-    add_headerfiles("include/(sched/**/*.h)")
+    add_files("library/**.cc")
+    add_headerfiles("include/(sched/**.h)")
     add_includedirs("include", { public = true })
     add_packages("fmt", "lqp", "nlohmann_json", { public = true })
     set_license("GPL-3.0")
