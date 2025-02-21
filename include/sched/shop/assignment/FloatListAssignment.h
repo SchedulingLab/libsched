@@ -53,7 +53,7 @@ namespace sched {
   struct AssignmentTraits<shop::FloatListAssignment> {
     static std::string name()
     {
-      return "flt";
+      return "mtx";
     }
   };
 
