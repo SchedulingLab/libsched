@@ -15,6 +15,7 @@
 #include <sched/Time.h>
 #include <sched/shop/schedule/JobShopSchedule.h>
 #include <sched/shop/input/TimeListInput.h>
+#include <sched/types/EngineTraits.h>
 
 namespace sched::shop {
 
@@ -107,6 +108,19 @@ namespace sched::shop {
 
       assert(schedule.task_count() == input.size());
       return make_schedule_active(schedule);
+    }
+  };
+
+}
+
+namespace sched {
+
+  template<>
+  struct EngineTraits<shop::TimeListEngine> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "tim";
     }
   };
 

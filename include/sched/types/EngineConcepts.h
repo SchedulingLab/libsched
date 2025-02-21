@@ -5,7 +5,9 @@
 
 #include <concepts>
 #include <optional>
-// #include <string>
+#include <string>
+
+#include <sched/types/EngineTraits.h>
 
 namespace sched::concepts {
 
@@ -24,7 +26,8 @@ namespace sched::concepts {
     typename E::Schedule;
 
     requires details::BasicEngineFor<E, Instance, typename E::Input, typename E::Schedule>;
-    // { E::name() } -> std::same_as<std::string>;
+
+    { EngineTraits<E>::name() } -> std::same_as<std::string>;
   };
 
 }

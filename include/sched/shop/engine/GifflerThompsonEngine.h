@@ -15,6 +15,7 @@
 #include <sched/shop/input/MachineListInput.h>
 #include <sched/shop/input/OperationListInput.h>
 #include <sched/shop/schedule/JobShopSchedule.h>
+#include <sched/types/EngineTraits.h>
 #include <sched/types/ShopInstanceConcepts.h>
 
 namespace sched::shop {
@@ -75,6 +76,37 @@ namespace sched::shop {
       return giffler_thompson(instance, compare);
     }
 
+  };
+
+}
+
+namespace sched {
+
+  template<>
+  struct EngineTraits<shop::OperationListGTEngine> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "ope-gt";
+    }
+  };
+
+  template<>
+  struct EngineTraits<shop::JobListGTEngine> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "job-gt";
+    }
+  };
+
+  template<>
+  struct EngineTraits<shop::MachineListGTEngine> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "mch-gt";
+    }
   };
 
 }

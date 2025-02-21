@@ -11,6 +11,7 @@
 #include <sched/Ids.h>
 #include <sched/meta/Instance.h>
 #include <sched/meta/input/FloatListInput.h>
+#include <sched/types/AssignmentTraits.h>
 
 namespace sched::shop {
 
@@ -24,16 +25,12 @@ namespace sched::shop {
       std::map<OperationId, MachineId> assignment;
       std::size_t input_index = 0;
 
-      for (auto job : sched::jobs(instance)) {
-        OperationId operation = {};
-        operation.job = job;
-        auto operation_count = instance.operation_count(job);
-
-        for (std::size_t index = 0; index < operation_count; ++index) {
-          operation.index = index;
+      for (auto job : jobs(instance)) {
+        for (auto operation : operations(instance, job)) {
           auto available = instance.machines_for_operation(operation);
           auto machine_count = available.size();
           assert(machine_count > 0);
+          assert(input_index < input.size());
           auto machine_index = static_cast<std::size_t>(input[input_index] * static_cast<double>(machine_count));
           assert(machine_index < machine_count);
 
@@ -45,6 +42,18 @@ namespace sched::shop {
       }
 
       return assignment;
+    }
+  };
+
+}
+
+namespace sched {
+
+  template<>
+  struct AssignmentTraits<shop::FloatListAssignment> {
+    static std::string name()
+    {
+      return "flt";
     }
   };
 

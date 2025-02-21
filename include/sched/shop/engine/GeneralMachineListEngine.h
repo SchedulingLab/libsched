@@ -16,6 +16,7 @@
 #include <sched/shop/helper/JobShopTaskComparator.h>
 #include <sched/shop/helper/JobShopTransportStates.h>
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
+#include <sched/types/EngineTraits.h>
 #include <sched/types/ShopInstanceConcepts.h>
 
 namespace sched::shop {
@@ -144,6 +145,19 @@ namespace sched::shop {
   using GeneralMachineListEngineLFT = GeneralMachineListEngine<JobShopTaskLatestFinishTime>;
   using GeneralMachineListEngineSPT = GeneralMachineListEngine<JobShopTaskShortestProcessingTime>;
   using GeneralMachineListEngineLPT = GeneralMachineListEngine<JobShopTaskLargestProcessingTime>;
+
+}
+
+namespace sched {
+
+  template<typename Comparator>
+  struct EngineTraits<shop::GeneralMachineListEngine<Comparator>> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "mch_"s + Comparator::name();
+    }
+  };
 
 }
 

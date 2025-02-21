@@ -11,6 +11,7 @@
 #include <sched/Ids.h>
 #include <sched/meta/Instance.h>
 #include <sched/shop/input/TransportationListInput.h>
+#include <sched/types/AssignmentTraits.h>
 
 namespace sched::shop {
 
@@ -21,6 +22,18 @@ namespace sched::shop {
     std::vector<TransportationId> operator()([[maybe_unused]] const Instance& instance, const TransportationListInput& input)
     {
       return input;
+    }
+  };
+
+}
+
+namespace sched {
+
+  template<>
+  struct AssignmentTraits<shop::TransportationListTransportationAssignment> {
+    static std::string name()
+    {
+      return "trp";
     }
   };
 

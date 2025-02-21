@@ -10,6 +10,8 @@
 #include <sched/meta/Instance.h>
 #include <sched/shop/schedule/JobShopSchedule.h>
 #include <sched/shop/helper/JobShopStates.h>
+#include <sched/types/AssignmentTraits.h>
+#include <sched/types/EngineTraits.h>
 
 namespace sched::shop {
 
@@ -50,6 +52,18 @@ namespace sched::shop {
     }
 
     Assignment assignment;
+  };
+
+}
+
+namespace sched {
+
+  template<typename Assignment, typename Comparator>
+  struct EngineTraits<shop::AssignmentEngine<Assignment, Comparator>> {
+    static std::string name()
+    {
+      return AssignmentTraits<Assignment>::name() + '_' + Comparator::name();
+    }
   };
 
 }

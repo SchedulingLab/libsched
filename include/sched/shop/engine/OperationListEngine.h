@@ -10,6 +10,7 @@
 #include <sched/shop/input/OperationListInput.h>
 #include <sched/shop/engine/JobListEngine.h>
 #include <sched/shop/schedule/JobShopSchedule.h>
+#include <sched/types/EngineTraits.h>
 #include <sched/types/ShopInstanceConcepts.h>
 
 namespace sched::shop {
@@ -30,6 +31,19 @@ namespace sched::shop {
 
       JobListEngine engine;
       return engine(instance, *maybe_job_list);
+    }
+  };
+
+}
+
+namespace sched {
+
+  template<>
+  struct EngineTraits<shop::OperationListEngine> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "ope";
     }
   };
 

@@ -3,6 +3,8 @@
 #ifndef SCHED_SHOP_JOB_SHOP_TASK_COMPARATOR_H
 #define SCHED_SHOP_JOB_SHOP_TASK_COMPARATOR_H
 
+#include <string_view>
+
 #include <sched/shop/schedule/JobShopSchedule.h>
 
 namespace sched::shop {
@@ -13,6 +15,11 @@ namespace sched::shop {
     {
       return lhs.start < rhs.start;
     }
+
+    static std::string_view name()
+    {
+      return "est";
+    }
   };
 
   struct JobShopTaskLatestStartingTime {
@@ -20,6 +27,11 @@ namespace sched::shop {
     bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const
     {
       return lhs.start > rhs.start;
+    }
+
+    static std::string_view name()
+    {
+      return "lst";
     }
   };
 
@@ -29,6 +41,11 @@ namespace sched::shop {
     {
       return lhs.completion < rhs.completion;
     }
+
+    static std::string_view name()
+    {
+      return "eft";
+    }
   };
 
   struct JobShopTaskLatestFinishTime {
@@ -36,6 +53,11 @@ namespace sched::shop {
     bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const
     {
       return lhs.completion > rhs.completion;
+    }
+
+    static std::string_view name()
+    {
+      return "lft";
     }
   };
 
@@ -45,6 +67,11 @@ namespace sched::shop {
     {
       return (lhs.completion - lhs.start) < (rhs.completion - rhs.start);
     }
+
+    static std::string_view name()
+    {
+      return "spt";
+    }
   };
 
   struct JobShopTaskLargestProcessingTime {
@@ -52,6 +79,11 @@ namespace sched::shop {
     bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const
     {
       return (lhs.completion - lhs.start) > (rhs.completion - rhs.start);
+    }
+
+    static std::string_view name()
+    {
+      return "lpt";
     }
   };
 

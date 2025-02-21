@@ -15,6 +15,8 @@
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
 #include <sched/shop/helper/JobShopTransportStates.h>
 #include <sched/meta/input/SplitInput.h>
+#include <sched/types/AssignmentTraits.h>
+#include <sched/types/EngineTraits.h>
 
 namespace sched::shop {
 
@@ -86,6 +88,19 @@ namespace sched::shop {
     }
 
     TransportationAssignment transportation_assignment;
+  };
+
+}
+
+namespace sched {
+
+  template<typename Comparator, typename TransportationAssignment>
+  struct EngineTraits<shop::TransportationJobListEngine<Comparator, TransportationAssignment>> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "job_"s + AssignmentTraits<TransportationAssignment>::name() + '_' + Comparator::name();
+    }
   };
 
 }

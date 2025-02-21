@@ -14,6 +14,7 @@
 #include <sched/shop/input/JobListInput.h>
 #include <sched/shop/schedule/JobShopSchedule.h>
 #include <sched/shop/helper/JobShopStates.h>
+#include <sched/types/EngineTraits.h>
 #include <sched/types/ShopInstanceConcepts.h>
 
 namespace sched::shop {
@@ -56,6 +57,19 @@ namespace sched::shop {
       }
 
       return schedule;
+    }
+  };
+
+}
+
+namespace sched {
+
+  template<>
+  struct EngineTraits<shop::JobListEngine> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "job";
     }
   };
 

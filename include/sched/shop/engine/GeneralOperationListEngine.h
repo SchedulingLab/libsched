@@ -11,6 +11,7 @@
 #include <sched/shop/input/OperationListInput.h>
 #include <sched/shop/helper/JobShopTaskComparator.h>
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
+#include <sched/types/EngineTraits.h>
 #include <sched/types/ShopInstanceConcepts.h>
 
 namespace sched::shop {
@@ -41,6 +42,19 @@ namespace sched::shop {
   using GeneralOperationListEngineLFT = GeneralOperationListEngine<JobShopTaskLatestFinishTime>;
   using GeneralOperationListEngineSPT = GeneralOperationListEngine<JobShopTaskShortestProcessingTime>;
   using GeneralOperationListEngineLPT = GeneralOperationListEngine<JobShopTaskLargestProcessingTime>;
+
+}
+
+namespace sched {
+
+  template<typename Comparator>
+  struct EngineTraits<shop::GeneralOperationListEngine<Comparator>> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "ope_"s + Comparator::name();
+    }
+  };
 
 }
 

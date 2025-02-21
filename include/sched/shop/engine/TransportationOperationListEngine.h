@@ -12,6 +12,8 @@
 #include <sched/shop/input/OperationListInput.h>
 #include <sched/meta/input/SplitInput.h>
 #include <sched/shop/engine/TransportationJobListEngine.h>
+#include <sched/types/AssignmentTraits.h>
+#include <sched/types/EngineTraits.h>
 
 namespace sched::shop {
 
@@ -31,6 +33,19 @@ namespace sched::shop {
 
       TransportationJobListEngine<Comparator, TransportationAssignment> engine;
       return engine(instance, { *maybe_job_list, input.input1 });
+    }
+  };
+
+}
+
+namespace sched {
+
+  template<typename Comparator, typename TransportationAssignment>
+  struct EngineTraits<shop::TransportationOperationListEngine<Comparator, TransportationAssignment>> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "ope_"s + AssignmentTraits<TransportationAssignment>::name() + '_' + Comparator::name();
     }
   };
 

@@ -15,6 +15,7 @@
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
 #include <sched/shop/engine/TransportationListEngine.h>
 #include <sched/shop/input/TransportationListInput.h>
+#include <sched/types/EngineTraits.h>
 
 namespace sched::shop {
 
@@ -46,6 +47,19 @@ namespace sched::shop {
   using TransportationFloatListEngineLFT = TransportationFloatListEngine<JobShopTaskLatestFinishTime>;
   using TransportationFloatListEngineSPT = TransportationFloatListEngine<JobShopTaskShortestProcessingTime>;
   using TransportationFloatListEngineLPT = TransportationFloatListEngine<JobShopTaskLargestProcessingTime>;
+
+}
+
+namespace sched {
+
+  template<typename Comparator>
+  struct EngineTraits<shop::TransportationFloatListEngine<Comparator>> {
+    static std::string name()
+    {
+      using namespace std::literals;
+      return "ftr_"s + Comparator::name();
+    }
+  };
 
 }
 

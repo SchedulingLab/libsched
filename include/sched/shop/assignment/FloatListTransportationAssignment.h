@@ -11,6 +11,7 @@
 #include <sched/Ids.h>
 #include <sched/meta/Instance.h>
 #include <sched/meta/input/FloatListInput.h>
+#include <sched/types/AssignmentTraits.h>
 
 namespace sched::shop {
 
@@ -30,6 +31,18 @@ namespace sched::shop {
       }
 
       return assignment;
+    }
+  };
+
+}
+
+namespace sched {
+
+  template<>
+  struct AssignmentTraits<shop::FloatListTransportationAssignment> {
+    static std::string name()
+    {
+      return "flt";
     }
   };
 
