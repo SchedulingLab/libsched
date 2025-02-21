@@ -5,7 +5,7 @@
 
 #include <cstddef>
 
-#include <sched/Instance.h>
+#include <sched/meta/Instance.h>
 
 namespace sched {
 

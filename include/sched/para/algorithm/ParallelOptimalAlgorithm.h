@@ -11,7 +11,7 @@
 #include <lqp/Problem.h>
 
 #include <sched/Api.h>
-#include <sched/Instance.h>
+#include <sched/meta/Instance.h>
 #include <sched/criterion/MakespanCriterion.h>
 #include <sched/para/helper/ParallelJob.h>
 #include <sched/para/schedule/ParallelSchedule.h>

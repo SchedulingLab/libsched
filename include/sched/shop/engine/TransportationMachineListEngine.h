@@ -11,7 +11,7 @@
 #include <vector>
 
 #include <sched/Ids.h>
-#include <sched/Instance.h>
+#include <sched/meta/Instance.h>
 #include <sched/meta/input/FloatListInput.h>
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
 #include <sched/shop/helper/JobShopTransportStates.h>

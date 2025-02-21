@@ -8,7 +8,7 @@
 
 #include <algorithm>
 
-#include <sched/Instance.h>
+#include <sched/meta/Instance.h>
 #include <sched/criterion/Comparison.h>
 #include <sched/meta/Solution.h>
 #include <sched/support/Random.h>

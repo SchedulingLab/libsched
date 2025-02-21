@@ -9,7 +9,7 @@
 #include <vector>
 
 #include <sched/Api.h>
-#include <sched/Instance.h>
+#include <sched/meta/Instance.h>
 #include <sched/criterion/MakespanCriterion.h>
 #include <sched/para/algorithm/LptAlgorithm.h>
 #include <sched/para/algorithm/MultifitAlgorithm.h>

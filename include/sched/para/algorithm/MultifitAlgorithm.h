@@ -9,7 +9,7 @@
 #include <vector>
 
 #include <sched/Api.h>
-#include <sched/Instance.h>
+#include <sched/meta/Instance.h>
 #include <sched/para/helper/FirstFitDecreasing.h>
 #include <sched/para/helper/ParallelJob.h>
 #include <sched/para/schedule/ParallelSchedule.h>

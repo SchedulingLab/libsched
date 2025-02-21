@@ -7,8 +7,7 @@
 #include <optional>
 
 #include <sched/Api.h>
-#include <sched/Instance.h>
-
+#include <sched/meta/Instance.h>
 #include <sched/shop/schedule/JobShopSchedule.h>
 #include <sched/shop/helper/JobShopStates.h>
 

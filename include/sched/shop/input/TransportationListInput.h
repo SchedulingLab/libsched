@@ -7,7 +7,7 @@
 #include <vector>
 
 #include <sched/Ids.h>
-#include <sched/Instance.h>
+#include <sched/meta/Instance.h>
 #include <sched/meta/input/InputSize.h>
 #include <sched/support/Random.h>
 #include <sched/types/InputTraits.h>
