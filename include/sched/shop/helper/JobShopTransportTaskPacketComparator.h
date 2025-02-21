@@ -16,7 +16,7 @@ namespace sched::shop {
       return cmp(lhs.task, rhs.task);
     }
 
-    static std::string_view name()
+    static std::string name()
     {
       return TaskComparator::name();
     }

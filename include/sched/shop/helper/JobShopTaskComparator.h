@@ -3,7 +3,7 @@
 #ifndef SCHED_SHOP_JOB_SHOP_TASK_COMPARATOR_H
 #define SCHED_SHOP_JOB_SHOP_TASK_COMPARATOR_H
 
-#include <string_view>
+#include <string>
 
 #include <sched/shop/schedule/JobShopSchedule.h>
 
@@ -16,7 +16,7 @@ namespace sched::shop {
       return lhs.start < rhs.start;
     }
 
-    static std::string_view name()
+    static std::string name()
     {
       return "est";
     }
@@ -29,7 +29,7 @@ namespace sched::shop {
       return lhs.start > rhs.start;
     }
 
-    static std::string_view name()
+    static std::string name()
     {
       return "lst";
     }
@@ -42,7 +42,7 @@ namespace sched::shop {
       return lhs.completion < rhs.completion;
     }
 
-    static std::string_view name()
+    static std::string name()
     {
       return "eft";
     }
@@ -55,7 +55,7 @@ namespace sched::shop {
       return lhs.completion > rhs.completion;
     }
 
-    static std::string_view name()
+    static std::string name()
     {
       return "lft";
     }
@@ -68,7 +68,7 @@ namespace sched::shop {
       return (lhs.completion - lhs.start) < (rhs.completion - rhs.start);
     }
 
-    static std::string_view name()
+    static std::string name()
     {
       return "spt";
     }
@@ -81,7 +81,7 @@ namespace sched::shop {
       return (lhs.completion - lhs.start) > (rhs.completion - rhs.start);
     }
 
-    static std::string_view name()
+    static std::string name()
     {
       return "lpt";
     }
