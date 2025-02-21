@@ -5,8 +5,8 @@
 
 #include <optional>
 
-#include <sched/types/EngineConcepts.h>
 #include <sched/types/CriterionConcepts.h>
+#include <sched/types/EngineConcepts.h>
 
 namespace sched {
 

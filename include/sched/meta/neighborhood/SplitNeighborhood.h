@@ -38,13 +38,13 @@ namespace sched {
         std::bernoulli_distribution dist(0.5);
 
         if (dist(random)) {
-          neighbor.assignment = neighborhood0(neighbor.assignment, schedule, random);
+          neighbor.input0 = neighborhood0(neighbor.input0, schedule, random);
         } else {
-          neighbor.schedule = neighborhood1(neighbor.schedule, schedule, random);
+          neighbor.input1 = neighborhood1(neighbor.input1, schedule, random);
         }
       } else {
-        neighbor.assignment = neighborhood0(neighbor.assignment, schedule, random);
-        neighbor.schedule = neighborhood1(neighbor.schedule, schedule, random);
+        neighbor.input0 = neighborhood0(neighbor.input0, schedule, random);
+        neighbor.input1 = neighborhood1(neighbor.input1, schedule, random);
       }
 
       return neighbor;
@@ -56,10 +56,10 @@ namespace sched {
       static_assert(concepts::NeighborhoodFor<Neighborhood0, Input0, Schedule>);
       static_assert(concepts::NeighborhoodFor<Neighborhood1, Input1, Schedule>);
 
-      auto assignment_neighbors = neighborhood0.generate_many(input.assignment, schedule, random, count);
-      assert(assignment_neighbors.size() == count);
-      auto schedule_neighbors = neighborhood1.generate_many(input.schedule, schedule, random, count);
-      assert(schedule_neighbors.size() == count);
+      auto neighbors0 = neighborhood0.generate_many(input.input0, schedule, random, count);
+      assert(neighbors0.size() == count);
+      auto neighbors1 = neighborhood1.generate_many(input.input1, schedule, random, count);
+      assert(neighbors1.size() == count);
 
       std::vector<SplitInput<Input0, Input1>> neighbors;
 
@@ -68,12 +68,12 @@ namespace sched {
           std::bernoulli_distribution dist(0.5);
 
           if (dist(random)) {
-            neighbors.push_back({ std::move(assignment_neighbors[i]), input.schedule });
+            neighbors.push_back({ std::move(neighbors0[i]), input.input1 });
           } else {
-            neighbors.push_back({ input.assignment, std::move(schedule_neighbors[i]) });
+            neighbors.push_back({ input.input0, std::move(neighbors1[i]) });
           }
         } else {
-          neighbors.push_back({ std::move(assignment_neighbors[i]), std::move(schedule_neighbors[i]) });
+          neighbors.push_back({ std::move(neighbors0[i]), std::move(neighbors1[i]) });
         }
       }
 
@@ -88,7 +88,7 @@ namespace sched {
   struct NeighborhoodTraits<SplitNeighborhood<Kind, Neighborhood0, Neighborhood1>> {
     static std::string name()
     {
-      return NeighborhoodTraits<Neighborhood0>::name() + '_' + NeighborhoodTraits<Neighborhood1>::name() + '-' + (Kind == SplitNeighborhoodKind::One ? "one" : "all");
+      return NeighborhoodTraits<Neighborhood0>::name() + '_' + NeighborhoodTraits<Neighborhood1>::name() + '_' + (Kind == SplitNeighborhoodKind::One ? "one" : "all");
     }
   };
 
