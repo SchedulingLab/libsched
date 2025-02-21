@@ -7,17 +7,12 @@
 
 #include "Ids.h"
 
-template<>
-struct fmt::formatter<sched::MachineId> {
-  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator { return ctx.end(); }
+namespace sched {
 
-  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  auto format(sched::MachineId id, format_context& ctx) const -> format_context::iterator
-  {
-    return format_to(ctx.out(), "{}", static_cast<std::size_t>(id));
-  }
-};
+  inline auto format_as(MachineId id) { return fmt::underlying(id); }
+  inline auto format_as(TransportationId id) { return fmt::underlying(id); }
+
+}
 
 template<>
 struct fmt::formatter<sched::JobId> {

@@ -6,6 +6,7 @@
 #include <cstddef>
 
 #include <limits>
+#include <string>
 
 #include <sched/Api.h>
 
@@ -38,6 +39,11 @@ namespace sched {
   constexpr MachineId AnyMachine = MachineId{ details::AnyId };
   constexpr MachineId NoMachine = MachineId{ details::NoId };
 
+  inline std::string to_string(MachineId id)
+  {
+    return std::to_string(static_cast<std::size_t>(id));
+  }
+
   /*
    * JobId
    */
@@ -57,6 +63,11 @@ namespace sched {
 
   constexpr JobId AnyJob = JobId{ details::AnyId };
   constexpr JobId NoJob = JobId{ details::NoId };
+
+  inline std::string to_string(JobId id)
+  {
+    return std::to_string(static_cast<std::size_t>(id));
+  }
 
   /*
    * OperationId
@@ -91,6 +102,11 @@ namespace sched {
     return !(lhs == rhs);
   }
 
+  inline std::string to_string(OperationId id)
+  {
+    return to_string(id.job) + '_' + std::to_string(id.index);
+  }
+
   /*
    * TransportationId
    */
@@ -101,6 +117,11 @@ namespace sched {
   constexpr std::size_t to_index(TransportationId id)
   {
     return static_cast<std::size_t>(id);
+  }
+
+  inline std::string to_string(TransportationId id)
+  {
+    return std::to_string(static_cast<std::size_t>(id));
   }
 
   /*
