@@ -9,6 +9,7 @@
 #include <deque>
 #include <tuple>
 
+#include <sched/meta/input/InputSize.h>
 #include <sched/meta/Instance.h>
 #include <sched/criterion//Comparison.h>
 #include <sched/meta/Solution.h>
