@@ -42,7 +42,7 @@ namespace sched {
   struct AssignmentTraits<shop::FloatListTransportationAssignment> {
     static std::string name()
     {
-      return "flt";
+      return "ftr";
     }
   };
 
