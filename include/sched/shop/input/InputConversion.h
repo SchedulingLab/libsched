@@ -5,8 +5,10 @@
 
 #include <cassert>
 
+#include <tuple>
 #include <optional>
 
+#include <sched/meta/input/FloatListInput.h>
 #include <sched/shop/input/JobListInput.h>
 #include <sched/shop/input/MachineListInput.h>
 #include <sched/shop/input/OperationListInput.h>
@@ -68,6 +70,36 @@ namespace sched::shop {
   {
     auto operation_list = to_operation_list(job_list, instance);
     return to_machine_list(operation_list, instance);
+  }
+
+  template<typename Instance>
+  OperationListInput to_operation_list(const FloatListInput& float_list, const Instance& instance)
+  {
+    std::vector<std::tuple<OperationId, double>> operation_order;
+
+    std::size_t index = 0;
+
+    for (auto job : sched::jobs(instance)) {
+      for (auto operation : operations(instance, job)) {
+        assert(index < float_list.size());
+        auto element = float_list[index++];
+        operation_order.emplace_back(operation, element);
+      }
+    }
+
+    assert(index == float_list.size());
+
+    std::sort(operation_order.begin(), operation_order.end(), [](const std::tuple<OperationId, double>& lhs, const std::tuple<OperationId, double>& rhs) {
+      return std::get<double>(lhs) < std::get<double>(rhs);
+    });
+
+    OperationListInput operation_list;
+
+    std::transform(operation_order.begin(), operation_order.end(), std::back_inserter(operation_list), [](const std::tuple<OperationId, double> item) {
+      return std::get<OperationId>(item);
+    });
+
+    return operation_list;
   }
 
 }

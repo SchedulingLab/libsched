@@ -31,8 +31,12 @@ namespace sched::shop {
         return std::nullopt;
       }
 
-      TransportationJobListEngine<Comparator, TransportationAssignment> engine;
-      return engine(instance, { *maybe_job_list, input.input1 });
+      using DelegateEngine = TransportationJobListEngine<Comparator, TransportationAssignment>;
+
+      const typename DelegateEngine::Input delegate_input = { std::move(*maybe_job_list), input.input1 };
+
+      DelegateEngine delegate_engine;
+      return delegate_engine(instance, delegate_input);
     }
   };
 
