@@ -61,7 +61,7 @@ namespace sched::shop {
     static FlexibleJobShopInstance load_fjsp(const std::filesystem::path& filename);
 
     static std::vector<FlexibleJobShopTransportBenchmark> load_fjspt_benchmarks(const std::filesystem::path& filename);
-    static FlexibleJobShopTransportInstance load_fjspt(const std::filesystem::path& filename);
+    static FlexibleJobShopTransportInstance load_fjspt(const std::filesystem::path& filename, TransportationMode mode = TransportationMode::LoadUnload);
   };
 
 }

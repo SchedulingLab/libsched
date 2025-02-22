@@ -258,7 +258,7 @@ namespace sched::shop {
     return benchmarks;
   }
 
-  FlexibleJobShopTransportInstance Import::load_fjspt(const std::filesystem::path& filename)
+  FlexibleJobShopTransportInstance Import::load_fjspt(const std::filesystem::path& filename, TransportationMode mode)
   {
     FlexibleJobShopTransportData data;
 
@@ -268,7 +268,7 @@ namespace sched::shop {
 
     root.get_to(data);
 
-    return { std::move(data) };
+    return { std::move(data), mode };
   }
 
 }
