@@ -3,6 +3,8 @@
 #ifndef SCHED_SHOP_FULL_OPERATION_LIST_ENGINE_H
 #define SCHED_SHOP_FULL_OPERATION_LIST_ENGINE_H
 
+#include <optional>
+
 #include <sched/shop/input/OperationListInput.h>
 #include <sched/shop/engine/FullJobListEngine.h>
 #include <sched/shop/input/InputConversion.h>

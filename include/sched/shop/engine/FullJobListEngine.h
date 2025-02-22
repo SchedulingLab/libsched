@@ -3,6 +3,10 @@
 #ifndef SCHED_SHOP_FULL_JOB_LIST_ENGINE_H
 #define SCHED_SHOP_FULL_JOB_LIST_ENGINE_H
 
+#include <cassert>
+
+#include <optional>
+
 #include <sched/shop/input/JobListInput.h>
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
 #include <sched/shop/helper/JobShopTransportStates.h>

@@ -3,7 +3,7 @@
 #ifndef SCHED_SHOP_FULL_MACHINE_LIST_ENGINE_H
 #define SCHED_SHOP_FULL_MACHINE_LIST_ENGINE_H
 
-#include <cassert>
+#include <optional>
 
 #include <sched/shop/engine/FullOperationListEngine.h>
 #include <sched/shop/input/InputConversion.h>
