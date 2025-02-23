@@ -14,7 +14,7 @@ namespace sched {
   {
     std::size_t size = 0;
 
-    for (auto job : sched::jobs(instance)) {
+    for (auto job : jobs(instance)) {
       size += instance.operation_count(job);
     }
 
@@ -26,7 +26,7 @@ namespace sched {
   {
     std::size_t size = 0;
 
-    for (auto job : sched::jobs(instance)) {
+    for (auto job : jobs(instance)) {
       size += instance.operation_count(job);
     }
 

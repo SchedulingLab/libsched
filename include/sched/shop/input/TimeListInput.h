@@ -31,12 +31,9 @@ namespace sched {
     {
       shop::TimeListInput input;
 
-      for (auto job : sched::jobs(instance)) {
-        auto operations = instance.operation_count(job);
-
-        for (std::size_t i = 0; i < operations; ++i) {
-          input.push_back(1);
-        }
+      for (const JobId job : jobs(instance)) {
+        auto operation_count = instance.operation_count(job);
+        input.insert(input.end(), operation_count, 1);
       }
 
       return input;
@@ -48,21 +45,17 @@ namespace sched {
       std::size_t count = 0;
       Time max_time = 0;
 
-      for (auto job : sched::jobs(instance)) {
-        const auto operations = instance.operation_count(job);
-
-        for (std::size_t i = 0; i < operations; ++i) {
-          const OperationId operation = { job, i };
-
+      for (const JobId job : jobs(instance)) {
+        for (const OperationId operation : operations(instance, job)) {
           if constexpr (Instance::Flexible) {
-            const auto machines = instance.machines_for_operation(operation);
+            const auto available = instance.machines_for_operation(operation);
 
-            for (auto& machine : machines) {
+            for (const MachineId machine : available) {
               const Time processing_time = instance.processing_time(operation, machine);
               max_time = std::max(processing_time, max_time);
             }
           } else {
-            const auto machine = instance.assigned_machine_for_operation(operation);
+            const MachineId machine = instance.assigned_machine_for_operation(operation);
             const Time processing_time = instance.processing_time(operation, machine);
             max_time = std::max(processing_time, max_time);
           }

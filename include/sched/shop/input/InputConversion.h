@@ -21,10 +21,9 @@ namespace sched::shop {
     OperationListInput operation_list;
     std::vector<std::size_t> job_state(instance.job_count(), 0);
 
-    for (const auto& job : job_list) {
-      OperationId operation = {};
-      operation.job = job;
-      operation.index = job_state[sched::to_index(job)]++;
+    for (const JobId job : job_list) {
+      const std::size_t index = job_state[to_index(job)]++;
+      const OperationId operation = { .job = job, .index = index };
       operation_list.push_back(operation);
     }
 
@@ -37,15 +36,15 @@ namespace sched::shop {
     JobListInput job_list;
     std::vector<std::size_t> job_state(instance.job_count(), 0);
 
-    for (auto op : operation_list) {
-      std::size_t& index = job_state[to_index(op.job)];
+    for (const OperationId operation : operation_list) {
+      std::size_t& index = job_state[to_index(operation.job)];
 
-      if (op.index != index) {
+      if (operation.index != index) {
         return std::nullopt;
       }
 
       ++index;
-      job_list.push_back(op.job);
+      job_list.push_back(operation.job);
     }
 
     return job_list;
@@ -57,9 +56,9 @@ namespace sched::shop {
     static_assert(!Instance::Flexible, "MachineListInput does not work with flexible instances.");
     MachineListInput machine_list(instance.machine_count());
 
-    for (auto operation : operation_list) {
+    for (const OperationId operation : operation_list) {
       auto machine = instance.assigned_machine_for_operation(operation);
-      machine_list[sched::to_index(machine)].push_back(operation);
+      machine_list[to_index(machine)].push_back(operation);
     }
 
     return machine_list;
@@ -79,8 +78,8 @@ namespace sched::shop {
 
     std::size_t index = 0;
 
-    for (auto job : sched::jobs(instance)) {
-      for (auto operation : operations(instance, job)) {
+    for (const JobId job : jobs(instance)) {
+      for (const OperationId operation : operations(instance, job)) {
         assert(index < float_list.size());
         auto element = float_list[index++];
         operation_order.emplace_back(operation, element);
@@ -89,13 +88,13 @@ namespace sched::shop {
 
     assert(index == float_list.size());
 
-    std::sort(operation_order.begin(), operation_order.end(), [](const std::tuple<OperationId, double>& lhs, const std::tuple<OperationId, double>& rhs) {
+    std::ranges::sort(operation_order, [](const std::tuple<OperationId, double>& lhs, const std::tuple<OperationId, double>& rhs) {
       return std::get<double>(lhs) < std::get<double>(rhs);
     });
 
     OperationListInput operation_list;
 
-    std::transform(operation_order.begin(), operation_order.end(), std::back_inserter(operation_list), [](const std::tuple<OperationId, double> item) {
+    std::ranges::transform(operation_order, std::back_inserter(operation_list), [](const std::tuple<OperationId, double> item) {
       return std::get<OperationId>(item);
     });
 

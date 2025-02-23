@@ -45,7 +45,7 @@ namespace sched {
     static shop::OperationListInput generate_random(const Instance& instance, Random& random)
     {
       shop::OperationListInput input = generate_input(instance);
-      std::shuffle(input.begin(), input.end(), random);
+      std::ranges::shuffle(input, random);
       return input;
     }
 
@@ -59,7 +59,7 @@ namespace sched {
         job_list.insert(job_list.end(), operation_count, job);
       }
 
-      std::shuffle(job_list.begin(), job_list.end(), random);
+      std::ranges::shuffle(job_list, random);
 
       std::vector<std::size_t> operations(instance.job_count(), 0);
 

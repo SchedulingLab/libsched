@@ -36,7 +36,7 @@ namespace sched::shop {
         std::vector<JobShopTask> tasks;
         std::vector<JobShopTransportTaskPacket> packets;
 
-        for (const JobId job : sched::jobs(instance)) {
+        for (const JobId job : jobs(instance)) {
           if (!states.has_next_operation(job)) {
             continue;
           }
@@ -48,11 +48,11 @@ namespace sched::shop {
             assert(!available.empty());
 
             if (operation.index == 0) {
-              std::transform(available.begin(), available.end(), std::back_inserter(tasks), [&](MachineId machine) {
+              std::ranges::transform(available, std::back_inserter(tasks), [&](MachineId machine) {
                 return states.create_task(operation, machine);
               });
             } else {
-              std::transform(available.begin(), available.end(), std::back_inserter(packets), [&](MachineId machine) {
+              std::ranges::transform(available, std::back_inserter(packets), [&](MachineId machine) {
                 return states.create_packet(operation, machine, vehicle);
               });
             }

@@ -31,7 +31,7 @@ namespace sched {
       std::vector<Solution> selected;
 
       for (std::size_t i = 0; i < selected_count; ++i) {
-        std::size_t index = distribution(random);
+        const std::size_t index = distribution(random);
         assert(index < solutions.size());
         selected.push_back(solutions[index]);
       }

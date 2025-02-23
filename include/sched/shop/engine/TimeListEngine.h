@@ -68,7 +68,7 @@ namespace sched::shop {
 
           std::vector<JobShopTask> tasks;
 
-          std::transform(available.begin(), available.end(), std::back_inserter(tasks), [&](MachineId machine) {
+          std::ranges::transform(available, std::back_inserter(tasks), [&](MachineId machine) {
             Time processing_time = instance.processing_time(op, machine);
 
             JobShopTask task = {};
@@ -80,7 +80,7 @@ namespace sched::shop {
             return task;
           });
 
-          task = *std::min_element(tasks.begin(), tasks.end(), [](const auto& lhs, const auto& rhs) {
+          task = *std::ranges::min_element(tasks, [](const auto& lhs, const auto& rhs) {
             return lhs.completion < rhs.completion;
           });
         } else {

@@ -17,7 +17,7 @@
 namespace sched::shop {
 
   template<typename Comparator>
-  struct SCHED_API GeneralOperationListEngine {
+  struct GeneralOperationListEngine {
     using Input = OperationListInput;
     using Schedule = JobShopTransportSchedule;
 

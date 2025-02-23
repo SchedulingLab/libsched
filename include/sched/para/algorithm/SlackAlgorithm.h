@@ -23,13 +23,13 @@ namespace sched::para {
     {
       std::vector<ParallelJob> jobs;
 
-      for (auto job : sched::jobs(instance)) {
+      for (const JobId job : jobs(instance)) {
         jobs.push_back({ job, instance.processing_time(job, AnyMachine) });
       }
 
       assert(!jobs.empty());
 
-      std::sort(jobs.begin(), jobs.end(), [](const ParallelJob& lhs, const ParallelJob& rhs) {
+      std::ranges::sort(jobs, [](const ParallelJob& lhs, const ParallelJob& rhs) {
         return lhs.processing_time > rhs.processing_time;
       });
 
@@ -54,7 +54,7 @@ namespace sched::para {
         return group.front().processing_time - group.back().processing_time;
       };
 
-      std::sort(groups.begin(), groups.end(), [slack](const std::vector<ParallelJob>& lhs, const std::vector<ParallelJob>& rhs) {
+      std::ranges::sort(groups, [slack](const std::vector<ParallelJob>& lhs, const std::vector<ParallelJob>& rhs) {
         assert(lhs.size() == rhs.size());
         return slack(lhs) > slack(rhs);
       });

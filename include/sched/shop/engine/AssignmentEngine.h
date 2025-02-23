@@ -32,9 +32,9 @@ namespace sched::shop {
       for (;;) {
         std::vector<JobShopTask> tasks;
 
-        for (auto job : sched::jobs(instance)) {
+        for (const JobId job : jobs(instance)) {
           if (states.has_next_operation(job)) {
-            auto operation = states.next_operation(job);
+            const OperationId operation = states.next_operation(job);
             assert(operations_assignment.find(operation) != operations_assignment.end());
             tasks.push_back(states.create_task(operation, operations_assignment[operation]));
           }

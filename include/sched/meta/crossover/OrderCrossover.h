@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <array>
+#include <ranges>
 #include <tuple>
 #include <type_traits>
 
@@ -43,7 +44,7 @@ namespace sched {
         } while (already_present(points[i], i));
       }
 
-      std::sort(points.begin(), points.end());
+      std::ranges::sort(points);
 
       Input child0 = parent0;
       Input child1 = parent1;
@@ -72,7 +73,7 @@ namespace sched {
       }
 
       auto index_of = [](Element element, const Input& input) {
-        if (auto iterator = std::find(input.begin(), input.end(), element); iterator != input.end()) {
+        if (auto iterator = std::ranges::find(input, element); iterator != input.end()) {
           return static_cast<std::size_t>(std::distance(input.begin(), iterator));
         }
 
@@ -80,11 +81,11 @@ namespace sched {
         return input.size();
       };
 
-      std::sort(missing0.begin(), missing0.end(), [&](Element lhs, Element rhs) {
+      std::ranges::sort(missing0, [&](Element lhs, Element rhs) {
         return index_of(lhs, parent1) < index_of(rhs, parent1);
       });
 
-      std::sort(missing1.begin(), missing1.end(), [&](Element lhs, Element rhs) {
+      std::ranges::sort(missing1, [&](Element lhs, Element rhs) {
         return index_of(lhs, parent0) < index_of(rhs, parent0);
       });
 

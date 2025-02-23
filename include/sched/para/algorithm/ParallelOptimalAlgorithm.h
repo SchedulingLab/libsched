@@ -23,14 +23,14 @@ namespace sched::para {
     template<typename Instance>
     ParallelSchedule operator()(const Instance& instance)
     {
-      std::vector<ParallelJob> jobs;
+      std::vector<ParallelJob> input;
 
-      for (auto job : sched::jobs(instance)) {
-        jobs.push_back({ job, instance.processing_time(job, AnyMachine) });
+      for (const JobId job : jobs(instance)) {
+        input.push_back({ job, instance.processing_time(job, AnyMachine) });
       }
 
       [[maybe_unused]] const std::size_t job_count = instance.job_count();
-      assert(job_count == jobs.size());
+      assert(job_count == input.size());
       std::size_t machine_count = instance.machine_count();
 
       lqp::Problem problem;
@@ -44,7 +44,7 @@ namespace sched::para {
         return lqp::VariableId{ (to_index(job) * machine_count) + machine };
       };
 
-      for (auto& job : jobs) {
+      for (auto& job : input) {
         for (std::size_t machine = 0; machine < machine_count; ++machine) {
           [[maybe_unused]] auto variable = problem.add_variable(lqp::VariableCategory::Binary, "x_" + std::to_string(to_index(job.id)) + "_" + std::to_string(machine));
           assert(x_i_j(job.id, machine) == variable);
@@ -58,7 +58,7 @@ namespace sched::para {
        * - sum_{i} x_i_j * p_i <= c_max (c_max is greater than the sum of the processing times of all tasks present on machine j)
        */
 
-      for (auto& job : jobs) {
+      for (auto& job : input) {
         lqp::QExpr sum;
 
         for (std::size_t machine = 0; machine < machine_count; ++machine) {
@@ -71,7 +71,7 @@ namespace sched::para {
       for (std::size_t machine = 0; machine < machine_count; ++machine) {
         lqp::QExpr sum;
 
-        for (auto& job : jobs) {
+        for (auto& job : input) {
           sum += job.processing_time * x_i_j(job.id, machine);
         }
 
@@ -92,7 +92,7 @@ namespace sched::para {
       ParallelSchedule schedule;
       std::vector<Time> machines(machine_count, 0);
 
-      for (auto& job : jobs) {
+      for (auto& job : input) {
         [[maybe_unused]] bool unique = false;
 
         for (std::size_t machine = 0; machine < machine_count; ++machine) {

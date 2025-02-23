@@ -47,7 +47,7 @@ namespace sched {
     static shop::VehicleListInput generate_random(const Instance& instance, Random& random)
     {
       shop::VehicleListInput input = generate_input(instance);
-      std::shuffle(input.begin(), input.end(), random);
+      std::ranges::shuffle(input, random);
       return input;
     }
 

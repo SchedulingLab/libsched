@@ -52,7 +52,7 @@ namespace sched {
       shop::MachineListInput input = generate_input(instance);
 
       for (auto& machine : input) {
-        std::shuffle(machine.begin(), machine.end(), random);
+        std::ranges::shuffle(machine, random);
       }
 
       return input;
@@ -69,7 +69,7 @@ namespace sched {
         job_list.insert(job_list.end(), operation_count, job);
       }
 
-      std::shuffle(job_list.begin(), job_list.end(), random);
+      std::ranges::shuffle(job_list, random);
 
       shop::MachineListInput input(instance.machine_count());
 

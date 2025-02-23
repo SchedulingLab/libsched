@@ -65,7 +65,7 @@ namespace sched {
         return criterion.compare(lhs.fitness, rhs.fitness) == Comparison::Better;
       };
 
-      std::sort(population.begin(), population.end(), solution_compare);
+      std::ranges::sort(population, solution_compare);
 
       termination.start();
       std::size_t generation = 0;
@@ -128,16 +128,16 @@ namespace sched {
         // replacement
 
         if (offsprings.size() > offsprings_size_max) {
-          std::sort(offsprings.begin(), offsprings.end(), solution_compare);
+          std::ranges::sort(offsprings, solution_compare);
           offsprings.resize(offsprings_size_max);
         }
 
         offsprings.insert(offsprings.end(), population.begin(), population.end());
         assert(offsprings.size() >= population_size);
         offsprings.resize(population_size);
-        std::sort(offsprings.begin(), offsprings.end(), solution_compare);
+        std::ranges::sort(offsprings, solution_compare);
         population = std::move(offsprings);
-        assert(std::is_sorted(population.begin(), population.end(), solution_compare));
+        assert(std::ranges::is_sorted(population, solution_compare));
 
         auto display_criterion = [this](auto value) {
           if (criterion.compare(value, Criterion::worst()) == Comparison::Equivalent) {

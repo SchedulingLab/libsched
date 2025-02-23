@@ -19,17 +19,17 @@ namespace sched::para {
     template<typename Instance>
     ParallelSchedule operator()(const Instance& instance)
     {
-      std::vector<ParallelJob> jobs;
+      std::vector<ParallelJob> input;
 
-      for (auto job : sched::jobs(instance)) {
-        jobs.push_back({ job, instance.processing_time(job, AnyMachine) });
+      for (const JobId job : jobs(instance)) {
+        input.push_back({ job, instance.processing_time(job, AnyMachine) });
       }
 
-      std::sort(jobs.begin(), jobs.end(), [](const ParallelJob& lhs, const ParallelJob& rhs) {
+      std::ranges::sort(input, [](const ParallelJob& lhs, const ParallelJob& rhs) {
         return lhs.processing_time > rhs.processing_time;
       });
 
-      return earliest_finish_time(instance, jobs);
+      return earliest_finish_time(instance, input);
     }
   };
 

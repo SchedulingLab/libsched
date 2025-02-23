@@ -28,7 +28,7 @@ namespace sched::shop {
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
     {
-      auto assigned_vehicles = vehicle_assignment(instance, input.input1);
+      const auto assigned_vehicles = vehicle_assignment(instance, input.input1);
       std::size_t vehicle_index = 0;
 
       JobShopTransportStates<Instance> states(instance);
@@ -47,11 +47,11 @@ namespace sched::shop {
           if (operation.index == 0) {
             std::vector<JobShopTask> tasks;
 
-            std::transform(available.begin(), available.end(), std::back_inserter(tasks), [&](MachineId machine) {
+            std::ranges::transform(available, std::back_inserter(tasks), [&](MachineId machine) {
               return states.create_task(operation, machine);
             });
 
-            auto task = *std::min_element(tasks.begin(), tasks.end(), [comparator](const JobShopTask& lhs, const JobShopTask& rhs) {
+            auto task = *std::ranges::min_element(tasks, [comparator](const JobShopTask& lhs, const JobShopTask& rhs) {
               return comparator(lhs, rhs);
             });
 
@@ -59,11 +59,11 @@ namespace sched::shop {
           } else {
             std::vector<JobShopTransportTaskPacket> packets;
 
-            std::transform(available.begin(), available.end(), std::back_inserter(packets), [&](MachineId machine) {
+            std::ranges::transform(available, std::back_inserter(packets), [&](MachineId machine) {
               return states.create_packet(operation, machine, vehicle);
             });
 
-            auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
+            auto packet = *std::ranges::min_element(packets, [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
               return comparator(lhs.task, rhs.task);
             });
 
@@ -71,13 +71,13 @@ namespace sched::shop {
           }
 
         } else { // !Flexible
-          MachineId machine = instance.assigned_machine_for_operation(operation);
+          const MachineId machine = instance.assigned_machine_for_operation(operation);
 
           if (operation.index == 0) {
-            JobShopTask task = states.create_task(operation, machine);
+            const JobShopTask task = states.create_task(operation, machine);
             states.update_schedule(task, schedule);
           } else {
-            JobShopTransportTaskPacket packet = states.create_packet(operation, machine, vehicle);
+            const JobShopTransportTaskPacket packet = states.create_packet(operation, machine, vehicle);
             states.update_schedule(packet, schedule);
           }
         }

@@ -30,13 +30,13 @@ namespace sched::para {
       const MakespanCriterion criterion;
       Time makespan = criterion(instance, fallback);
 
-      std::vector<ParallelJob> jobs;
+      std::vector<ParallelJob> input;
       Time sum = 0;
       Time max = 0;
 
-      for (auto job : sched::jobs(instance)) {
-        Time processing_time = instance.processing_time(job, AnyMachine);
-        jobs.push_back({ job, processing_time });
+      for (auto job : jobs(instance)) {
+        const Time processing_time = instance.processing_time(job, AnyMachine);
+        input.push_back({ job, processing_time });
         sum += processing_time;
         max = std::max(max, processing_time);
       }
@@ -52,7 +52,7 @@ namespace sched::para {
       Time upper = makespan;
       Time lower = std::max({ average, max, static_cast<Time>(static_cast<double>(makespan) / ratio) });
 
-      std::sort(jobs.begin(), jobs.end(), [](const ParallelJob& lhs, const ParallelJob& rhs) {
+      std::ranges::sort(input, [](const ParallelJob& lhs, const ParallelJob& rhs) {
         return lhs.processing_time > rhs.processing_time;
       });
 
@@ -63,7 +63,7 @@ namespace sched::para {
       while ((upper - lower) > max_difference) {
         const Time middle = lower + ((upper - lower) / 2);
 
-        auto boxes = compute_first_fit_decreasing(jobs, middle);
+        auto boxes = compute_first_fit_decreasing(input, middle);
 
         if (boxes.size() <= instance.machine_count()) {
           upper = middle;

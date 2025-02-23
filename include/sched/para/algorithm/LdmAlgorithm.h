@@ -3,6 +3,7 @@
 #ifndef SCHED_PARA_LDM_ALGORITHM_H
 #define SCHED_PARA_LDM_ALGORITHM_H
 
+#include <algorithm>
 #include <cassert>
 
 #include <algorithm>
@@ -91,7 +92,7 @@ namespace sched::para {
           return (lhs.sets.back().total - lhs.sets.front().total) < (rhs.sets.back().total - rhs.sets.front().total);
         };
 
-        std::sort(tuples.begin(), tuples.end(), comparator);
+        std::ranges::sort(tuples, comparator);
 
         while (tuples.size() > 1) {
           const LdmTuple last1 = std::move(tuples.back());
@@ -101,8 +102,8 @@ namespace sched::para {
 
           LdmTuple merged = ldm_tuple_merge(last1, last2);
 
-          auto it = std::lower_bound(tuples.begin(), tuples.end(), merged, comparator);
-          tuples.insert(it, std::move(merged));
+          auto iterator = std::ranges::lower_bound(tuples, merged, comparator);
+          tuples.insert(iterator, std::move(merged));
         }
       }
     };
@@ -116,7 +117,7 @@ namespace sched::para {
     {
       details::LdmPartition partition(instance.machine_count());
 
-      for (auto job : sched::jobs(instance)) {
+      for (auto job : jobs(instance)) {
         partition.append({ job, instance.processing_time(job, AnyMachine) });
       }
 

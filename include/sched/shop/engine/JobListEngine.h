@@ -41,7 +41,7 @@ namespace sched::shop {
 
           std::vector<JobShopTask> tasks;
 
-          std::transform(available.begin(), available.end(), std::back_inserter(tasks), [&](MachineId machine) {
+          std::ranges::transform(available, std::back_inserter(tasks), [&](MachineId machine) {
             return states.create_task(operation, machine);
           });
 

@@ -43,7 +43,7 @@ namespace sched::shop {
           if (operation.index == 0) {
             std::vector<JobShopTask> tasks;
 
-            std::transform(available.begin(), available.end(), std::back_inserter(tasks), [&](MachineId machine) {
+            std::ranges::transform(available, std::back_inserter(tasks), [&](MachineId machine) {
               return states.create_task(operation, machine);
             });
 
@@ -54,7 +54,7 @@ namespace sched::shop {
             std::vector<JobShopTransportTaskPacket> packets;
 
             for (const VehicleId vehicle : vehicles(instance)) {
-              std::transform(available.begin(), available.end(), std::back_inserter(packets), [&](MachineId machine) {
+              std::ranges::transform(available, std::back_inserter(packets), [&](MachineId machine) {
                 return states.create_packet(operation, machine, vehicle);
               });
             }

@@ -21,22 +21,22 @@ namespace sched::para {
     template<typename Instance, int Iterations = 7>
     ParallelSchedule operator()(const Instance& instance)
     {
-      std::vector<ParallelJob> jobs;
+      std::vector<ParallelJob> input;
       Time sum = 0;
       Time max = 0;
 
-      for (auto job : sched::jobs(instance)) {
-        Time processing_time = instance.processing_time(job, AnyMachine);
-        jobs.push_back({ job, processing_time });
+      for (const JobId job : jobs(instance)) {
+        const Time processing_time = instance.processing_time(job, AnyMachine);
+        input.push_back({ job, processing_time });
         sum += processing_time;
         max = std::max(max, processing_time);
       }
 
-      std::sort(jobs.begin(), jobs.end(), [](const ParallelJob& lhs, const ParallelJob& rhs) {
+      std::ranges::sort(input, [](const ParallelJob& lhs, const ParallelJob& rhs) {
         return lhs.processing_time > rhs.processing_time;
       });
 
-      return apply(instance, jobs, sum, max);
+      return apply(instance, input, sum, max);
     }
 
     template<typename Instance, int Iterations = 7>
