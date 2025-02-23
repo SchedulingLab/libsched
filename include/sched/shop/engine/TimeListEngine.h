@@ -56,23 +56,23 @@ namespace sched::shop {
       JobShopSchedule schedule;
 
       while (!queue.empty()) {
-        const OperationState operation_state = queue.top();
+        OperationState operation_state = queue.top();
         queue.pop();
 
-        const OperationId op = operation_state.operation;
+        const OperationId operation = operation_state.operation;
         JobShopTask task = {};
 
         if constexpr (Instance::Flexible) {
-          auto available = instance.machines_for_operation(op);
+          auto available = instance.machines_for_operation(operation);
           assert(!available.empty());
 
           std::vector<JobShopTask> tasks;
 
           std::ranges::transform(available, std::back_inserter(tasks), [&](MachineId machine) {
-            Time processing_time = instance.processing_time(op, machine);
+            Time processing_time = instance.processing_time(operation, machine);
 
             JobShopTask task = {};
-            task.operation = op;
+            task.operation = operation;
             task.machine = machine;
             task.start = std::max({ operation_state.min_time, machines[to_index(machine)] });
             task.completion = task.start + processing_time;
@@ -84,10 +84,10 @@ namespace sched::shop {
             return lhs.completion < rhs.completion;
           });
         } else {
-          MachineId machine = instance.assigned_machine_for_operation(op);
-          Time processing_time = instance.processing_time(op, machine);
+          MachineId machine = instance.assigned_machine_for_operation(operation);
+          Time processing_time = instance.processing_time(operation, machine);
 
-          task.operation = op;
+          task.operation = operation;
           task.machine = machine;
           task.start = std::max({ operation_state.min_time, machines[to_index(machine)] });
           task.completion = task.start + processing_time;
@@ -96,7 +96,7 @@ namespace sched::shop {
         machines[to_index(task.machine)] = task.completion;
         schedule.append(task);
 
-        if (op.index + 1 < instance.operation_count(op.job)) {
+        if (operation.index + 1 < instance.operation_count(operation.job)) {
           ++operation_state.operation.index;
           operation_state.min_time = task.completion + mapping[operation_state.operation];
           queue.push(operation_state);
