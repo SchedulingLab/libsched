@@ -32,12 +32,9 @@ namespace sched {
     {
       shop::JobListInput input;
 
-      for (auto job : sched::jobs(instance)) {
-        auto operations = instance.operation_count(job);
-
-        for (std::size_t i = 0; i < operations; ++i) {
-          input.push_back(job);
-        }
+      for (const JobId job : jobs(instance)) {
+        const std::size_t operation_count = instance.operation_count(job);
+        input.insert(input.end(), operation_count, job);
       }
 
       return input;
@@ -47,7 +44,7 @@ namespace sched {
     static shop::JobListInput generate_random(const Instance& instance, Random& random)
     {
       shop::JobListInput input = generate_input(instance);
-      std::shuffle(input.begin(), input.end(), random);
+      std::ranges::shuffle(input, random);
       return input;
     }
 

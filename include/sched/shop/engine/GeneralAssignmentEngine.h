@@ -14,15 +14,15 @@
 
 namespace sched::shop {
 
-  template<typename Assignment, typename Comparator>
+  template<typename MachineAssignment, typename Comparator>
   struct SCHED_API GeneralAssignmentEngine {
-    using Input = typename Assignment::Input;
+    using Input = typename MachineAssignment::Input;
     using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
     {
-      auto operations_assignment = assignment(instance, input);
+      auto assigned_machines = machine_assignment(instance, input);
 
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
@@ -32,17 +32,17 @@ namespace sched::shop {
         std::vector<JobShopTask> tasks;
         std::vector<JobShopTransportTaskPacket> packets;
 
-        for (auto job : sched::jobs(instance)) {
+        for (const JobId job : jobs(instance)) {
           if (states.has_next_operation(job)) {
-            auto operation = states.next_operation(job);
-            assert(operations_assignment.find(operation) != operations_assignment.end());
-            auto machine = operations_assignment[operation];
+            const OperationId operation = states.next_operation(job);
+            assert(assigned_machines.find(operation) != assigned_machines.end());
+            const MachineId machine = assigned_machines[operation];
 
             if (operation.index == 0) {
               tasks.push_back(states.create_task(operation, machine));
             } else {
-              for (auto transportation : sched::transportations(instance)) {
-                packets.push_back(states.create_packet(operation, machine, transportation));
+              for (auto vehicle : vehicles(instance)) {
+                packets.push_back(states.create_packet(operation, machine, vehicle));
               }
             }
           }
@@ -57,7 +57,7 @@ namespace sched::shop {
       return schedule;
     }
 
-    Assignment assignment;
+    MachineAssignment machine_assignment;
   };
 
 }

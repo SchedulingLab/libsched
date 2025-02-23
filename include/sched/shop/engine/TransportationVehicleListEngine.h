@@ -15,28 +15,28 @@
 #include <sched/shop/helper/JobShopTaskComparator.h>
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
 #include <sched/shop/helper/JobShopTransportStates.h>
-#include <sched/shop/input/TransportationListInput.h>
+#include <sched/shop/input/VehicleListInput.h>
 #include <sched/types/EngineTraits.h>
 
 namespace sched::shop {
 
   template<typename Comparator>
-  struct SCHED_API TransportationListEngine {
-    using Input = TransportationListInput;
+  struct SCHED_API TransportationVehicleListEngine {
+    using Input = VehicleListInput;
     using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
-    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const TransportationListInput& input)
+    std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const VehicleListInput& input)
     {
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
       Comparator comparator;
 
-      for (auto transportation : input) {
+      for (const VehicleId vehicle : input) {
         std::vector<JobShopTask> tasks;
         std::vector<JobShopTransportTaskPacket> packets;
 
-        for (auto job : sched::jobs(instance)) {
+        for (const JobId job : sched::jobs(instance)) {
           if (!states.has_next_operation(job)) {
             continue;
           }
@@ -53,16 +53,16 @@ namespace sched::shop {
               });
             } else {
               std::transform(available.begin(), available.end(), std::back_inserter(packets), [&](MachineId machine) {
-                return states.create_packet(operation, machine, transportation);
+                return states.create_packet(operation, machine, vehicle);
               });
             }
           } else { // !Flexible
-            MachineId machine = instance.assigned_machine_for_operation(operation);
+            const MachineId machine = instance.assigned_machine_for_operation(operation);
 
             if (operation.index == 0) {
               tasks.push_back(states.create_task(operation, machine));
             } else {
-              packets.push_back(states.create_packet(operation, machine, transportation));
+              packets.push_back(states.create_packet(operation, machine, vehicle));
             }
           }
         }
@@ -77,19 +77,19 @@ namespace sched::shop {
     }
   };
 
-  using TransportationListEngineEST = TransportationListEngine<JobShopTaskEarliestStartingTime>;
-  using TransportationListEngineLST = TransportationListEngine<JobShopTaskLatestStartingTime>;
-  using TransportationListEngineEFT = TransportationListEngine<JobShopTaskEarliestFinishTime>;
-  using TransportationListEngineLFT = TransportationListEngine<JobShopTaskLatestFinishTime>;
-  using TransportationListEngineSPT = TransportationListEngine<JobShopTaskShortestProcessingTime>;
-  using TransportationListEngineLPT = TransportationListEngine<JobShopTaskLargestProcessingTime>;
+  using TransportationVehicleListEngineEST = TransportationVehicleListEngine<JobShopTaskEarliestStartingTime>;
+  using TransportationVehicleListEngineLST = TransportationVehicleListEngine<JobShopTaskLatestStartingTime>;
+  using TransportationVehicleListEngineEFT = TransportationVehicleListEngine<JobShopTaskEarliestFinishTime>;
+  using TransportationVehicleListEngineLFT = TransportationVehicleListEngine<JobShopTaskLatestFinishTime>;
+  using TransportationVehicleListEngineSPT = TransportationVehicleListEngine<JobShopTaskShortestProcessingTime>;
+  using TransportationVehicleListEngineLPT = TransportationVehicleListEngine<JobShopTaskLargestProcessingTime>;
 
 }
 
 namespace sched {
 
   template<typename Comparator>
-  struct EngineTraits<shop::TransportationListEngine<Comparator>> {
+  struct EngineTraits<shop::TransportationVehicleListEngine<Comparator>> {
     static std::string name()
     {
       using namespace std::literals;

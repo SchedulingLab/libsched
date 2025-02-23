@@ -108,18 +108,18 @@ namespace sched {
   }
 
   /*
-   * TransportationId
+   * VehicleId
    */
 
-  enum TransportationId : std::size_t {
+  enum VehicleId : std::size_t {
   };
 
-  constexpr std::size_t to_index(TransportationId id)
+  constexpr std::size_t to_index(VehicleId id)
   {
     return static_cast<std::size_t>(id);
   }
 
-  inline std::string to_string(TransportationId id)
+  inline std::string to_string(VehicleId id)
   {
     return std::to_string(static_cast<std::size_t>(id));
   }
@@ -140,9 +140,9 @@ namespace sched {
       return static_cast<JobId>(val);
     }
 
-    constexpr TransportationId operator""_t(unsigned long long val)
+    constexpr VehicleId operator""_v(unsigned long long val)
     {
-      return static_cast<TransportationId>(val);
+      return static_cast<VehicleId>(val);
     }
 
   }

@@ -33,7 +33,7 @@ namespace sched::concepts {
 
   template<typename I>
   concept ShopTransportInstance = ShopInstance<I> && requires(I instance, MachineId origin, MachineId target) {
-    { instance.transportation_count() } -> std::convertible_to<std::size_t>;
+    { instance.vehicle_count() } -> std::convertible_to<std::size_t>;
     { instance.transportation_time_empty(origin, target) } -> std::same_as<Time>;
     { instance.transportation_time_loaded(origin, target) } -> std::same_as<Time>;
   };

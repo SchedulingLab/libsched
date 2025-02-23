@@ -30,7 +30,7 @@ namespace sched::shop {
       JobShopStates<Instance> states(instance);
       JobShopSchedule schedule;
 
-      for (auto job : input) {
+      for (const JobId job : input) {
         const OperationId operation = states.next_operation(job);
 
         JobShopTask task = {};

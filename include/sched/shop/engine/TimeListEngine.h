@@ -41,16 +41,13 @@ namespace sched::shop {
       std::map<OperationId, Time> mapping;
       std::size_t index = 0;
 
-      for (auto job : sched::jobs(instance)) {
-        auto operations = instance.operation_count(job);
-
-        for (std::size_t i = 0; i < operations; ++i) {
-          const OperationId operation = { .job = job, .index = i };
+      for (const JobId job : jobs(instance)) {
+        for (const OperationId operation : operations(instance, job)) {
           mapping.insert({ operation, input[index++] });
         }
 
-        OperationId operation = { job, 0 };
-        OperationState operation_state = { operation, mapping[operation] };
+        const OperationId operation = { .job = job, .index = 0 };
+        const OperationState operation_state = { operation, mapping[operation] };
         queue.push(operation_state);
       }
 
@@ -59,7 +56,7 @@ namespace sched::shop {
       JobShopSchedule schedule;
 
       while (!queue.empty()) {
-        OperationState operation_state = queue.top();
+        const OperationState operation_state = queue.top();
         queue.pop();
 
         const OperationId op = operation_state.operation;

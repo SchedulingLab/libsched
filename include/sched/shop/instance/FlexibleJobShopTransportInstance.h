@@ -96,7 +96,7 @@ namespace sched::shop {
       return TimeMax;
     }
 
-    constexpr std::size_t transportation_count() const noexcept
+    constexpr std::size_t vehicle_count() const noexcept
     {
       return m_data.vehicles;
     }

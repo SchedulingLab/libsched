@@ -17,9 +17,9 @@
 
 namespace sched::shop {
 
-  template<typename Comparator, typename TransportationAssignment>
+  template<typename Comparator, typename VehicleAssignment>
   struct SCHED_API TransportationOperationListEngine {
-    using Input = SplitInput<OperationListInput, typename TransportationAssignment::Input>;
+    using Input = SplitInput<OperationListInput, typename VehicleAssignment::Input>;
     using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
@@ -31,7 +31,7 @@ namespace sched::shop {
         return std::nullopt;
       }
 
-      using DelegateEngine = TransportationJobListEngine<Comparator, TransportationAssignment>;
+      using DelegateEngine = TransportationJobListEngine<Comparator, VehicleAssignment>;
 
       const typename DelegateEngine::Input delegate_input = { std::move(*maybe_job_list), input.input1 };
 
@@ -44,12 +44,12 @@ namespace sched::shop {
 
 namespace sched {
 
-  template<typename Comparator, typename TransportationAssignment>
-  struct EngineTraits<shop::TransportationOperationListEngine<Comparator, TransportationAssignment>> {
+  template<typename Comparator, typename VehicleAssignment>
+  struct EngineTraits<shop::TransportationOperationListEngine<Comparator, VehicleAssignment>> {
     static std::string name()
     {
       using namespace std::literals;
-      return "ope_"s + AssignmentTraits<TransportationAssignment>::name() + '_' + Comparator::name();
+      return "ope_"s + AssignmentTraits<VehicleAssignment>::name() + '_' + Comparator::name();
     }
   };
 

@@ -10,7 +10,7 @@
 namespace sched {
 
   inline auto format_as(MachineId id) { return fmt::underlying(id); }
-  inline auto format_as(TransportationId id) { return fmt::underlying(id); }
+  inline auto format_as(VehicleId id) { return fmt::underlying(id); }
 
 }
 

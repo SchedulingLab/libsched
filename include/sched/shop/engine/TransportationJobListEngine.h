@@ -20,23 +20,24 @@
 
 namespace sched::shop {
 
-  template<typename Comparator, typename TransportationAssignment>
+  template<typename Comparator, typename VehicleAssignment>
   struct TransportationJobListEngine {
-    using Input = SplitInput<JobListInput, typename TransportationAssignment::Input>;
+    using Input = SplitInput<JobListInput, typename VehicleAssignment::Input>;
     using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
     {
-      auto transportation = transportation_assignment(instance, input.input1);
-      std::size_t transportation_index = 0;
+      auto assigned_vehicles = vehicle_assignment(instance, input.input1);
+      std::size_t vehicle_index = 0;
 
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
       Comparator comparator;
 
-      for (auto job : input.input0) {
-        assert(transportation_index < transportation.size());
+      for (const JobId job : input.input0) {
+        assert(vehicle_index < assigned_vehicles.size());
+        const VehicleId vehicle = assigned_vehicles[vehicle_index];
         const OperationId operation = states.next_operation(job);
 
         if constexpr (Instance::Flexible) {
@@ -59,7 +60,7 @@ namespace sched::shop {
             std::vector<JobShopTransportTaskPacket> packets;
 
             std::transform(available.begin(), available.end(), std::back_inserter(packets), [&](MachineId machine) {
-              return states.create_packet(operation, machine, transportation[transportation_index]);
+              return states.create_packet(operation, machine, vehicle);
             });
 
             auto packet = *std::min_element(packets.begin(), packets.end(), [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
@@ -76,30 +77,30 @@ namespace sched::shop {
             JobShopTask task = states.create_task(operation, machine);
             states.update_schedule(task, schedule);
           } else {
-            JobShopTransportTaskPacket packet = states.create_packet(operation, machine, transportation[transportation_index]);
+            JobShopTransportTaskPacket packet = states.create_packet(operation, machine, vehicle);
             states.update_schedule(packet, schedule);
           }
         }
 
-        ++transportation_index;
+        ++vehicle_index;
       }
 
       return schedule;
     }
 
-    TransportationAssignment transportation_assignment;
+    VehicleAssignment vehicle_assignment;
   };
 
 }
 
 namespace sched {
 
-  template<typename Comparator, typename TransportationAssignment>
-  struct EngineTraits<shop::TransportationJobListEngine<Comparator, TransportationAssignment>> {
+  template<typename Comparator, typename VehicleAssignment>
+  struct EngineTraits<shop::TransportationJobListEngine<Comparator, VehicleAssignment>> {
     static std::string name()
     {
       using namespace std::literals;
-      return "job_"s + AssignmentTraits<TransportationAssignment>::name() + '_' + Comparator::name();
+      return "job_"s + AssignmentTraits<VehicleAssignment>::name() + '_' + Comparator::name();
     }
   };
 

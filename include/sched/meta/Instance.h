@@ -11,7 +11,7 @@ namespace sched {
 
   using MachineRange = Range<MachineId>;
   using JobRange = Range<JobId>;
-  using TransportationRange = Range<TransportationId>;
+  using VehicleRange = Range<VehicleId>;
 
   template<concepts::Instance Instance>
   MachineRange machines(const Instance& instance)
@@ -26,9 +26,9 @@ namespace sched {
   }
 
   template<typename Instance>
-  TransportationRange transportations(const Instance& instance)
+  VehicleRange vehicles(const Instance& instance)
   {
-    return TransportationRange{ instance.transportation_count() };
+    return VehicleRange{ instance.vehicle_count() };
   }
 
   struct OperationRange {

@@ -35,13 +35,10 @@ namespace sched {
       static_assert(!Instance::Flexible, "MachineListInput does not work with flexible instances.");
       shop::MachineListInput input(instance.machine_count());
 
-      for (auto job : sched::jobs(instance)) {
-        std::size_t operation_count = instance.operation_count(job);
-
-        for (std::size_t i = 0; i < operation_count; ++i) {
-          const OperationId op = { job, i };
-          auto machine = instance.assigned_machine_for_operation(op);
-          input[sched::to_index(machine)].push_back(op);
+      for (const JobId job : jobs(instance)) {
+        for (const OperationId operation : operations(instance, job)) {
+          const MachineId machine = instance.assigned_machine_for_operation(operation);
+          input[to_index(machine)].push_back(operation);
         }
       }
 
@@ -65,27 +62,24 @@ namespace sched {
     static shop::MachineListInput generate_feasible(const Instance& instance, Random& random)
     {
       static_assert(!Instance::Flexible, "MachineListInput does not work with flexible instances.");
-      std::vector<JobId> jobs;
+      std::vector<JobId> job_list;
 
-      for (auto job : sched::jobs(instance)) {
-        auto operations = instance.operation_count(job);
-
-        for (std::size_t i = 0; i < operations; ++i) {
-          jobs.push_back(job);
-        }
+      for (const JobId job : jobs(instance)) {
+        const std::size_t operation_count = instance.operation_count(job);
+        job_list.insert(job_list.end(), operation_count, job);
       }
 
-      std::shuffle(jobs.begin(), jobs.end(), random);
+      std::shuffle(job_list.begin(), job_list.end(), random);
 
       shop::MachineListInput input(instance.machine_count());
 
       std::vector<std::size_t> operations(instance.job_count(), 0);
 
-      for (auto job : jobs) {
-        const std::size_t index = operations[sched::to_index(job)]++;
-        OperationId operation = { .job = job, .index = index };
-        auto machine = instance.assigned_machine_for_operation(operation);
-        input[sched::to_index(machine)].push_back(operation);
+      for (const JobId job : job_list) {
+        const std::size_t index = operations[to_index(job)]++;
+        const OperationId operation = { .job = job, .index = index };
+        const MachineId machine = instance.assigned_machine_for_operation(operation);
+        input[to_index(machine)].push_back(operation);
       }
 
       return input;

@@ -15,15 +15,15 @@
 
 namespace sched::shop {
 
-  template<typename Comparator, typename TransportationAssignment>
+  template<typename Comparator, typename VehicleAssignment>
   struct TransportationMachineListEngine {
-    using Input = SplitInput<FloatListInput, typename TransportationAssignment::Input>;
+    using Input = SplitInput<FloatListInput, typename VehicleAssignment::Input>;
     using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
     {
-      using DelegateEngine = TransportationOperationListEngine<Comparator, TransportationAssignment>;
+      using DelegateEngine = TransportationOperationListEngine<Comparator, VehicleAssignment>;
 
       const typename DelegateEngine::Input delegate_input = { to_operation_list(input.input0), input.input1 };
 
@@ -37,12 +37,12 @@ namespace sched::shop {
 
 namespace sched {
 
-  template<typename Comparator, typename TransportationAssignment>
-  struct EngineTraits<shop::TransportationMachineListEngine<Comparator, TransportationAssignment>> {
+  template<typename Comparator, typename VehicleAssignment>
+  struct EngineTraits<shop::TransportationMachineListEngine<Comparator, VehicleAssignment>> {
     static std::string name()
     {
       using namespace std::literals;
-      return "mch_"s + AssignmentTraits<TransportationAssignment>::name() + '_' + Comparator::name();
+      return "mch_"s + AssignmentTraits<VehicleAssignment>::name() + '_' + Comparator::name();
     }
   };
 

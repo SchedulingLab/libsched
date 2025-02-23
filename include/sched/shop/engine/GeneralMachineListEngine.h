@@ -43,7 +43,7 @@ namespace sched::shop {
         // try to find schedulable operations
         std::size_t finished = 0;
 
-        for (auto machine : sched::machines(instance)) {
+        for (const MachineId machine : sched::machines(instance)) {
           auto& machine_state = states.machines[to_index(machine)];
 
           if (machine_state.index == machine_assignment[to_index(machine)].size()) {
@@ -54,7 +54,7 @@ namespace sched::shop {
 
           for (;;) {
             // check if the next operation is schedulable
-            auto& operation = std::get<OperationId>(machine_assignment[to_index(machine)][machine_state.index]);
+            const auto operation = std::get<OperationId>(machine_assignment[to_index(machine)][machine_state.index]);
             auto& job_state = states.jobs[to_index(operation.job)];
 
             if (operation.index < job_state.operation) {
@@ -75,8 +75,8 @@ namespace sched::shop {
               if (operation.index == 0) {
                 tasks.push_back(states.create_task(operation, machine));
               } else {
-                for (auto transportation : sched::transportations(instance)) {
-                  packets.push_back(states.create_packet(operation, machine, transportation));
+                for (auto vehicle : vehicles(instance)) {
+                  packets.push_back(states.create_packet(operation, machine, vehicle));
                 }
               }
             }

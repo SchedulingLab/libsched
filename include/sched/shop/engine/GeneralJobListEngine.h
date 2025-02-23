@@ -33,7 +33,7 @@ namespace sched::shop {
       JobShopTransportSchedule schedule;
       Comparator comparator;
 
-      for (auto job : input) {
+      for (const JobId job : input) {
         const OperationId operation = states.next_operation(job);
 
         if constexpr (Instance::Flexible) {
@@ -53,9 +53,9 @@ namespace sched::shop {
           } else {
             std::vector<JobShopTransportTaskPacket> packets;
 
-            for (auto transportation : sched::transportations(instance)) {
+            for (const VehicleId vehicle : vehicles(instance)) {
               std::transform(available.begin(), available.end(), std::back_inserter(packets), [&](MachineId machine) {
-                return states.create_packet(operation, machine, transportation);
+                return states.create_packet(operation, machine, vehicle);
               });
             }
 
@@ -67,7 +67,7 @@ namespace sched::shop {
           }
 
         } else { // !Flexible
-          MachineId machine = instance.assigned_machine_for_operation(operation);
+          const MachineId machine = instance.assigned_machine_for_operation(operation);
 
           if (operation.index == 0) {
             JobShopTask task = states.create_task(operation, machine);
@@ -75,8 +75,8 @@ namespace sched::shop {
           } else {
             std::vector<JobShopTransportTaskPacket> packets;
 
-            for (auto transportation : sched::transportations(instance)) {
-              packets.push_back(states.create_packet(operation, machine, transportation));
+            for (const VehicleId vehicle : vehicles(instance)) {
+              packets.push_back(states.create_packet(operation, machine, vehicle));
             }
 
             auto packet = *std::ranges::min_element(packets, [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {

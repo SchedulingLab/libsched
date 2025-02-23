@@ -30,14 +30,14 @@ namespace sched {
       size += instance.operation_count(job);
     }
 
-    const std::size_t transportation_count = instance.transportation_count();
+    const std::size_t vehicle_count = instance.vehicle_count();
 
     // add r * 10%
-    size += transportation_count * std::max(size / 10, std::size_t(1));
+    size += vehicle_count * std::max(size / 10, std::size_t(1));
 
-    // make it a multiple of transportation_count
-    if (size % transportation_count != 0) {
-      size += transportation_count - (size % transportation_count);
+    // make it a multiple of vehicle_count
+    if (size % vehicle_count != 0) {
+      size += vehicle_count - (size % vehicle_count);
     }
 
     return size;

@@ -32,10 +32,9 @@ namespace sched {
     {
       shop::OperationListInput input;
 
-      for (auto job : sched::jobs(instance)) {
-        auto operations = instance.operation_count(job);
-        for (std::size_t i = 0; i < operations; ++i) {
-          input.push_back({ job, i });
+      for (const JobId job : jobs(instance)) {
+        for (const OperationId operation : operations(instance, job)) {
+          input.push_back(operation);
         }
       }
 
@@ -53,30 +52,23 @@ namespace sched {
     template<typename Instance>
     static shop::OperationListInput generate_feasible(const Instance& instance, Random& random)
     {
-      // generate a job list
-      std::vector<JobId> ids;
+      std::vector<JobId> job_list;
 
-      for (auto job : sched::jobs(instance)) {
-        auto operations = instance.operation_count(job);
-
-        for (std::size_t i = 0; i < operations; ++i) {
-          ids.push_back(job);
-        }
+      for (const JobId job : jobs(instance)) {
+        const std::size_t operation_count = instance.operation_count(job);
+        job_list.insert(job_list.end(), operation_count, job);
       }
 
-      // make the job list random
-      std::shuffle(ids.begin(), ids.end(), random);
+      std::shuffle(job_list.begin(), job_list.end(), random);
 
-      // create operations from job ids
-      std::vector<std::size_t> jobs(instance.job_count(), 0);
+      std::vector<std::size_t> operations(instance.job_count(), 0);
 
       shop::OperationListInput input;
 
-      for (auto job : ids) {
-        OperationId op = {};
-        op.job = job;
-        op.index = jobs[sched::to_index(job)]++;
-        input.push_back(op);
+      for (const JobId job : job_list) {
+        const std::size_t index = operations[to_index(job)]++;
+        const OperationId operation = { .job = job, .index = index };
+        input.push_back(operation);
       }
 
       return input;

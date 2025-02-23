@@ -14,15 +14,15 @@
 
 namespace sched::shop {
 
-  template<typename MachineAssignment, typename TransportationAssignment>
+  template<typename MachineAssignment, typename VehicleAssignment>
   struct FullMachineListEngine {
-    using Input = ThreeInput<typename MachineAssignment::Input, FloatListInput, typename TransportationAssignment::Input>;
+    using Input = ThreeInput<typename MachineAssignment::Input, FloatListInput, typename VehicleAssignment::Input>;
     using Schedule = JobShopTransportSchedule;
 
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
     {
-      using DelegateEngine = FullOperationListEngine<MachineAssignment, TransportationAssignment>;
+      using DelegateEngine = FullOperationListEngine<MachineAssignment, VehicleAssignment>;
 
       const typename DelegateEngine::Input delegate_input = { input.input0, to_operation_list(input.input1, instance), input.input2 };
 
@@ -35,12 +35,12 @@ namespace sched::shop {
 
 namespace sched {
 
-  template<typename MachineAssignment, typename TransportationAssignment>
-  struct EngineTraits<shop::FullMachineListEngine<MachineAssignment, TransportationAssignment>> {
+  template<typename MachineAssignment, typename VehicleAssignment>
+  struct EngineTraits<shop::FullMachineListEngine<MachineAssignment, VehicleAssignment>> {
     static std::string name()
     {
       using namespace std::literals;
-      return "mch_"s + AssignmentTraits<MachineAssignment>::name() + '_' + AssignmentTraits<TransportationAssignment>::name();
+      return "mch_"s + AssignmentTraits<MachineAssignment>::name() + '_' + AssignmentTraits<VehicleAssignment>::name();
     }
   };
 

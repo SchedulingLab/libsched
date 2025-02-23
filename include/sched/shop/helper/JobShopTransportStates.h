@@ -22,7 +22,7 @@ namespace sched::shop {
   struct JobShopTransportStates : JobShopStates<Instance> {
     JobShopTransportStates(const Instance& instance)
     : JobShopStates<Instance>(instance)
-    , transportations(instance.transportation_count())
+    , vehicles(instance.vehicle_count())
     {
     }
 
@@ -32,26 +32,26 @@ namespace sched::shop {
 
     using States::update_schedule; // necessary for overloading
 
-    JobShopTransportTaskPacket create_packet(OperationId operation, MachineId machine, TransportationId transportation) const
+    JobShopTransportTaskPacket create_packet(OperationId operation, MachineId machine, VehicleId vehicle) const
     {
       const JobState& job_state = States::jobs[to_index(operation.job)];
-      const TransportationState& transportation_state = transportations[to_index(transportation)];
+      const VehicleState& vehicle_state = vehicles[to_index(vehicle)];
       const MachineState& machine_state = States::machines[to_index(machine)];
 
       JobShopTransportTaskPacket packet = {};
 
-      const Time empty_time = States::instance->transportation_time_empty(transportation_state.machine, job_state.machine);
+      const Time empty_time = States::instance->transportation_time_empty(vehicle_state.machine, job_state.machine);
 
-      packet.empty_task.transportation_resource = transportation;
+      packet.empty_task.vehicle = vehicle;
       packet.empty_task.transportation_kind = TransportationKind::Empty;
-      packet.empty_task.origin = transportation_state.machine;
+      packet.empty_task.origin = vehicle_state.machine;
       packet.empty_task.target = job_state.machine;
-      packet.empty_task.start = transportation_state.time;
+      packet.empty_task.start = vehicle_state.time;
       packet.empty_task.completion = packet.empty_task.start + empty_time;
 
       Time loaded_time = States::instance->transportation_time_loaded(job_state.machine, machine);
 
-      packet.loaded_task.transportation_resource = transportation;
+      packet.loaded_task.vehicle = vehicle;
       packet.loaded_task.transportation_kind = TransportationKind::Loaded;
       packet.loaded_task.origin = job_state.machine;
       packet.loaded_task.target = machine;
@@ -76,15 +76,15 @@ namespace sched::shop {
       const MachineId machine = packet.task.machine;
       MachineState& machine_state = States::machines[to_index(machine)];
 
-      const TransportationId transportation = packet.loaded_task.transportation_resource;
-      TransportationState& transportation_state = transportations[to_index(transportation)];
+      const VehicleId vehicle = packet.loaded_task.vehicle;
+      VehicleState& vehicle_state = vehicles[to_index(vehicle)];
 
       ++job_state.operation;
       job_state.machine = machine;
       job_state.time = packet.task.completion;
 
-      transportation_state.machine = machine;
-      transportation_state.time = packet.loaded_task.completion;
+      vehicle_state.machine = machine;
+      vehicle_state.time = packet.loaded_task.completion;
 
       machine_state.time = packet.task.completion;
       ++machine_state.index;
@@ -126,12 +126,12 @@ namespace sched::shop {
       return true;
     }
 
-    struct TransportationState {
+    struct VehicleState {
       MachineId machine = NoMachine;
       Time time = 0;
     };
 
-    std::vector<TransportationState> transportations;
+    std::vector<VehicleState> vehicles;
   };
 
 }

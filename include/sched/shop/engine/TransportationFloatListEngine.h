@@ -13,8 +13,8 @@
 #include <sched/meta/input/FloatListInput.h>
 #include <sched/shop/helper/JobShopTaskComparator.h>
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
-#include <sched/shop/engine/TransportationListEngine.h>
-#include <sched/shop/input/TransportationListInput.h>
+#include <sched/shop/engine/TransportationVehicleListEngine.h>
+#include <sched/shop/input/VehicleListInput.h>
 #include <sched/types/EngineTraits.h>
 
 namespace sched::shop {
@@ -27,17 +27,17 @@ namespace sched::shop {
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const FloatListInput& input)
     {
-      const std::size_t transportation_count = instance.transportation_count();
-      TransportationListInput transportation_list;
+      const std::size_t vehicle_count = instance.vehicle_count();
+      VehicleListInput vehicle_list;
 
-      for (auto value : input) {
-        auto id = static_cast<std::size_t>(value * transportation_count);
-        assert(id < transportation_count);
-        transportation_list.push_back(TransportationId{ id });
+      for (const double value : input) {
+        auto id = static_cast<std::size_t>(value * vehicle_count);
+        assert(id < vehicle_count);
+        vehicle_list.push_back(VehicleId{ id });
       }
 
-      TransportationListEngine<Comparator> engine;
-      return engine(instance, transportation_list);
+      TransportationVehicleListEngine<Comparator> engine;
+      return engine(instance, vehicle_list);
     }
   };
 

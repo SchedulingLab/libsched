@@ -70,9 +70,9 @@ namespace sched::shop {
       return m_instance->processing_time(op, machine);
     }
 
-    constexpr std::size_t transportation_count() const noexcept(noexcept(std::declval<Instance>().transportation_count()))
+    constexpr std::size_t vehicle_count() const noexcept(noexcept(std::declval<Instance>().vehicle_count()))
     {
-      return m_instance->transportation_count();
+      return m_instance->vehicle_count();
     }
 
     constexpr Time transportation_time_empty(MachineId from, MachineId to) const noexcept(noexcept(std::declval<Instance>().transportation_time_empty(MachineId(), MachineId())))

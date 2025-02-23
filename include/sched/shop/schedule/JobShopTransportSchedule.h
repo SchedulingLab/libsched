@@ -17,7 +17,7 @@
 namespace sched::shop {
 
   struct TransportationTask {
-    TransportationId transportation_resource;
+    VehicleId vehicle;
     TransportationKind transportation_kind;
     MachineId origin;
     MachineId target;

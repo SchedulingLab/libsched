@@ -21,7 +21,7 @@ namespace sched::concepts {
   }
 
   template<typename A, typename Instance>
-  concept MachineAssignmentFor = requires(A assignment, Instance instance, A::Input input) {
+  concept MachineAssignmentFor = requires {
     typename A::Input;
 
     requires details::BasicMachineAssignmentFor<A, Instance, typename A::Input>;
@@ -33,12 +33,12 @@ namespace sched::concepts {
   namespace details {
     template<typename A, typename Instance, typename Input>
     concept BasicVehicleAssignmentFor = requires(A assignment, Instance instance, Input input) {
-      { assignment(instance, input) } -> std::same_as<std::vector<TransportationId>>;
+      { assignment(instance, input) } -> std::same_as<std::vector<VehicleId>>;
     };
   }
 
   template<typename A, typename Instance>
-  concept VehicleAssignmentFor = requires(A assignment, Instance instance, A::Input input) {
+  concept VehicleAssignmentFor = requires {
     typename A::Input;
 
     requires details::BasicVehicleAssignmentFor<A, Instance, typename A::Input>;

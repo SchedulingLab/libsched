@@ -31,7 +31,7 @@ namespace sched::shop {
         bool found = false;
         bool finished = true;
 
-        for (auto machine : sched::machines(instance)) {
+        for (const MachineId machine : machines(instance)) {
           auto& machine_state = states.machines[to_index(machine)];
 
           if (machine_state.index == input[to_index(machine)].size()) {
@@ -42,7 +42,7 @@ namespace sched::shop {
           finished = false;
 
           // check if the next operation is schedulable
-          auto& operation = input[to_index(machine)][machine_state.index];
+          const OperationId operation = input[to_index(machine)][machine_state.index];
           auto& job_state = states.jobs[to_index(operation.job)];
 
           if (operation.index == job_state.operation) {
