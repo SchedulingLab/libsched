@@ -12,7 +12,7 @@
 #include <sched/Time.h>
 #include <sched/support/Array2D.h>
 
-#include <sched/shop/schedule/JobShopData.h>
+#include <sched/shop/instance/JobShopData.h>
 #include <sched/shop/Transportation.h>
 
 namespace sched::shop {
