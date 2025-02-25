@@ -153,6 +153,8 @@ namespace sched::shop {
     FlexibleJobShopTransportData m_data = {};
   };
 
+  SCHED_API FlexibleJobShopTransportInstance import_fjspt_json(const std::filesystem::path& filename, TransportationMode mode = TransportationMode::None);
+
 }
 
 #endif // SCHED_SHOP_FLEXIBLE_JOB_SHOP_TRANSPORT_INSTANCE_H

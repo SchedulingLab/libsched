@@ -55,13 +55,10 @@ namespace sched::shop {
 
   struct SCHED_API Import {
     static std::vector<JobShopBenchmark> load_jsp_benchmarks(const std::filesystem::path& filename);
-    static JobShopInstance load_jsp(const std::filesystem::path& filename);
 
     static std::vector<FlexibleJobShopBenchmark> load_fjsp_benchmarks(const std::filesystem::path& filename);
-    static FlexibleJobShopInstance load_fjsp(const std::filesystem::path& filename);
 
     static std::vector<FlexibleJobShopTransportBenchmark> load_fjspt_benchmarks(const std::filesystem::path& filename);
-    static FlexibleJobShopTransportInstance load_fjspt(const std::filesystem::path& filename, TransportationMode mode = TransportationMode::LoadUnload);
   };
 
 }

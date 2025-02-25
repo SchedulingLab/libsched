@@ -13,20 +13,48 @@
 
 namespace sched::shop {
 
-  struct OperationData {
+  struct SCHED_API OperationData {
     MachineId machine = NoMachine;
     Time processing = 0;
   };
 
-  struct FlexibleOperationData {
+  SCHED_API void from_json(const nlohmann::json& json, OperationData& data);
+
+  struct SCHED_API JobData {
+    std::vector<OperationData> operations;
+  };
+
+  SCHED_API void from_json(const nlohmann::json& json, JobData& data);
+
+  struct SCHED_API JobShopData {
+    std::size_t machines = 0;
+    std::vector<JobData> jobs;
+  };
+
+  SCHED_API void from_json(const nlohmann::json& json, JobShopData& data);
+
+  struct SCHED_API FlexibleOperationData {
     std::vector<OperationData> choices;
   };
 
-  struct FlexibleJobData {
+  SCHED_API void from_json(const nlohmann::json& json, FlexibleOperationData& data);
+
+  struct SCHED_API FlexibleJobData {
     std::vector<FlexibleOperationData> operations;
   };
 
-  struct FlexibleJobShopTransportData {
+  SCHED_API void from_json(const nlohmann::json& json, FlexibleJobData& data);
+
+  struct SCHED_API FlexibleJobShopData {
+    std::size_t machines = 0;
+    MachineId load = NoMachine;
+    MachineId unload = NoMachine;
+    std::vector<FlexibleJobData> jobs;
+  };
+
+  SCHED_API void from_json(const nlohmann::json& json, FlexibleJobShopData& data);
+
+  struct SCHED_API FlexibleJobShopTransportData {
     std::size_t machines = 0;
     MachineId load = NoMachine;
     MachineId unload = NoMachine;
@@ -36,7 +64,7 @@ namespace sched::shop {
     Array2D<Time> loaded;
   };
 
-  void from_json(const nlohmann::json& json, FlexibleJobShopTransportData& data);
+  SCHED_API void from_json(const nlohmann::json& json, FlexibleJobShopTransportData& data);
 
 }
 

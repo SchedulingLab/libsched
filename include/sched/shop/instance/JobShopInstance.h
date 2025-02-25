@@ -10,38 +10,29 @@
 #include <sched/Api.h>
 #include <sched/Ids.h>
 #include <sched/Time.h>
+#include <sched/shop/instance/JobShopData.h>
 
 namespace sched::shop {
 
   struct SCHED_API JobShopInstance {
     static constexpr bool Flexible = false;
 
-    struct OperationDesc {
-      MachineId machine;
-      Time processing;
-    };
-
-    struct JobDesc {
-      std::vector<OperationDesc> operations;
-    };
-
     JobShopInstance() = default;
 
-    JobShopInstance(std::size_t machines, std::vector<JobDesc> jobs)
-    : m_machines(machines)
-    , m_jobs(std::move(jobs))
+    JobShopInstance(JobShopData data)
+    : m_data(std::move(data))
     {
       assert(is_valid());
     }
 
     std::size_t machine_count() const noexcept
     {
-      return m_machines;
+      return m_data.machines;
     }
 
     std::size_t job_count() const noexcept
     {
-      return m_jobs.size();
+      return m_data.jobs.size();
     }
 
     std::size_t operation_count(JobId job) const
@@ -78,18 +69,18 @@ namespace sched::shop {
     }
 
   private:
-    const JobDesc& get_job(JobId id) const
+    const JobData& get_job(JobId id) const
     {
       auto index = sched::to_index(id);
-      assert(index < m_jobs.size());
-      return m_jobs[index];
+      assert(index < m_data.jobs.size());
+      return m_data.jobs[index];
     }
 
     bool is_valid() const noexcept
     {
-      for (const auto& job : m_jobs) {
+      for (const auto& job : m_data.jobs) {
         for (const auto& op : job.operations) {
-          if (sched::to_index(op.machine) >= m_machines) {
+          if (to_index(op.machine) >= m_data.machines) {
             return false;
           }
         }
@@ -98,9 +89,10 @@ namespace sched::shop {
       return true;
     }
 
-    std::size_t m_machines = 0;
-    std::vector<JobDesc> m_jobs;
+    JobShopData m_data;
   };
+
+  SCHED_API JobShopInstance import_jsp_txt(const std::filesystem::path& filename);
 
 }
 

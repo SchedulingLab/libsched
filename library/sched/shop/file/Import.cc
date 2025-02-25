@@ -76,51 +76,6 @@ namespace sched::shop {
     return benchmarks;
   }
 
-  JobShopInstance Import::load_jsp(const std::filesystem::path& filename)
-  {
-    std::ifstream input(filename);
-
-    if (!input) {
-      throw std::runtime_error("File not found: " + filename.string());
-    }
-
-    std::size_t machine_count = 0;
-    std::size_t job_count = 0;
-
-    for (std::string line; std::getline(input, line);) {
-      if (line[0] == '#') {
-        continue;
-      }
-
-      std::istringstream first;
-      first.str(line);
-      first >> job_count >> machine_count;
-      break;
-    }
-
-    std::vector<JobShopInstance::JobDesc> jobs;
-
-    for (std::string line; std::getline(input, line);) {
-      std::istringstream data;
-      data.str(line);
-
-      JobShopInstance::JobDesc job;
-      std::size_t machine = 0;
-      Time processing = 0;
-
-      while (data >> machine >> processing) {
-        const JobShopInstance::OperationDesc op = { MachineId{ machine }, processing };
-        job.operations.push_back(op);
-      }
-
-      jobs.push_back(std::move(job));
-    }
-
-    assert(jobs.size() == job_count);
-
-    return { machine_count, std::move(jobs) };
-  }
-
   /*
    * fjsp
    */
@@ -167,67 +122,6 @@ namespace sched::shop {
     return benchmarks;
   }
 
-  FlexibleJobShopInstance Import::load_fjsp(const std::filesystem::path& filename)
-  {
-    std::ifstream input(filename);
-
-    if (!input) {
-      throw std::runtime_error("File not found: " + filename.string());
-    }
-
-    std::size_t machine_count = 0;
-    std::size_t job_count = 0;
-
-    for (std::string line; std::getline(input, line);) {
-      if (line[0] == '#') {
-        continue;
-      }
-
-      std::istringstream first;
-      first.str(line);
-      first >> job_count >> machine_count;
-      break;
-    }
-
-    std::vector<FlexibleJobShopInstance::JobDesc> jobs;
-
-    for (std::size_t i = 0; i < job_count; ++i) {
-      std::string line;
-
-      if (!std::getline(input, line)) {
-        throw std::runtime_error("Missing data for job #" + std::to_string(i));
-      }
-
-      std::istringstream data;
-      data.str(line);
-
-      std::size_t operation_count = 0;
-      data >> operation_count;
-      assert(operation_count > 0);
-
-      FlexibleJobShopInstance::JobDesc job;
-      std::size_t operation_machine_count = 0;
-
-      while (data >> operation_machine_count) {
-        FlexibleJobShopInstance::OperationDesc operation;
-        std::size_t machine = 0;
-        Time processing = 0;
-
-        for (std::size_t j = 0; j < operation_machine_count; ++j) {
-          data >> machine >> processing;
-          operation.choices.push_back({ MachineId{ machine }, processing });
-        }
-
-        job.operations.push_back(std::move(operation));
-      }
-
-      assert(job.operations.size() == operation_count);
-      jobs.push_back(std::move(job));
-    }
-
-    return { machine_count, std::move(jobs) };
-  }
-
   /*
    * fjspt
    */
@@ -256,19 +150,6 @@ namespace sched::shop {
     assert(root.is_array());
     root.get_to(benchmarks);
     return benchmarks;
-  }
-
-  FlexibleJobShopTransportInstance Import::load_fjspt(const std::filesystem::path& filename, TransportationMode mode)
-  {
-    FlexibleJobShopTransportData data;
-
-    std::ifstream stream(filename);
-    nlohmann::json root;
-    stream >> root;
-
-    root.get_to(data);
-
-    return { std::move(data), mode };
   }
 
 }

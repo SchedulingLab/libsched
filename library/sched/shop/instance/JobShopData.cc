@@ -8,8 +8,12 @@ namespace sched {
   void from_json(const nlohmann::json& json, Array2D<Time>& data)
   {
     assert(json.is_array());
+    assert(json.size() == data.rows());
 
     for (std::size_t i = 0; i < data.rows(); ++i) {
+      assert(json[i].is_array());
+      assert(json[i].size() == data.cols());
+
       for (std::size_t j = 0; j < data.cols(); ++j) {
         json[i][j].get_to(data(i, j));
       }
@@ -26,6 +30,17 @@ namespace sched::shop {
     json.at("processing").get_to(data.processing);
   }
 
+  void from_json(const nlohmann::json& json, JobData& data)
+  {
+    json.get_to(data.operations);
+  }
+
+  void from_json(const nlohmann::json& json, JobShopData& data)
+  {
+    json.at("machines").get_to(data.machines);
+    json.at("jobs").get_to(data.jobs);
+  }
+
   void from_json(const nlohmann::json& json, FlexibleOperationData& data)
   {
     json.get_to(data.choices);
@@ -34,6 +49,14 @@ namespace sched::shop {
   void from_json(const nlohmann::json& json, FlexibleJobData& data)
   {
     json.get_to(data.operations);
+  }
+
+  void from_json(const nlohmann::json& json, FlexibleJobShopData& data)
+  {
+    json.at("machines").get_to(data.machines);
+    json.at("load").get_to(data.load);
+    json.at("unload").get_to(data.unload);
+    json.at("jobs").get_to(data.jobs);
   }
 
   void from_json(const nlohmann::json& json, FlexibleJobShopTransportData& data)

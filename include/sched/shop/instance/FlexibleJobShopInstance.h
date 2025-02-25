@@ -10,42 +10,29 @@
 #include <sched/Api.h>
 #include <sched/Ids.h>
 #include <sched/Time.h>
+#include <sched/shop/instance/JobShopData.h>
 
 namespace sched::shop {
 
   struct SCHED_API FlexibleJobShopInstance {
     static constexpr bool Flexible = true;
 
-    struct FlexibleOperationDesc {
-      MachineId machine;
-      Time processing;
-    };
-
-    struct OperationDesc {
-      std::vector<FlexibleOperationDesc> choices;
-    };
-
-    struct JobDesc {
-      std::vector<OperationDesc> operations;
-    };
-
     FlexibleJobShopInstance() = default;
 
-    FlexibleJobShopInstance(std::size_t machines, std::vector<JobDesc> jobs)
-    : m_machines(machines)
-    , m_jobs(std::move(jobs))
+    FlexibleJobShopInstance(FlexibleJobShopData data)
+    : m_data(std::move(data))
     {
       assert(is_valid());
     }
 
     std::size_t machine_count() const noexcept
     {
-      return m_machines;
+      return m_data.machines;
     }
 
     std::size_t job_count() const noexcept
     {
-      return m_jobs.size();
+      return m_data.jobs.size();
     }
 
     std::size_t operation_count(JobId job) const
@@ -89,19 +76,19 @@ namespace sched::shop {
     }
 
   private:
-    const JobDesc& get_job(JobId id) const
+    const FlexibleJobData& get_job(JobId id) const
     {
       auto index = sched::to_index(id);
-      assert(index < m_jobs.size());
-      return m_jobs[index];
+      assert(index < m_data.jobs.size());
+      return m_data.jobs[index];
     }
 
     bool is_valid() const noexcept
     {
-      for (const auto& job : m_jobs) {
-        for (const auto& op : job.operations) {
-          for (const auto& choice : op.choices) {
-            if (sched::to_index(choice.machine) >= m_machines) {
+      for (const auto& job : m_data.jobs) {
+        for (const auto& operation : job.operations) {
+          for (const auto& choice : operation.choices) {
+            if (to_index(choice.machine) >= m_data.machines) {
               return false;
             }
           }
@@ -111,9 +98,10 @@ namespace sched::shop {
       return true;
     }
 
-    std::size_t m_machines = 0;
-    std::vector<JobDesc> m_jobs;
+    FlexibleJobShopData m_data;
   };
+
+  SCHED_API FlexibleJobShopInstance import_fjsp_txt(const std::filesystem::path& filename);
 
 }
 
