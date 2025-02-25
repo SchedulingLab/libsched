@@ -22,8 +22,9 @@ namespace sched::shop {
 
     FlexibleJobShopTransportInstance() = default;
 
-    FlexibleJobShopTransportInstance(FlexibleJobShopTransportData data, TransportationMode mode = TransportationMode::LoadUnload)
+    FlexibleJobShopTransportInstance(FlexibleJobShopTransportData data, TransportationMode mode = TransportationMode::None)
     : m_data(std::move(data))
+    , m_mode(mode)
     {
       if (mode == TransportationMode::Load || mode == TransportationMode::LoadUnload) {
         FlexibleOperationData load_operation;
@@ -119,6 +120,17 @@ namespace sched::shop {
       return m_data.loaded(sched::to_index(origin), sched::to_index(target));
     }
 
+
+    const FlexibleJobShopTransportData& data() const
+    {
+      return m_data;
+    }
+
+    TransportationMode mode() const
+    {
+      return m_mode;
+    }
+
   private:
     const FlexibleJobData& get_job(JobId id) const
     {
@@ -151,9 +163,11 @@ namespace sched::shop {
     }
 
     FlexibleJobShopTransportData m_data = {};
+    TransportationMode m_mode = TransportationMode::None;
   };
 
   SCHED_API FlexibleJobShopTransportInstance import_fjspt_json(const std::filesystem::path& filename, TransportationMode mode = TransportationMode::None);
+  SCHED_API void export_fjspt_json(const std::filesystem::path& filename, const FlexibleJobShopTransportInstance& instance);
 
 }
 

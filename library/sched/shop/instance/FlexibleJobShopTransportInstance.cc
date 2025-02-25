@@ -6,6 +6,7 @@
 #include <fstream>
 
 #include <sched/types/ShopInstanceConcepts.h>
+#include <sched/support/Json.h>
 
 static_assert(sched::concepts::ShopTransportInstance<sched::shop::FlexibleJobShopTransportInstance>);
 
@@ -24,4 +25,27 @@ namespace sched::shop {
     return { std::move(data), mode };
   }
 
+  void export_fjspt_json(const std::filesystem::path& filename, const FlexibleJobShopTransportInstance& instance)
+  {
+    FlexibleJobShopTransportData data = instance.data();
+    const TransportationMode mode = instance.mode();
+
+    if (mode == TransportationMode::Load || mode == TransportationMode::LoadUnload) {
+      for (auto& job : data.jobs) {
+        job.operations.erase(job.operations.begin());
+      }
+    }
+
+    if (mode == TransportationMode::Unload || mode == TransportationMode::LoadUnload) {
+      for (auto& job : data.jobs) {
+        job.operations.pop_back();
+      }
+    }
+
+    nlohmann::json root;
+    root = data;
+
+    std::ofstream stream(filename);
+    dump_json(stream, root);
+  }
 }
