@@ -5,9 +5,11 @@
 
 #include <cassert>
 
-#include <tuple>
+#include <map>
 #include <optional>
+#include <tuple>
 
+#include <sched/shop/helper/MachineOperations.h>
 #include <sched/meta/input/FloatListInput.h>
 #include <sched/shop/input/JobListInput.h>
 #include <sched/shop/input/MachineListInput.h>
@@ -99,6 +101,44 @@ namespace sched::shop {
     });
 
     return operation_list;
+  }
+
+  template<typename Instance>
+  MachineOperations to_machine_operations(const Instance& instance)
+  {
+    MachineOperations machine_operations(instance.machine_count());
+
+    for (const JobId job : jobs(instance)) {
+      for (const OperationId operation : operations(instance, job)) {
+        if constexpr (Instance::Flexible) {
+          const auto available = instance.machines_for_operation(operation);
+
+          for (const MachineId machine : available) {
+            machine_operations[to_index(machine)].push_back(operation);
+          }
+        } else {
+          const MachineId machine = instance.assigned_machine_for_operation(operation);
+          machine_operations[to_index(machine)].push_back(operation);
+        }
+      }
+    }
+
+    return machine_operations;
+  }
+
+  template<typename Instance>
+  std::map<OperationId, double> to_operation_priority(const Instance& instance, const FloatListInput& input)
+  {
+    std::map<OperationId, double> operation_priority;
+    std::size_t index = 0;
+
+    for (const JobId job : jobs(instance)) {
+      for (const OperationId operation : operations(instance, job)) {
+        operation_priority.emplace(operation, input[index++]);
+      }
+    }
+
+    return operation_priority;
   }
 
 }

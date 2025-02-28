@@ -6,7 +6,6 @@
 #include <cassert>
 
 #include <algorithm>
-#include <map>
 #include <optional>
 #include <vector>
 
@@ -31,7 +30,6 @@ namespace sched::shop {
       requires(concepts::ShopTransportInstance<Instance>)
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const FloatListInput& input)
     {
-
       auto machine_operations = to_machine_operations(instance);
       auto operation_priority = to_operation_priority(instance, input);
 
@@ -51,11 +49,6 @@ namespace sched::shop {
         const auto schedulable_operations = states.next_schedulable_operations(machine_operations);
 
         if (schedulable_operations.empty()) {
-          // maybe that there were pending operations that already had been scheduled, check again
-          if (!states.has_pending_operations()) {
-            break;
-          }
-
           return std::nullopt;
         }
 
@@ -73,49 +66,11 @@ namespace sched::shop {
         }
 
         states.choose_and_update(tasks, packets, schedule, comparator);
+        states.update_pending_operations(machine_operations);
       }
 
       return schedule;
     }
-
-    template<typename Instance>
-    MachineOperations to_machine_operations(const Instance& instance)
-    {
-      MachineOperations machine_operations(instance.machine_count());
-
-      for (const JobId job : jobs(instance)) {
-        for (const OperationId operation : operations(instance, job)) {
-          if constexpr (Instance::Flexible) {
-            const auto available = instance.machines_for_operation(operation);
-
-            for (const MachineId machine : available) {
-              machine_operations[to_index(machine)].push_back(operation);
-            }
-          } else {
-            const MachineId machine = instance.assigned_machine_for_operation(operation);
-            machine_operations[to_index(machine)].push_back(operation);
-          }
-        }
-      }
-
-      return machine_operations;
-    }
-
-    template<typename Instance>
-    std::map<OperationId, double> to_operation_priority(const Instance& instance, const FloatListInput& input)
-    {
-      std::map<OperationId, double> operation_priority;
-      std::size_t index = 0;
-
-      for (const JobId job : jobs(instance)) {
-        for (const OperationId operation : operations(instance, job)) {
-          operation_priority.emplace(operation, input[index++]);
-        }
-      }
-
-      return operation_priority;
-    }
-
   };
 
   using GeneralMachineListEngineEST = GeneralMachineListEngine<JobShopTaskEarliestStartingTime>;

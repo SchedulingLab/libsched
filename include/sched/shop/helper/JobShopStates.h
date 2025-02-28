@@ -3,18 +3,18 @@
 #ifndef SCHED_SHOP_JOB_SHOP_STATES_H
 #define SCHED_SHOP_JOB_SHOP_STATES_H
 
+#include <cassert>
+
 #include <algorithm>
 #include <vector>
 #include <tuple>
 
 #include <sched/Ids.h>
 #include <sched/support/Range.h>
-
 #include <sched/shop/schedule/JobShopSchedule.h>
+#include <sched/shop/helper/MachineOperations.h>
 
 namespace sched::shop {
-
-  using MachineOperations = std::vector<std::vector<OperationId>>;
 
   template<typename Instance>
   struct JobShopStates {
@@ -50,16 +50,12 @@ namespace sched::shop {
       return std::ranges::any_of(machines, [&](std::size_t index) { return index < machine_operations[index].size(); }, &MachineState::index);
     }
 
-    std::vector<std::tuple<OperationId, MachineId>> next_schedulable_operations(const MachineOperations& machine_operations)
+    void update_pending_operations(const MachineOperations& machine_operations)
     {
       assert(machine_operations.size() == machines.size());
 
-      std::vector<std::tuple<OperationId, MachineId>> schedulable_operations;
-
       for (std::size_t machine_index : over(machines)) {
         MachineState& machine_state = machines[machine_index];
-
-        // check if the next operation is schedulable
 
         for (;;) {
           if (machine_state.index >= machine_operations[machine_index].size()) {
@@ -82,12 +78,35 @@ namespace sched::shop {
             continue;
           }
 
-          if (machine_operation.index == job_operation.index) {
-            // we found one
-            schedulable_operations.emplace_back(machine_operation, MachineId{ machine_index });
-          }
-
           break;
+        }
+      }
+    }
+
+    std::vector<std::tuple<OperationId, MachineId>> next_schedulable_operations(const MachineOperations& machine_operations) const
+    {
+      assert(machine_operations.size() == machines.size());
+
+      std::vector<std::tuple<OperationId, MachineId>> schedulable_operations;
+
+      for (std::size_t machine_index : over(machines)) {
+        MachineState& machine_state = machines[machine_index];
+
+        // check if the next operation is schedulable
+
+        if (machine_state.index >= machine_operations[machine_index].size()) {
+          break;
+        }
+
+        const OperationId machine_operation = machine_operations[machine_index][machine_state.index];
+        assert(has_next_operation(machine_operation.job));
+
+        const OperationId job_operation = next_operation(machine_operation.job);
+        assert(machine_operation.index >= job_operation.index);
+
+        if (machine_operation.index == job_operation.index) {
+          // we found one
+          schedulable_operations.emplace_back(machine_operation, MachineId{ machine_index });
         }
       }
 

@@ -4,11 +4,11 @@
 #define SCHED_SHOP_FULL_MACHINE_LIST_ENGINE_H
 
 #include <algorithm>
-#include <map>
 #include <optional>
 
 #include <sched/shop/helper/JobShopTransportStates.h>
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
+#include <sched/shop/input/InputConversion.h>
 #include <sched/meta/input/FloatListInput.h>
 #include <sched/meta/input/ThreeInput.h>
 #include <sched/types/AssignmentTraits.h>
@@ -43,7 +43,6 @@ namespace sched::shop {
       std::size_t vehicle_index = 0;
 
       while (states.has_pending_operations(machine_operations)) {
-
         const auto schedulable_operations = states.next_schedulable_operations(machine_operations);
 
         if (schedulable_operations.empty()) {
@@ -81,21 +80,6 @@ namespace sched::shop {
       }
 
       return machine_operations;
-    }
-
-    template<typename Instance>
-    std::map<OperationId, double> to_operation_priority(const Instance& instance, const FloatListInput& input)
-    {
-      std::map<OperationId, double> operation_priority;
-      std::size_t index = 0;
-
-      for (const JobId job : jobs(instance)) {
-        for (const OperationId operation : operations(instance, job)) {
-          operation_priority.emplace(operation, input[index++]);
-        }
-      }
-
-      return operation_priority;
     }
 
     MachineAssignment machine_assignment;
