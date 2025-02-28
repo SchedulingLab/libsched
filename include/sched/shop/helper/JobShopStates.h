@@ -90,7 +90,7 @@ namespace sched::shop {
       std::vector<std::tuple<OperationId, MachineId>> schedulable_operations;
 
       for (std::size_t machine_index : over(machines)) {
-        MachineState& machine_state = machines[machine_index];
+        const MachineState& machine_state = machines[machine_index];
 
         // check if the next operation is schedulable
 
