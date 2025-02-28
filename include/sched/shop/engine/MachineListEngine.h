@@ -26,48 +26,16 @@ namespace sched::shop {
       JobShopStates<Instance> states(instance);
       JobShopSchedule schedule;
 
-      for (;;) {
-        // try to find a schedulable operation
-        bool found = false;
-        bool finished = true;
+      while (states.has_waiting_operations(input)) {
+        const auto schedulable_operations = states.next_schedulable_operations(input);
 
-        for (const MachineId machine : machines(instance)) {
-          const std::size_t index = states.next_index(machine);
-
-          if (index == input[to_index(machine)].size()) {
-            // there is no more operation to schedule on this machine
-            continue;
-          }
-
-          finished = false;
-
-          // check if the next operation is schedulable
-
-          const OperationId machine_operation = input[to_index(machine)][index];
-
-          if (!states.has_next_operation(machine_operation.job)) {
-            continue;
-          }
-
-          const OperationId job_operation = states.next_operation(machine_operation.job);
-
-          if (machine_operation.index == job_operation.index) {
-            // we found one
-            found = true;
-
-            JobShopTask task = states.create_task(machine_operation, machine);
-            states.update_schedule(task, schedule);
-            break;
-          }
-        }
-
-        if (finished) {
-          break;
-        }
-
-        if (!found) {
+        if (schedulable_operations.empty()) {
           return std::nullopt;
         }
+
+        const auto [ operation, machine ] = schedulable_operations.front();
+        const JobShopTask task = states.create_task(operation, machine);
+        states.update_schedule(task, schedule);
       }
 
       return schedule;

@@ -3,13 +3,18 @@
 #ifndef SCHED_SHOP_JOB_SHOP_STATES_H
 #define SCHED_SHOP_JOB_SHOP_STATES_H
 
+#include <algorithm>
 #include <vector>
+#include <tuple>
 
 #include <sched/Ids.h>
+#include <sched/support/Range.h>
 
 #include <sched/shop/schedule/JobShopSchedule.h>
 
 namespace sched::shop {
+
+  using MachineOperations = std::vector<std::vector<OperationId>>;
 
   template<typename Instance>
   struct JobShopStates {
@@ -37,6 +42,43 @@ namespace sched::shop {
     {
       const MachineState& machine_state = machines[to_index(machine)];
       return machine_state.index;
+    }
+
+    bool has_waiting_operations(const MachineOperations& machine_operations) const
+    {
+      assert(machine_operations.size() == machines.size());
+      return std::ranges::any_of(machines, [&](std::size_t index) { return index < machine_operations[index].size(); }, &MachineState::index);
+    }
+
+    std::vector<std::tuple<OperationId, MachineId>> next_schedulable_operations(const MachineOperations& machine_operations) const
+    {
+      assert(machine_operations.size() == machines.size());
+
+      std::vector<std::tuple<OperationId, MachineId>> schedulable_operations;
+
+      for (std::size_t machine_index : over(machines)) {
+        const MachineState& machine_state = machines[machine_index];
+
+        // check if the next operation is schedulable
+
+        if (machine_state.index >= machine_operations[machine_index].size()) {
+          continue;
+        }
+
+        const OperationId machine_operation = machine_operations[machine_index][machine_state.index];
+
+        if (!has_next_operation(machine_operation.job)) {
+          continue;
+        }
+
+        const OperationId job_operation = next_operation(machine_operation.job);
+
+        if (machine_operation.index == job_operation.index) {
+          schedulable_operations.emplace_back(machine_operation, MachineId{ machine_index });
+        }
+      }
+
+      return schedulable_operations;
     }
 
     JobShopTask create_task(OperationId operation, MachineId machine) const
