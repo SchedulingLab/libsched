@@ -29,7 +29,6 @@ namespace sched::concepts {
     { AssignmentTraits<A>::name() } -> std::same_as<std::string>;
   };
 
-
   namespace details {
     template<typename A, typename Instance, typename Input>
     concept BasicVehicleAssignmentFor = requires(A assignment, Instance instance, Input input) {

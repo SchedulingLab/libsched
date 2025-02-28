@@ -4,6 +4,7 @@
 #define SCHED_JSON_H
 
 #include <iosfwd>
+
 #include <nlohmann/json_fwd.hpp>
 
 namespace sched {
