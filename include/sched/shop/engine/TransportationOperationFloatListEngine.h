@@ -25,7 +25,7 @@ namespace sched::shop {
     {
       using DelegateEngine = TransportationOperationListEngine<Comparator, VehicleAssignment>;
 
-      const typename DelegateEngine::Input delegate_input = { to_operation_list(input.input0), input.input1 };
+      const typename DelegateEngine::Input delegate_input = { to_operation_list(input.input0, instance), input.input1 };
 
       DelegateEngine delegate_engine = {};
       return delegate_engine(instance, delegate_input);
