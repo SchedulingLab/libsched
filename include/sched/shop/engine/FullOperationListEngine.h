@@ -22,7 +22,7 @@ namespace sched::shop {
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
     {
-      auto maybe_job_list = to_job_list(input, instance);
+      auto maybe_job_list = to_job_list(input.input1, instance);
 
       if (!maybe_job_list) {
         return std::nullopt;
