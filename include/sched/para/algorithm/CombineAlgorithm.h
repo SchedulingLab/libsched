@@ -23,11 +23,10 @@ namespace sched::para {
     template<typename Instance>
     ParallelSchedule operator()(const Instance& instance)
     {
-      const LptAlgorithm lpt;
-
+      LptAlgorithm lpt;
       ParallelSchedule fallback = lpt(instance);
 
-      const MakespanCriterion criterion;
+      MakespanCriterion criterion;
       Time makespan = criterion(instance, fallback);
 
       std::vector<ParallelJob> input;
