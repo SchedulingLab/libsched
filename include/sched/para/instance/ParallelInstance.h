@@ -17,6 +17,8 @@ namespace sched::para {
   struct SCHED_API ParallelInstance {
     using Schedule = ParallelSchedule;
 
+    ParallelInstance() = default;
+
     ParallelInstance(std::size_t machines, const std::vector<Time>& jobs)
     : m_machines(machines)
     , m_jobs(jobs)
@@ -46,7 +48,7 @@ namespace sched::para {
     }
 
   private:
-    std::size_t m_machines;
+    std::size_t m_machines = 0;
     std::vector<Time> m_jobs;
   };
 
