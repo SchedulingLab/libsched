@@ -83,7 +83,7 @@ namespace sched {
 
           switch (dist(random)) {
             case 0:
-              neighbors.push_back({ std::move(neighbors1[i]), input.input1, input.input2 });
+              neighbors.push_back({ std::move(neighbors0[i]), input.input1, input.input2 });
               break;
             case 1:
               neighbors.push_back({ input.input0, std::move(neighbors1[i]), input.input2 });
