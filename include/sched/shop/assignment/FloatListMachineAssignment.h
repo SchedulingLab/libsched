@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (c) 2022-2025 Julien Bernard
-#ifndef SCHED_SHOP_FLOAT_LIST_ASSIGNMENT_H
-#define SCHED_SHOP_FLOAT_LIST_ASSIGNMENT_H
+#ifndef SCHED_SHOP_FLOAT_LIST_MACHINE_ASSIGNMENT_H
+#define SCHED_SHOP_FLOAT_LIST_MACHINE_ASSIGNMENT_H
 
 #include <cassert>
 
@@ -15,7 +15,7 @@
 
 namespace sched::shop {
 
-  struct SCHED_API FloatListAssignment {
+  struct SCHED_API FloatListMachineAssignment {
     using Input = FloatListInput;
 
     template<typename Instance>
@@ -50,7 +50,7 @@ namespace sched::shop {
 namespace sched {
 
   template<>
-  struct AssignmentTraits<shop::FloatListAssignment> {
+  struct AssignmentTraits<shop::FloatListMachineAssignment> {
     static std::string name()
     {
       return "mtx";
@@ -59,4 +59,4 @@ namespace sched {
 
 }
 
-#endif // SCHED_SHOP_FLOAT_LIST_ASSIGNMENT_H
+#endif // SCHED_SHOP_FLOAT_LIST_MACHINE_ASSIGNMENT_H
