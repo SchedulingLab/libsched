@@ -3,6 +3,7 @@
 #ifndef SCHED_SHOP_FULL_MACHINE_LIST_ENGINE_H
 #define SCHED_SHOP_FULL_MACHINE_LIST_ENGINE_H
 
+#include <algorithm>
 #include <map>
 #include <optional>
 
@@ -41,7 +42,7 @@ namespace sched::shop {
 
       std::size_t vehicle_index = 0;
 
-      while (states.has_waiting_operations(machine_operations)) {
+      while (states.has_pending_operations(machine_operations)) {
 
         const auto schedulable_operations = states.next_schedulable_operations(machine_operations);
 

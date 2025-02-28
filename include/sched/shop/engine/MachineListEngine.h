@@ -26,16 +26,17 @@ namespace sched::shop {
       JobShopStates<Instance> states(instance);
       JobShopSchedule schedule;
 
-      while (states.has_waiting_operations(input)) {
+      while (states.has_pending_operations(input)) {
         const auto schedulable_operations = states.next_schedulable_operations(input);
 
         if (schedulable_operations.empty()) {
           return std::nullopt;
         }
 
-        const auto [ operation, machine ] = schedulable_operations.front();
-        const JobShopTask task = states.create_task(operation, machine);
-        states.update_schedule(task, schedule);
+        for (const auto [ operation, machine ] : schedulable_operations.front()) {
+          const JobShopTask task = states.create_task(operation, machine);
+          states.update_schedule(task, schedule);
+        }
       }
 
       return schedule;

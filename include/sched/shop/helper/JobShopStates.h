@@ -44,7 +44,7 @@ namespace sched::shop {
       return machine_state.index;
     }
 
-    bool has_waiting_operations(const MachineOperations& machine_operations) const
+    bool has_pending_operations(const MachineOperations& machine_operations) const
     {
       assert(machine_operations.size() == machines.size());
       return std::ranges::any_of(machines, [&](std::size_t index) { return index < machine_operations[index].size(); }, &MachineState::index);
@@ -61,20 +61,33 @@ namespace sched::shop {
 
         // check if the next operation is schedulable
 
-        if (machine_state.index >= machine_operations[machine_index].size()) {
-          continue;
-        }
+        for (;;) {
+          if (machine_state.index >= machine_operations[machine_index].size()) {
+            break;
+          }
 
-        const OperationId machine_operation = machine_operations[machine_index][machine_state.index];
+          const OperationId machine_operation = machine_operations[machine_index][machine_state.index];
 
-        if (!has_next_operation(machine_operation.job)) {
-          continue;
-        }
+          if (!has_next_operation(machine_operation.job)) {
+            // this operation has already been scheduled
+            ++machine_state.index;
+            continue;
+          }
 
-        const OperationId job_operation = next_operation(machine_operation.job);
+          const OperationId job_operation = next_operation(machine_operation.job);
 
-        if (machine_operation.index == job_operation.index) {
-          schedulable_operations.emplace_back(machine_operation, MachineId{ machine_index });
+          if (machine_operation.index < job_operation.index) {
+            // this operation has already been scheduled
+            ++machine_state.index;
+            continue;
+          }
+
+          if (machine_operation.index == job_operation.index) {
+            // we found one
+            schedulable_operations.emplace_back(machine_operation, MachineId{ machine_index });
+          }
+
+          break;
         }
       }
 
