@@ -21,15 +21,15 @@ namespace sched::para {
     template<typename Instance>
     ParallelSchedule operator()(const Instance& instance)
     {
-      std::vector<ParallelJob> jobs;
+      std::vector<ParallelJob> input;
 
       for (const JobId job : jobs(instance)) {
-        jobs.push_back({ job, instance.processing_time(job, AnyMachine) });
+        input.push_back({ job, instance.processing_time(job, AnyMachine) });
       }
 
-      assert(!jobs.empty());
+      assert(!input.empty());
 
-      std::ranges::sort(jobs, [](const ParallelJob& lhs, const ParallelJob& rhs) {
+      std::ranges::sort(input, [](const ParallelJob& lhs, const ParallelJob& rhs) {
         return lhs.processing_time > rhs.processing_time;
       });
 
@@ -40,7 +40,7 @@ namespace sched::para {
 
       while (job_count > 0) {
         const std::size_t count = std::min(job_count, machine_count);
-        std::vector<ParallelJob> group(&jobs[i], &jobs[i] + count);
+        std::vector<ParallelJob> group(&input[i], &input[i] + count);
         groups.push_back(std::move(group));
         i += count;
         job_count -= count;
@@ -59,17 +59,17 @@ namespace sched::para {
         return slack(lhs) > slack(rhs);
       });
 
-      jobs.clear();
+      input.clear();
 
       for (auto& group : groups) {
         for (auto job : group) {
           if (job.id != NoJob) {
-            jobs.push_back(job);
+            input.push_back(job);
           }
         }
       }
 
-      return earliest_finish_time(instance, jobs);
+      return earliest_finish_time(instance, input);
     }
   };
 
