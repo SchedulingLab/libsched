@@ -33,7 +33,7 @@ namespace sched::shop {
           return std::nullopt;
         }
 
-        for (const auto [ operation, machine ] : schedulable_operations.front()) {
+        for (const auto [ operation, machine ] : schedulable_operations) {
           const JobShopTask task = states.create_task(operation, machine);
           states.update_schedule(task, schedule);
         }
