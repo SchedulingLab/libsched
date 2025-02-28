@@ -42,11 +42,11 @@ namespace sched::shop {
 
         if (operation.index == 0) {
           JobShopTask task = states.create_task(operation, machine);
-          states.update_schedule(task);
+          states.update_schedule(task, schedule);
         } else {
           const VehicleId vehicle = assigned_vehicles[vehicle_index];
           JobShopTransportTaskPacket packet = states.create_packet(operation, machine, vehicle);
-          states.update_schedule(packet);
+          states.update_schedule(packet, schedule);
         }
 
         ++vehicle_index;
