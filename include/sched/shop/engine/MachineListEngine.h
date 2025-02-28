@@ -32,9 +32,9 @@ namespace sched::shop {
         bool finished = true;
 
         for (const MachineId machine : machines(instance)) {
-          auto& machine_state = states.machines[to_index(machine)];
+          const std::size_t index = states.next_index(machine);
 
-          if (machine_state.index == input[to_index(machine)].size()) {
+          if (index == input[to_index(machine)].size()) {
             // there is no more operation to schedule on this machine
             continue;
           }
@@ -42,14 +42,20 @@ namespace sched::shop {
           finished = false;
 
           // check if the next operation is schedulable
-          const OperationId operation = input[to_index(machine)][machine_state.index];
-          auto& job_state = states.jobs[to_index(operation.job)];
 
-          if (operation.index == job_state.operation) {
+          const OperationId machine_operation = input[to_index(machine)][index];
+
+          if (!states.has_next_operation(machine_operation.job)) {
+            continue;
+          }
+
+          const OperationId job_operation = states.next_operation(machine_operation.job);
+
+          if (machine_operation.index == job_operation.index) {
             // we found one
             found = true;
 
-            JobShopTask task = states.create_task(operation, machine);
+            JobShopTask task = states.create_task(machine_operation, machine);
             states.update_schedule(task, schedule);
             break;
           }

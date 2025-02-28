@@ -33,6 +33,12 @@ namespace sched::shop {
       return { job, job_state.operation };
     }
 
+    std::size_t next_index(MachineId machine) const
+    {
+      const MachineState& machine_state = machines[to_index(machine)];
+      return machine_state.index;
+    }
+
     JobShopTask create_task(OperationId operation, MachineId machine) const
     {
       const JobState& job_state = jobs[to_index(operation.job)];
