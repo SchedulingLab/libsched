@@ -50,14 +50,14 @@ namespace sched::shop {
       return std::ranges::any_of(machines, [&](std::size_t index) { return index < machine_operations[index].size(); }, &MachineState::index);
     }
 
-    std::vector<std::tuple<OperationId, MachineId>> next_schedulable_operations(const MachineOperations& machine_operations) const
+    std::vector<std::tuple<OperationId, MachineId>> next_schedulable_operations(const MachineOperations& machine_operations)
     {
       assert(machine_operations.size() == machines.size());
 
       std::vector<std::tuple<OperationId, MachineId>> schedulable_operations;
 
       for (std::size_t machine_index : over(machines)) {
-        const MachineState& machine_state = machines[machine_index];
+        MachineState& machine_state = machines[machine_index];
 
         // check if the next operation is schedulable
 
