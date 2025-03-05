@@ -46,6 +46,7 @@ namespace sched::shop {
       packet.empty_task.transportation_kind = TransportationKind::Empty;
       packet.empty_task.origin = vehicle_state.machine;
       packet.empty_task.target = job_state.machine;
+      packet.empty_task.job = NoJob;
       packet.empty_task.start = vehicle_state.time;
       packet.empty_task.completion = packet.empty_task.start + empty_time;
 
@@ -55,6 +56,7 @@ namespace sched::shop {
       packet.loaded_task.transportation_kind = TransportationKind::Loaded;
       packet.loaded_task.origin = job_state.machine;
       packet.loaded_task.target = machine;
+      packet.loaded_task.job = operation.job;
       packet.loaded_task.start = std::max({ packet.empty_task.completion, job_state.time });
       packet.loaded_task.completion = packet.loaded_task.start + loaded_time;
 

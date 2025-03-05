@@ -21,6 +21,7 @@ namespace sched::shop {
     TransportationKind transportation_kind;
     MachineId origin;
     MachineId target;
+    JobId job;
     Time start;
     Time completion;
   };
