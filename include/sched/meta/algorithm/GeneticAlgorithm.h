@@ -65,26 +65,12 @@ namespace sched {
 
       const std::size_t offsprings_size_max = population_size * 9 / 10;
 
-      auto compute_solution = [this, instance](Input&& input) {
-        Solution solution;
-        solution.input = std::move(input);
-        solution.schedule = engine(instance, solution.input);
-
-        if (solution.schedule) {
-          solution.fitness = criterion(instance, *solution.schedule);
-        } else {
-          solution.fitness = Criterion::worst();
-        }
-
-        return solution;
-      };
-
       // initial population
 
       std::vector<Solution> population;
 
       for (std::size_t i = 0; i < population_size; ++i) {
-        population.push_back(compute_solution(InputTraits<Input>::generate_feasible(instance, random)));
+        population.push_back(compute_solution(instance, InputTraits<Input>::generate_feasible(instance, random)));
       }
 
       auto solution_compare = [this](const Solution& lhs, const Solution& rhs) {
@@ -108,12 +94,12 @@ namespace sched {
 
         // crossover
 
-        std::vector<Solution> offsprings = compute_crossover(selected, random);
+        std::vector<Solution> offsprings = compute_crossover(instance, selected, random);
         visitor.after_crossover(generation, offsprings);
 
         // mutation
 
-        std::vector<Solution> offsprings_mutated = compute_mutation(selected, random);
+        std::vector<Solution> offsprings_mutated = compute_mutation(instance, selected, random);
         visitor.after_mutation(generation, offsprings_mutated);
         offsprings.insert(offsprings.end(), offsprings_mutated.begin(), offsprings_mutated.end());
 
@@ -140,13 +126,29 @@ namespace sched {
       return population;
     }
 
+    template<typename Instance>
+    Solution compute_solution(const Instance& instance, Input&& input) {
+      Solution solution = {};
+      solution.input = std::move(input);
+      solution.schedule = engine(instance, solution.input);
+
+      if (solution.schedule) {
+        solution.fitness = criterion(instance, *solution.schedule);
+      } else {
+        solution.fitness = Criterion::worst();
+      }
+
+      return solution;
+    };
+
     std::vector<Solution> compute_selection(const std::vector<Solution>& population, std::size_t population_size)
     {
       auto selected = selection(population, population_size / 2, random); // TODO: selection size
       assert(selected.size() > 1);
     }
 
-    std::vector<Solution> compute_crossover(const std::vector<Solution>& selected, Random& random)
+    template<typename Instance>
+    std::vector<Solution> compute_crossover(const Instance& instance, const std::vector<Solution>& selected, Random& random)
     {
       std::vector<Solution> offsprings;
 
@@ -166,14 +168,15 @@ namespace sched {
 
         auto [child0, child1] = crossover(selected[i].input, selected[j].input, random);
 
-        offsprings.push_back(compute_solution(std::move(child0)));
-        offsprings.push_back(compute_solution(std::move(child1)));
+        offsprings.push_back(compute_solution(instance, std::move(child0)));
+        offsprings.push_back(compute_solution(instance, std::move(child1)));
       }
 
       return offsprings;
     }
 
-    std::vector<Solution> compute_mutation(const std::vector<Solution>& selected, Random& random)
+    template<typename Instance>
+    std::vector<Solution> compute_mutation(const Instance& instance, const std::vector<Solution>& selected, Random& random)
     {
       std::vector<Solution> offsprings;
 
@@ -188,7 +191,7 @@ namespace sched {
 
         if (solution.schedule) {
           auto mutant = mutation(solution.input, *solution.schedule, random);
-          offsprings.push_back(compute_solution(std::move(mutant)));
+          offsprings.push_back(compute_solution(instance, std::move(mutant)));
         }
       }
 
