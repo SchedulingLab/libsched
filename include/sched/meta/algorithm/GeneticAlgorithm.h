@@ -20,7 +20,7 @@ namespace sched {
   struct GeneticAlgorithmVisitor {
 
     template<typename Solution>
-    void initial_population([[maybe_unused]] std::size_t generation, [[maybe_unused]] const std::vector<Solution>& population)
+    void initial_population([[maybe_unused]] const std::vector<Solution>& population)
     {
     }
 
