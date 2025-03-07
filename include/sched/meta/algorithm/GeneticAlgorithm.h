@@ -89,7 +89,7 @@ namespace sched {
 
         // selection
 
-        auto selected = compute_selection(population, population_size);
+        auto selected = compute_selection(population, population_size, random);
         visitor.after_selection(generation, selected);
 
         // crossover
@@ -141,7 +141,7 @@ namespace sched {
       return solution;
     };
 
-    std::vector<Solution> compute_selection(const std::vector<Solution>& population, std::size_t population_size)
+    std::vector<Solution> compute_selection(const std::vector<Solution>& population, std::size_t population_size, Random& random)
     {
       auto selected = selection(population, population_size / 2, random); // TODO: selection size
       assert(selected.size() > 1);
