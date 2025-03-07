@@ -145,6 +145,7 @@ namespace sched {
     {
       auto selected = selection(population, population_size / 2, random); // TODO: selection size
       assert(selected.size() > 1);
+      return selected;
     }
 
     template<typename Instance>
