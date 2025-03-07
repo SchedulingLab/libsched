@@ -10,9 +10,8 @@
 
 namespace sched {
 
-  template<typename Engine, typename Criterion, typename Instance>
-    requires(concepts::EngineFor<Engine, Instance> && concepts::CriterionFor<Criterion, Instance>)
-  struct Solution {
+  template<typename Engine, typename Criterion>
+  struct BasicSolution {
     using Input = typename Engine::Input;
     using Schedule = std::optional<typename Engine::Schedule>;
     using Fitness = typename Criterion::Fitness;

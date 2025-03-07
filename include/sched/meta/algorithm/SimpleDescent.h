@@ -17,7 +17,7 @@ namespace sched {
     template<typename Instance, typename Termination>
     auto operator()(const Instance& instance, const Input& start, Random& random, std::size_t neighbors_count, Termination termination)
     {
-      using Solution = Solution<Engine, Criterion, Instance>;
+      using Solution = BasicSolution<Engine, Criterion>;
 
       Solution best;
       best.input = start;

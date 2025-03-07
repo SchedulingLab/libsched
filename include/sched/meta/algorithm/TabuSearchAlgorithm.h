@@ -16,7 +16,6 @@
 #include <sched/support/Random.h>
 #include <sched/support//Log.h>
 #include <sched/types/InputTraits.h>
-#include <sched/types/NeighborhoodTraits.h>
 
 namespace sched {
 
@@ -33,7 +32,7 @@ namespace sched {
       auto operation_count = input_size_for(instance);
       auto tabu_duration = static_cast<std::size_t>(((n + m / 2.0) * std::exp(-1.0 * n / (5.0 * m))) + (operation_count / 2.0 * std::exp(-(5.0 * m) / n)));
 
-      using Solution = Solution<Engine, Criterion, Instance>;
+      using Solution = BasicSolution<Engine, Criterion>;
 
       Solution best;
       best.input = start;
@@ -124,16 +123,6 @@ namespace sched {
       }
 
       return std::make_tuple(best.input, best.fitness, best.schedule, iteration);
-    }
-
-    static std::string input_name()
-    {
-      return InputTraits<Input>::name();
-    }
-
-    static std::string neighborhood_name()
-    {
-      return NeighborhoodTraits<Neighborhood>::name();
     }
 
     Engine engine;
