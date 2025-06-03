@@ -141,7 +141,8 @@ namespace sched::shop {
     json.at("unload").get_to(data.unload);
     json.at("jobs").get_to(data.jobs);
     json.at("vehicles").get_to(data.vehicles);
-    data.empty = data.loaded = Array2D<Time>(data.machines, data.machines);
+    const std::size_t device_count = data.machines + data.stations;
+    data.empty = data.loaded = Array2D<Time>(device_count, device_count);
     json.at("empty").get_to(data.empty);
     json.at("loaded").get_to(data.loaded);
   }
