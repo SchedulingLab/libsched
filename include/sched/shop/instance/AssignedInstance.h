@@ -85,6 +85,21 @@ namespace sched::shop {
       return m_instance->transportation_time_loaded(from, to);
     }
 
+    std::size_t station_count() const noexcept
+    {
+      return m_instance->station_count();
+    }
+
+    MachineId load_station() const noexcept
+    {
+      return m_instance->load_station();
+    }
+
+    MachineId unload_station() const noexcept
+    {
+      return m_instance->unload_station();
+    }
+
   private:
     const Instance* m_instance = nullptr;
     std::map<OperationId, MachineId> m_assignment;
