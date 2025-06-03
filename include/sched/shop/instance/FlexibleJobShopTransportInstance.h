@@ -120,6 +120,15 @@ namespace sched::shop {
       return m_data.loaded(sched::to_index(origin), sched::to_index(target));
     }
 
+    MachineId load_station() const
+    {
+      return m_data.load;
+    }
+
+    MachineId unload_station() const
+    {
+      return m_data.unload;
+    }
 
     const FlexibleJobShopTransportData& data() const
     {

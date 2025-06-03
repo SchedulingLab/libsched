@@ -36,6 +36,8 @@ namespace sched::concepts {
     { instance.vehicle_count() } -> std::convertible_to<std::size_t>;
     { instance.transportation_time_empty(origin, target) } -> std::same_as<Time>;
     { instance.transportation_time_loaded(origin, target) } -> std::same_as<Time>;
+    { instance.load_station() } -> std::same_as<MachineId>;
+    { instance.unload_station() } -> std::same_as<MachineId>;
   };
 
 }
