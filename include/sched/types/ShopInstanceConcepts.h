@@ -29,6 +29,8 @@ namespace sched::concepts {
 
     { instance.release_date(job) } -> std::same_as<Time>;
     { instance.due_date(job) } -> std::same_as<Time>;
+
+    { instance.device_count() } -> std::convertible_to<std::size_t>;
   };
 
   template<typename I>

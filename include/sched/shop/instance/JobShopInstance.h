@@ -68,6 +68,11 @@ namespace sched::shop {
       return TimeMax;
     }
 
+    std::size_t device_count() const
+    {
+      return m_data.machines;
+    }
+
   private:
     const JobData& get_job(JobId id) const
     {

@@ -3,6 +3,8 @@
 #ifndef SCHED_SHOP_JOB_SHOP_TRANSPORT_STATES_H
 #define SCHED_SHOP_JOB_SHOP_TRANSPORT_STATES_H
 
+#include <cassert>
+
 #include <algorithm>
 #include <vector>
 
@@ -73,12 +75,15 @@ namespace sched::shop {
     void update_schedule(const JobShopTransportTaskPacket& packet, JobShopTransportSchedule& schedule)
     {
       const JobId job = packet.task.operation.job;
+      assert(to_index(job) < States::jobs.size());
       JobState& job_state = States::jobs[to_index(job)];
 
       const MachineId machine = packet.task.machine;
+      assert(to_index(machine) < States::machines.size());
       MachineState& machine_state = States::machines[to_index(machine)];
 
       const VehicleId vehicle = packet.loaded_task.vehicle;
+      assert(to_index(vehicle) < vehicles.size());
       VehicleState& vehicle_state = vehicles[to_index(vehicle)];
 
       ++job_state.operation;

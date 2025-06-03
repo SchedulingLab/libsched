@@ -21,7 +21,7 @@ namespace sched::shop {
     JobShopStates(const Instance& instance)
     : instance(&instance)
     , jobs(instance.job_count())
-    , machines(instance.machine_count())
+    , machines(instance.device_count())
     {
     }
 

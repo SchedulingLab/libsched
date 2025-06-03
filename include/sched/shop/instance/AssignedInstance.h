@@ -100,6 +100,11 @@ namespace sched::shop {
       return m_instance->unload_station();
     }
 
+    std::size_t device_count() const
+    {
+      return m_instance->device_count();
+    }
+
   private:
     const Instance* m_instance = nullptr;
     std::map<OperationId, MachineId> m_assignment;
