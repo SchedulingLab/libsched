@@ -52,8 +52,6 @@ namespace sched::shop {
 
   struct SCHED_API FlexibleJobShopData {
     std::size_t machines = 0;
-    MachineId load = NoMachine;
-    MachineId unload = NoMachine;
     std::vector<FlexibleJobData> jobs;
   };
 
@@ -62,6 +60,7 @@ namespace sched::shop {
 
   struct SCHED_API FlexibleJobShopTransportData {
     std::size_t machines = 0;
+    std::size_t stations = 0;
     MachineId load = NoMachine;
     MachineId unload = NoMachine;
     std::vector<FlexibleJobData> jobs;

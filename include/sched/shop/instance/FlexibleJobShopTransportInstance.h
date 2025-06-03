@@ -97,12 +97,12 @@ namespace sched::shop {
       return TimeMax;
     }
 
-    constexpr std::size_t vehicle_count() const noexcept
+    std::size_t vehicle_count() const noexcept
     {
       return m_data.vehicles;
     }
 
-    Time transportation_time_empty(MachineId origin, MachineId target) const noexcept
+    Time transportation_time_empty(MachineId origin, MachineId target) const
     {
       if (origin == NoMachine) {
         return Time{ 0 };
@@ -111,7 +111,7 @@ namespace sched::shop {
       return m_data.empty(sched::to_index(origin), sched::to_index(target));
     }
 
-    Time transportation_time_loaded(MachineId origin, MachineId target) const noexcept
+    Time transportation_time_loaded(MachineId origin, MachineId target) const
     {
       if (origin == NoMachine) {
         return Time{ 0 };
@@ -120,12 +120,17 @@ namespace sched::shop {
       return m_data.loaded(sched::to_index(origin), sched::to_index(target));
     }
 
-    MachineId load_station() const
+    std::size_t station_count() const noexcept
+    {
+      return m_data.stations;
+    }
+
+    MachineId load_station() const noexcept
     {
       return m_data.load;
     }
 
-    MachineId unload_station() const
+    MachineId unload_station() const noexcept
     {
       return m_data.unload;
     }
@@ -138,6 +143,11 @@ namespace sched::shop {
     TransportationMode mode() const
     {
       return m_mode;
+    }
+
+    std::size_t device_count() const
+    {
+      return m_data.machines + m_data.stations;
     }
 
   private:
@@ -160,11 +170,13 @@ namespace sched::shop {
         }
       }
 
-      if (m_data.empty.rows() != m_data.machines || m_data.empty.cols() != m_data.machines) {
+      std::size_t device_count = m_data.machines + m_data.stations;
+
+      if (m_data.empty.rows() != device_count || m_data.empty.cols() != device_count) {
         return false;
       }
 
-      if (m_data.loaded.rows() != m_data.machines || m_data.loaded.cols() != m_data.machines) {
+      if (m_data.loaded.rows() != device_count || m_data.loaded.cols() != device_count) {
         return false;
       }
 
