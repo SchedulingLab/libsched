@@ -19,6 +19,12 @@ namespace sched {
     return MachineRange{ instance.machine_count() };
   }
 
+  template<typename Instance>
+  MachineRange devices(const Instance& instance)
+  {
+    return MachineRange{ instance.device_count() };
+  }
+
   template<concepts::Instance Instance>
   JobRange jobs(const Instance& instance)
   {
