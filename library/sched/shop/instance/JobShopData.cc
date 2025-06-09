@@ -5,7 +5,7 @@
 
 namespace sched {
 
-  void from_json(const nlohmann::json& json, Array2D<Time>& data)
+  void from_json(const Json& json, Array2D<Time>& data)
   {
     assert(json.is_array());
     assert(json.size() == data.rows());
@@ -20,12 +20,12 @@ namespace sched {
     }
   }
 
-  void to_json(nlohmann::json& json, const Array2D<Time>& data)
+  void to_json(Json& json, const Array2D<Time>& data)
   {
-    json = nlohmann::json::array();
+    json = Json::array();
 
     for (std::size_t i = 0; i < data.rows(); ++i) {
-      nlohmann::json row_json = nlohmann::json::array();
+      Json row_json = Json::array();
 
       for (std::size_t j = 0; j < data.cols(); ++j) {
         row_json.push_back(data[i][j]);
@@ -43,13 +43,13 @@ namespace sched::shop {
    * OperationData
    */
 
-  void from_json(const nlohmann::json& json, OperationData& data)
+  void from_json(const Json& json, OperationData& data)
   {
     json.at("machine").get_to(data.machine);
     json.at("processing").get_to(data.processing);
   }
 
-  void to_json(nlohmann::json& json, const OperationData& data)
+  void to_json(Json& json, const OperationData& data)
   {
     json = { { "machine", data.machine }, { "processing", data.processing } };
   }
@@ -58,12 +58,12 @@ namespace sched::shop {
    * JobData
    */
 
-  void from_json(const nlohmann::json& json, JobData& data)
+  void from_json(const Json& json, JobData& data)
   {
     json.get_to(data.operations);
   }
 
-  void to_json(nlohmann::json& json, const JobData& data)
+  void to_json(Json& json, const JobData& data)
   {
     json = data.operations;
   }
@@ -72,13 +72,13 @@ namespace sched::shop {
    * JobShopData
    */
 
-  void from_json(const nlohmann::json& json, JobShopData& data)
+  void from_json(const Json& json, JobShopData& data)
   {
     json.at("machines").get_to(data.machines);
     json.at("jobs").get_to(data.jobs);
   }
 
-  void to_json(nlohmann::json& json, const JobShopData& data)
+  void to_json(Json& json, const JobShopData& data)
   {
     json = { { "machines", data.machines }, { "jobs", data.jobs } };
   }
@@ -87,12 +87,12 @@ namespace sched::shop {
    * FlexibleOperationData
    */
 
-  void from_json(const nlohmann::json& json, FlexibleOperationData& data)
+  void from_json(const Json& json, FlexibleOperationData& data)
   {
     json.get_to(data.choices);
   }
 
-  void to_json(nlohmann::json& json, const FlexibleOperationData& data)
+  void to_json(Json& json, const FlexibleOperationData& data)
   {
     json = data.choices;
   }
@@ -101,12 +101,12 @@ namespace sched::shop {
    * FlexibleJobData
    */
 
-  void from_json(const nlohmann::json& json, FlexibleJobData& data)
+  void from_json(const Json& json, FlexibleJobData& data)
   {
     json.get_to(data.operations);
   }
 
-  void to_json(nlohmann::json& json, const FlexibleJobData& data)
+  void to_json(Json& json, const FlexibleJobData& data)
   {
     json = data.operations;
   }
@@ -115,13 +115,13 @@ namespace sched::shop {
    * FlexibleJobShopData
    */
 
-  void from_json(const nlohmann::json& json, FlexibleJobShopData& data)
+  void from_json(const Json& json, FlexibleJobShopData& data)
   {
     json.at("machines").get_to(data.machines);
     json.at("jobs").get_to(data.jobs);
   }
 
-  void to_json(nlohmann::json& json, const FlexibleJobShopData& data)
+  void to_json(Json& json, const FlexibleJobShopData& data)
   {
     json = {
       { "machines", data.machines },
@@ -133,7 +133,7 @@ namespace sched::shop {
    * FlexibleJobShopTransportData
    */
 
-  void from_json(const nlohmann::json& json, FlexibleJobShopTransportData& data)
+  void from_json(const Json& json, FlexibleJobShopTransportData& data)
   {
     json.at("machines").get_to(data.machines);
     json.at("stations").get_to(data.stations);
@@ -147,7 +147,7 @@ namespace sched::shop {
     json.at("loaded").get_to(data.loaded);
   }
 
-  void to_json(nlohmann::json& json, const FlexibleJobShopTransportData& data)
+  void to_json(Json& json, const FlexibleJobShopTransportData& data)
   {
     json = {
       { "machines", data.machines },

@@ -10,6 +10,7 @@
 #include <sched/Ids.h>
 #include <sched/Time.h>
 #include <sched/support/Array2D.h>
+#include <sched/support/Json.h>
 
 namespace sched::shop {
 
@@ -18,45 +19,45 @@ namespace sched::shop {
     Time processing = 0;
   };
 
-  SCHED_API void from_json(const nlohmann::json& json, OperationData& data);
-  SCHED_API void to_json(nlohmann::json& json, const OperationData& data);
+  SCHED_API void from_json(const Json& json, OperationData& data);
+  SCHED_API void to_json(Json& json, const OperationData& data);
 
   struct SCHED_API JobData {
     std::vector<OperationData> operations;
   };
 
-  SCHED_API void from_json(const nlohmann::json& json, JobData& data);
-  SCHED_API void to_json(nlohmann::json& json, const JobData& data);
+  SCHED_API void from_json(const Json& json, JobData& data);
+  SCHED_API void to_json(Json& json, const JobData& data);
 
   struct SCHED_API JobShopData {
     std::size_t machines = 0;
     std::vector<JobData> jobs;
   };
 
-  SCHED_API void from_json(const nlohmann::json& json, JobShopData& data);
-  SCHED_API void to_json(nlohmann::json& json, const JobShopData& data);
+  SCHED_API void from_json(const Json& json, JobShopData& data);
+  SCHED_API void to_json(Json& json, const JobShopData& data);
 
   struct SCHED_API FlexibleOperationData {
     std::vector<OperationData> choices;
   };
 
-  SCHED_API void from_json(const nlohmann::json& json, FlexibleOperationData& data);
-  SCHED_API void to_json(nlohmann::json& json, const FlexibleOperationData& data);
+  SCHED_API void from_json(const Json& json, FlexibleOperationData& data);
+  SCHED_API void to_json(Json& json, const FlexibleOperationData& data);
 
   struct SCHED_API FlexibleJobData {
     std::vector<FlexibleOperationData> operations;
   };
 
-  SCHED_API void from_json(const nlohmann::json& json, FlexibleJobData& data);
-  SCHED_API void to_json(nlohmann::json& json, const FlexibleJobData& data);
+  SCHED_API void from_json(const Json& json, FlexibleJobData& data);
+  SCHED_API void to_json(Json& json, const FlexibleJobData& data);
 
   struct SCHED_API FlexibleJobShopData {
     std::size_t machines = 0;
     std::vector<FlexibleJobData> jobs;
   };
 
-  SCHED_API void from_json(const nlohmann::json& json, FlexibleJobShopData& data);
-  SCHED_API void to_json(nlohmann::json& json, const FlexibleJobShopData& data);
+  SCHED_API void from_json(const Json& json, FlexibleJobShopData& data);
+  SCHED_API void to_json(Json& json, const FlexibleJobShopData& data);
 
   struct SCHED_API FlexibleJobShopTransportData {
     std::size_t machines = 0;
@@ -69,8 +70,8 @@ namespace sched::shop {
     Array2D<Time> loaded;
   };
 
-  SCHED_API void from_json(const nlohmann::json& json, FlexibleJobShopTransportData& data);
-  SCHED_API void to_json(nlohmann::json& json, const FlexibleJobShopTransportData& data);
+  SCHED_API void from_json(const Json& json, FlexibleJobShopTransportData& data);
+  SCHED_API void to_json(Json& json, const FlexibleJobShopTransportData& data);
 
 }
 

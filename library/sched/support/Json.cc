@@ -17,9 +17,9 @@ namespace sched {
 
     struct JsonSerializer {
 
-      void serialize(std::ostream& os, const nlohmann::json& j)
+      void serialize(std::ostream& os, const Json& j)
       {
-        using JsonValueType = nlohmann::json::value_t;
+        using JsonValueType = Json::value_t;
         bool first = true;
 
         switch (j.type()) {
@@ -59,7 +59,7 @@ namespace sched {
             break;
 
           case JsonValueType::array:
-            if (std::ranges::all_of(j, [](const nlohmann::json& item) { return item.is_primitive(); })) {
+            if (std::ranges::all_of(j, [](const Json& item) { return item.is_primitive(); })) {
               inline_serialize(os, j);
             } else {
               os << "[\n";
@@ -90,9 +90,9 @@ namespace sched {
         }
       }
 
-      void inline_serialize(std::ostream& os, const nlohmann::json& j)
+      void inline_serialize(std::ostream& os, const Json& j)
       {
-        using JsonValueType = nlohmann::json::value_t;
+        using JsonValueType = Json::value_t;
         bool first = true;
 
         switch (j.type()) {
@@ -117,7 +117,7 @@ namespace sched {
             break;
 
           case JsonValueType::string:
-            os << '"' << std::quoted(j.get<std::string>()) << '"';
+            os << std::quoted(j.get<std::string>());
             break;
 
           case JsonValueType::object:
@@ -169,7 +169,7 @@ namespace sched {
   }
 
 
-  void dump_json(std::ostream& os, const nlohmann::json& j)
+  void dump_json(std::ostream& os, const Json& j)
   {
     JsonSerializer serializer;
     serializer.serialize(os, j);

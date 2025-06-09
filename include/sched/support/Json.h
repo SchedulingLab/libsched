@@ -9,7 +9,9 @@
 
 namespace sched {
 
-  void dump_json(std::ostream& os, const nlohmann::json& j);
+  using Json = nlohmann::ordered_json;
+
+  void dump_json(std::ostream& os, const Json& j);
 
 }
 

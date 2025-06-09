@@ -17,7 +17,7 @@ namespace sched::shop {
     FlexibleJobShopTransportData data;
 
     std::ifstream stream(filename);
-    nlohmann::json root;
+    Json root;
     stream >> root;
 
     root.get_to(data);
@@ -42,7 +42,7 @@ namespace sched::shop {
       }
     }
 
-    nlohmann::json root;
+    Json root;
     root = data;
 
     std::ofstream stream(filename);
