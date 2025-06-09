@@ -33,7 +33,7 @@ namespace sched {
             break;
 
           case JsonValueType::object:
-            if (std::ranges::all_of(j.items(), [](const auto& item) { return item.value().is_primitive(); })) {
+            if (std::ranges::all_of(j.items(), [](const auto& item) { return item.value().is_primitive(); }) || j.size() == 1) {
               inline_serialize(os, j);
             } else {
               os << "{\n";
@@ -59,7 +59,7 @@ namespace sched {
             break;
 
           case JsonValueType::array:
-            if (std::ranges::all_of(j, [](const Json& item) { return item.is_primitive(); })) {
+            if (std::ranges::all_of(j, [](const Json& item) { return item.is_primitive(); }) || j.size() == 1) {
               inline_serialize(os, j);
             } else {
               os << "[\n";
