@@ -44,7 +44,7 @@ namespace sched::shop {
         }
       }
 
-      assert(is_valid());
+      assert(valid());
     }
 
     std::size_t machine_count() const noexcept
