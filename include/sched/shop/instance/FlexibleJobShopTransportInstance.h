@@ -158,19 +158,19 @@ namespace sched::shop {
       return m_data.jobs[index];
     }
 
-    bool is_valid() const noexcept
+    bool valid() const noexcept
     {
+      std::size_t device_count = m_data.machines + m_data.stations;
+
       for (const auto& job : m_data.jobs) {
         for (const auto& op : job.operations) {
           for (const auto& choice : op.choices) {
-            if (sched::to_index(choice.machine) >= m_data.machines) {
+            if (sched::to_index(choice.machine) >= device_count) {
               return false;
             }
           }
         }
       }
-
-      std::size_t device_count = m_data.machines + m_data.stations;
 
       if (m_data.empty.rows() != device_count || m_data.empty.cols() != device_count) {
         return false;
