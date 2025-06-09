@@ -60,7 +60,7 @@ namespace sched {
             if (std::ranges::all_of(j, [](const nlohmann::json& item) { return item.is_primitive(); })) {
               inline_serialize(os, j);
             } else {
-              os << "[ ";
+              os << "[\n";
               ++indent;
               first = true;
 
@@ -115,9 +115,8 @@ namespace sched {
             break;
 
           case JsonValueType::string:
-            os << std::quoted(j.get<std::string>());
+            os << '"' << std::quoted(j.get<std::string>()) << '"';
             break;
-
 
           case JsonValueType::object:
             os << "{ ";
