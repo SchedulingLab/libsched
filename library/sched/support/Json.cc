@@ -47,12 +47,14 @@ namespace sched {
                   os << ",\n";
                 }
 
-                os << std::string(indent * IndentWidth, ' ') << key << ": ";
+                os << std::string(indent * IndentWidth, ' ');
+                serialize(os, key);
+                os << ": ";
                 serialize(os, value);
               }
 
               --indent;
-              os << std::string(indent * IndentWidth, ' ') << "}";
+              os << '\n' << std::string(indent * IndentWidth, ' ') << "}";
             }
             break;
 
@@ -76,7 +78,7 @@ namespace sched {
               }
 
               --indent;
-              os << " ]";
+              os << '\n' << std::string(indent * IndentWidth, ' ') << ']';
             }
             break;
 
@@ -129,7 +131,8 @@ namespace sched {
                 os << ", ";
               }
 
-              os << key << ": ";
+              inline_serialize(os, key);
+              os << ": ";
               inline_serialize(os, value);
             }
 
