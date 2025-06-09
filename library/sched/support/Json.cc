@@ -173,6 +173,7 @@ namespace sched {
   {
     JsonSerializer serializer;
     serializer.serialize(os, j);
+    os << '\n';
   }
 
 }
