@@ -57,8 +57,6 @@ namespace sched::shop {
     static std::vector<JobShopBenchmark> load_jsp_benchmarks(const std::filesystem::path& filename);
 
     static std::vector<FlexibleJobShopBenchmark> load_fjsp_benchmarks(const std::filesystem::path& filename);
-
-    static std::vector<FlexibleJobShopTransportBenchmark> load_fjspt_benchmarks(const std::filesystem::path& filename);
   };
 
 }

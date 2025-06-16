@@ -122,34 +122,4 @@ namespace sched::shop {
     return benchmarks;
   }
 
-  /*
-   * fjspt
-   */
-
-  void from_json(const nlohmann::json& j, FlexibleJobShopTransportBenchmark& benchmark)
-  {
-    assert(!j.is_null());
-    j.at("name").get_to(benchmark.name);
-    j.at("jobs").get_to(benchmark.jobs);
-    j.at("machines").get_to(benchmark.machines);
-    j.at("vehicles").get_to(benchmark.vehicles);
-
-    std::string path_string;
-    j.at("path").get_to(path_string);
-    benchmark.path = path_string;
-  }
-
-  std::vector<FlexibleJobShopTransportBenchmark> Import::load_fjspt_benchmarks(const std::filesystem::path& filename)
-  {
-    std::vector<FlexibleJobShopTransportBenchmark> benchmarks;
-
-    std::ifstream stream(filename);
-    nlohmann::json root;
-    stream >> root;
-
-    assert(root.is_array());
-    root.get_to(benchmarks);
-    return benchmarks;
-  }
-
 }
