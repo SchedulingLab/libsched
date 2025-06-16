@@ -13,6 +13,7 @@ namespace sched::shop {
   {
     assert(!j.is_null());
     j.at("name").get_to(benchmark.name);
+    benchmark.family = ""; // will be filled later
     j.at("jobs").get_to(benchmark.jobs);
     j.at("machines").get_to(benchmark.machines);
     j.at("vehicles").get_to(benchmark.vehicles);
@@ -22,6 +23,11 @@ namespace sched::shop {
     benchmark.path = path_string;
   }
 
+  struct FlexibleJobShopTransportBenchmarkSet {
+    std::string name;
+    std::vector<FlexibleJobShopTransportBenchmark> instances;
+  };
+
   void from_json(const nlohmann::json& j, FlexibleJobShopTransportBenchmarkSet& benchmarks) // NOLINT(misc-use-internal-linkage)
   {
     assert(!j.is_null());
@@ -29,19 +35,27 @@ namespace sched::shop {
     j.at("instances").get_to(benchmarks.instances);
   }
 
-  std::vector<FlexibleJobShopTransportBenchmarkSet> load_fjspt_benchmarks(const std::filesystem::path& filename)
+  std::vector<FlexibleJobShopTransportBenchmark> load_fjspt_benchmarks(const std::filesystem::path& filename)
   {
-    std::vector<FlexibleJobShopTransportBenchmarkSet> benchmarks;
+    std::vector<FlexibleJobShopTransportBenchmarkSet> families;
 
     std::ifstream stream(filename);
     nlohmann::json root;
     stream >> root;
 
     assert(root.is_array());
-    root.get_to(benchmarks);
+    root.get_to(families);
+
+    std::vector<FlexibleJobShopTransportBenchmark> benchmarks;
+
+    for (FlexibleJobShopTransportBenchmarkSet& family : families) {
+      for (FlexibleJobShopTransportBenchmark& benchmark : family.instances) {
+        benchmark.family = family.name;
+        benchmarks.push_back(std::move(benchmark));
+      }
+    }
+
     return benchmarks;
   }
-
-
 
 }

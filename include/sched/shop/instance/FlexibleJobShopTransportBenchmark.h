@@ -13,18 +13,14 @@ namespace sched::shop {
 
   struct SCHED_API FlexibleJobShopTransportBenchmark {
     std::string name;
+    std::string family;
     int jobs;
     int machines;
     int vehicles;
     std::filesystem::path path;
   };
 
-  struct SCHED_API FlexibleJobShopTransportBenchmarkSet {
-    std::string name;
-    std::vector<FlexibleJobShopTransportBenchmark> instances;
-  };
-
-  SCHED_API std::vector<FlexibleJobShopTransportBenchmarkSet> load_fjspt_benchmarks(const std::filesystem::path& filename);
+  SCHED_API std::vector<FlexibleJobShopTransportBenchmark> load_fjspt_benchmarks(const std::filesystem::path& filename);
 
 }
 

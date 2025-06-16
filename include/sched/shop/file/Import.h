@@ -45,14 +45,6 @@ namespace sched::shop {
     std::filesystem::path path;
   };
 
-  struct SCHED_API FlexibleJobShopTransportBenchmark {
-    std::string name;
-    int jobs;
-    int machines;
-    int vehicles;
-    std::filesystem::path path;
-  };
-
   struct SCHED_API Import {
     static std::vector<JobShopBenchmark> load_jsp_benchmarks(const std::filesystem::path& filename);
 
