@@ -13,6 +13,7 @@
 #include <sched/meta/Instance.h>
 #include <sched/shop/input/JobListInput.h>
 #include <sched/shop/helper/JobShopTaskComparator.h>
+#include <sched/shop/helper/JobShopTransportTaskPacketComparator.h>
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
 #include <sched/shop/helper/JobShopTransportStates.h>
 #include <sched/types/EngineTraits.h>
@@ -31,7 +32,9 @@ namespace sched::shop {
     {
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
-      Comparator comparator;
+
+      const JobShopTaskComparatorAdaptor<Comparator, Instance> task_comparator(&instance);
+      const JobShopTransportTaskPacketComparatorAdaptor<Comparator, Instance> packet_comparator(&instance);
 
       for (const JobId job : input) {
         const OperationId operation = states.next_operation(job);
@@ -47,7 +50,7 @@ namespace sched::shop {
               return states.create_task(operation, machine);
             });
 
-            auto task = *std::ranges::min_element(tasks, comparator);
+            auto task = *std::ranges::min_element(tasks, task_comparator);
 
             states.update_schedule(task, schedule);
           } else {
@@ -59,9 +62,7 @@ namespace sched::shop {
               });
             }
 
-            auto packet = *std::ranges::min_element(packets, [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-              return comparator(lhs.task, rhs.task);
-            });
+            auto packet = *std::ranges::min_element(packets, packet_comparator);
 
             states.update_schedule(packet, schedule);
           }
@@ -79,9 +80,7 @@ namespace sched::shop {
               packets.push_back(states.create_packet(operation, machine, vehicle));
             }
 
-            auto packet = *std::ranges::min_element(packets, [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-              return comparator(lhs.task, rhs.task);
-            });
+            auto packet = *std::ranges::min_element(packets, packet_comparator);
 
             states.update_schedule(packet, schedule);
           }

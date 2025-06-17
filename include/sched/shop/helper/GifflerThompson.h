@@ -22,6 +22,8 @@ namespace sched::shop {
     std::vector<JobShopTask> available_tasks;
     std::vector<JobShopTask> conflicting_tasks;
 
+    const JobShopTaskComparatorAdaptor<JobShopTaskEarliestFinishTime, Instance> task_comparator(&instance);
+
     for (;;) {
       available_operations.clear();
 
@@ -42,7 +44,7 @@ namespace sched::shop {
         available_tasks.push_back(states.create_task(operation, machine));
       }
 
-      const JobShopTask earliest_completed_task = *std::ranges::min_element(available_tasks, JobShopTaskEarliestFinishTime());
+      const JobShopTask earliest_completed_task = *std::ranges::min_element(available_tasks, task_comparator);
 
       conflicting_tasks.clear();
 

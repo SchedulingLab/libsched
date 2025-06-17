@@ -3,15 +3,19 @@
 #ifndef SCHED_SHOP_JOB_SHOP_TASK_COMPARATOR_H
 #define SCHED_SHOP_JOB_SHOP_TASK_COMPARATOR_H
 
+#include <algorithm>
 #include <string>
 
+#include <sched/Api.h>
+#include <sched/meta/Instance.h>
 #include <sched/shop/schedule/JobShopSchedule.h>
 
 namespace sched::shop {
 
-  struct JobShopTaskEarliestStartingTime {
+  struct SCHED_API JobShopTaskEarliestStartingTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const
+    template<typename Instance>
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs, [[maybe_unused]] const Instance& instance) const
     {
       return lhs.start < rhs.start;
     }
@@ -22,9 +26,10 @@ namespace sched::shop {
     }
   };
 
-  struct JobShopTaskLatestStartingTime {
+  struct SCHED_API JobShopTaskLatestStartingTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const
+    template<typename Instance>
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs, [[maybe_unused]] const Instance& instance) const
     {
       return lhs.start > rhs.start;
     }
@@ -35,9 +40,10 @@ namespace sched::shop {
     }
   };
 
-  struct JobShopTaskEarliestFinishTime {
+  struct SCHED_API JobShopTaskEarliestFinishTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const
+    template<typename Instance>
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs, [[maybe_unused]] const Instance& instance) const
     {
       return lhs.completion < rhs.completion;
     }
@@ -48,9 +54,10 @@ namespace sched::shop {
     }
   };
 
-  struct JobShopTaskLatestFinishTime {
+  struct SCHED_API JobShopTaskLatestFinishTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const
+    template<typename Instance>
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs, [[maybe_unused]] const Instance& instance) const
     {
       return lhs.completion > rhs.completion;
     }
@@ -61,9 +68,10 @@ namespace sched::shop {
     }
   };
 
-  struct JobShopTaskShortestProcessingTime {
+  struct SCHED_API JobShopTaskShortestProcessingTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const
+    template<typename Instance>
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs, [[maybe_unused]] const Instance& instance) const
     {
       return (lhs.completion - lhs.start) < (rhs.completion - rhs.start);
     }
@@ -74,9 +82,10 @@ namespace sched::shop {
     }
   };
 
-  struct JobShopTaskLargestProcessingTime {
+  struct SCHED_API JobShopTaskLargestProcessingTime {
 
-    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const
+    template<typename Instance>
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs, [[maybe_unused]] const Instance& instance) const
     {
       return (lhs.completion - lhs.start) > (rhs.completion - rhs.start);
     }
@@ -85,6 +94,73 @@ namespace sched::shop {
     {
       return "lpt";
     }
+  };
+
+  namespace details {
+
+    template<typename Instance>
+    Time remaining_work(OperationId starting_operation, const Instance& instance)
+    {
+      Time work = 0;
+
+      for (const OperationId operation : operations(instance, starting_operation.job)) {
+        if (operation.index < starting_operation.index) {
+          continue;
+        }
+
+        if constexpr (Instance::Flexible) {
+          std::vector<MachineId> machines = instance.machines_for_operation(operation);
+
+          Time min_time = TimeMax;
+
+          for (const MachineId machine : machines) {
+            Time time = instance.processing_time(operation, machine);
+            min_time = std::min(time, min_time);
+          }
+
+          work += min_time;
+        } else {
+          const MachineId machine = instance.assigned_machine_for_operation(operation);
+          work += instance.processing_time(operation, machine);
+        }
+      }
+
+      return work;
+    }
+
+  };
+
+  struct SCHED_API JobShopTaskMostWorkRemaining {
+
+    template<typename Instance>
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs, const Instance& instance) const
+    {
+      return details::remaining_work(lhs, instance) > details::remaining_work(rhs, instance);
+    }
+
+    static std::string name()
+    {
+      return "mwkr";
+    }
+
+  };
+
+
+
+  template<typename Comparator, typename Instance>
+  struct JobShopTaskComparatorAdaptor {
+    JobShopTaskComparatorAdaptor(const Instance* instance)
+    : instance(instance)
+    {
+    }
+
+    bool operator()(const JobShopTask& lhs, const JobShopTask& rhs) const
+    {
+      return comparator(lhs, rhs, *instance);
+    }
+
+    Comparator comparator;
+    const Instance* instance = nullptr;
   };
 
 }

@@ -10,15 +10,12 @@
 
 #include <sched/Ids.h>
 #include <sched/shop/helper/JobShopStates.h>
+#include <sched/shop/helper/JobShopTaskComparator.h>
+#include <sched/shop/helper/JobShopTransportTaskPacket.h>
+#include <sched/shop/helper/JobShopTransportTaskPacketComparator.h>
 #include <sched/shop/schedule/JobShopTransportSchedule.h>
 
 namespace sched::shop {
-
-  struct JobShopTransportTaskPacket {
-    JobShopTask task;
-    TransportationTask empty_task;
-    TransportationTask loaded_task;
-  };
 
   template<typename Instance>
   struct JobShopTransportStates : JobShopStates<Instance> {
@@ -104,27 +101,23 @@ namespace sched::shop {
     template<typename Comparator>
     bool choose_and_update(const std::vector<JobShopTask>& tasks, const std::vector<JobShopTransportTaskPacket>& packets, JobShopTransportSchedule& schedule, Comparator comparator)
     {
+      const JobShopTaskComparatorAdaptor<Comparator, Instance> task_comparator(States::instance);
+      const JobShopTransportTaskPacketComparatorAdaptor<Comparator, Instance> packet_comparator(States::instance);
+
       if (!tasks.empty() && !packets.empty()) {
-        auto task = *std::ranges::min_element(tasks, comparator);
+        auto task = *std::ranges::min_element(tasks, task_comparator);
+        auto packet = *std::ranges::min_element(packets, packet_comparator);
 
-        auto packet = *std::ranges::min_element(packets, [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-          return comparator(lhs.task, rhs.task);
-        });
-
-        if (comparator(task, packet.task)) {
+        if (comparator(task, packet.task, *States::instance)) {
           update_schedule(task, schedule);
         } else {
           update_schedule(packet, schedule);
         }
       } else if (!tasks.empty()) {
-        auto task = *std::ranges::min_element(tasks, comparator);
-
+        auto task = *std::ranges::min_element(tasks, task_comparator);
         update_schedule(task, schedule);
       } else if (!packets.empty()) {
-        auto packet = *std::ranges::min_element(packets, [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-          return comparator(lhs.task, rhs.task);
-        });
-
+        auto packet = *std::ranges::min_element(packets, packet_comparator);
         update_schedule(packet, schedule);
       } else {
         return false;

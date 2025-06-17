@@ -4,32 +4,26 @@
 #define SCHED_SHOP_JOB_SHOP_TRANSPORT_TASK_PACKET_COMPARATOR_H
 
 #include <sched/shop/helper/JobShopTaskComparator.h>
-#include <sched/shop/helper/JobShopTransportStates.h>
+#include <sched/shop/helper/JobShopTransportTaskPacket.h>
 
 namespace sched::shop {
 
-  template<typename TaskComparator>
-  struct JobShopTransportTaskPacketWrapperComparator {
+  template<typename Comparator, typename Instance>
+  struct JobShopTransportTaskPacketComparatorAdaptor {
+
+    JobShopTransportTaskPacketComparatorAdaptor(const Instance* instance)
+    : instance(instance)
+    {
+    }
 
     bool operator()(const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs)
     {
-      return cmp(lhs.task, rhs.task);
+      return comparator(lhs.task, rhs.task, *instance);
     }
 
-    static std::string name()
-    {
-      return TaskComparator::name();
-    }
-
-    TaskComparator cmp;
+    Comparator comparator;
+    const Instance* instance = nullptr;
   };
-
-  using JobShopTransportTaskPacketEarliestStartingTime = JobShopTransportTaskPacketWrapperComparator<JobShopTaskEarliestStartingTime>;
-  using JobShopTransportTaskPacketLatestStartingTime = JobShopTransportTaskPacketWrapperComparator<JobShopTaskLatestStartingTime>;
-  using JobShopTransportTaskPacketEarliestFinishTime = JobShopTransportTaskPacketWrapperComparator<JobShopTaskEarliestFinishTime>;
-  using JobShopTransportTaskPacketLatestFinishTime = JobShopTransportTaskPacketWrapperComparator<JobShopTaskLatestFinishTime>;
-  using JobShopTransportTaskPacketShortestProcessingTime = JobShopTransportTaskPacketWrapperComparator<JobShopTaskShortestProcessingTime>;
-  using JobShopTransportTaskPacketLargestProcessingTime = JobShopTransportTaskPacketWrapperComparator<JobShopTaskLargestProcessingTime>;
 
 }
 

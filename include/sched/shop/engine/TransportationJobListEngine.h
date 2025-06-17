@@ -33,7 +33,9 @@ namespace sched::shop {
 
       JobShopTransportStates<Instance> states(instance);
       JobShopTransportSchedule schedule;
-      Comparator comparator;
+
+      const JobShopTaskComparatorAdaptor<Comparator, Instance> task_comparator(&instance);
+      const JobShopTransportTaskPacketComparatorAdaptor<Comparator, Instance> packet_comparator(&instance);
 
       for (const JobId job : input.input0) {
         assert(vehicle_index < assigned_vehicles.size());
@@ -51,10 +53,7 @@ namespace sched::shop {
               return states.create_task(operation, machine);
             });
 
-            auto task = *std::ranges::min_element(tasks, [comparator](const JobShopTask& lhs, const JobShopTask& rhs) {
-              return comparator(lhs, rhs);
-            });
-
+            auto task = *std::ranges::min_element(tasks, task_comparator);
             states.update_schedule(task, schedule);
           } else {
             std::vector<JobShopTransportTaskPacket> packets;
@@ -63,10 +62,7 @@ namespace sched::shop {
               return states.create_packet(operation, machine, vehicle);
             });
 
-            auto packet = *std::ranges::min_element(packets, [comparator](const JobShopTransportTaskPacket& lhs, const JobShopTransportTaskPacket& rhs) {
-              return comparator(lhs.task, rhs.task);
-            });
-
+            auto packet = *std::ranges::min_element(packets, packet_comparator);
             states.update_schedule(packet, schedule);
           }
 
