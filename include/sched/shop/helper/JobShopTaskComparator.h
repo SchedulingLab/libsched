@@ -135,7 +135,7 @@ namespace sched::shop {
     template<typename Instance>
     bool operator()(const JobShopTask& lhs, const JobShopTask& rhs, const Instance& instance) const
     {
-      return details::remaining_work(lhs, instance) > details::remaining_work(rhs, instance);
+      return details::remaining_work(lhs.operation, instance) > details::remaining_work(rhs.operation, instance);
     }
 
     static std::string name()
