@@ -22,6 +22,7 @@ namespace sched {
   template<typename Engine, typename Neighborhood, typename Criterion>
   struct TabuSearchAlgorithm {
     using Input = typename Engine::Input;
+    using Solution = BasicSolution<Engine, Criterion>;
 
     template<typename Instance, typename Termination>
     auto operator()(const Instance& instance, const Input& start, Random& random, std::size_t neighbors_count, Termination termination)
@@ -32,21 +33,8 @@ namespace sched {
       auto operation_count = input_size_for(instance);
       auto tabu_duration = static_cast<std::size_t>(((n + m / 2.0) * std::exp(-1.0 * n / (5.0 * m))) + (operation_count / 2.0 * std::exp(-(5.0 * m) / n)));
 
-      using Solution = BasicSolution<Engine, Criterion>;
 
-      Solution best;
-      best.input = start;
-
-      for (;;) {
-        best.schedule = engine(instance, best.input);
-
-        if (best.schedule) {
-          best.fitness = criterion(instance, *best.schedule);
-          break;
-        }
-
-        best.input = InputTraits<Input>::generate_feasible(instance, random);
-      }
+      Solution best = compute_first_solution(instance, start, random);
 
       Solution current = best;
       std::size_t iteration = 0;
@@ -102,16 +90,8 @@ namespace sched {
           tabu_list.push_back({ current.input, iteration });
         } else {
           tabu_list.clear();
-
-          for (;;) {
-            current.input = InputTraits<Input>::generate_feasible(instance, random);
-            current.schedule = engine(instance, current.input);
-
-            if (current.schedule) {
-              current.fitness = criterion(instance, *current.schedule);
-              break;
-            }
-          }
+          const Input new_input = InputTraits<Input>::generate_feasible(instance, random);
+          current = compute_first_solution(instance, new_input, random);
         }
 
         if (criterion.compare(current.fitness, best.fitness) == Comparison::Better) {
@@ -124,6 +104,26 @@ namespace sched {
 
       return std::make_tuple(best.input, best.fitness, best.schedule, iteration);
     }
+
+    template<typename Instance>
+    Solution compute_first_solution(const Instance& instance, const Input& start, Random& random) {
+      Solution solution = {};
+      solution.input = start;
+
+      for (;;) {
+        solution.schedule = engine(instance, solution.input);
+
+        if (solution.schedule) {
+          solution.fitness = criterion(instance, *solution.schedule);
+          break;
+        }
+
+        solution.input = InputTraits<Input>::generate_feasible(instance, random);
+      }
+
+      return solution;
+    }
+
 
     Engine engine;
     Neighborhood neighborhood;

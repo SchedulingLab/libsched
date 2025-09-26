@@ -7,7 +7,7 @@ add_requires("lqp", "nlohmann_json")
 add_requires("fmt", { system = false, configs = { header_only = true }})
 
 add_rules("mode.debug", "mode.releasedbg", "mode.release")
-add_rules("plugin.compile_commands.autoupdate", {outputdir = "$(buildir)"})
+add_rules("plugin.compile_commands.autoupdate", {outputdir = "$(builddir)"})
 
 if is_mode("sanitizers") then
     set_symbols("debug")
