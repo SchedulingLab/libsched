@@ -20,9 +20,9 @@ struct fmt::formatter<sched::shop::JobListInput> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   auto format(const sched::shop::JobListInput& input, format_context& ctx) const -> format_context::iterator
   {
-    format_to(ctx.out(), "[");
-    format_to(ctx.out(), "{}", fmt::join(input, ", "));
-    return format_to(ctx.out(), "]");
+    fmt::format_to(ctx.out(), "[");
+    fmt::format_to(ctx.out(), "{}", fmt::join(input, ", "));
+    return fmt::format_to(ctx.out(), "]");
   }
 };
 
@@ -34,9 +34,9 @@ struct fmt::formatter<sched::shop::OperationListInput> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   auto format(const sched::shop::OperationListInput& input, format_context& ctx) const -> format_context::iterator
   {
-    format_to(ctx.out(), "[");
-    format_to(ctx.out(), "{}", fmt::join(input, ", "));
-    return format_to(ctx.out(), "]");
+    fmt::format_to(ctx.out(), "[");
+    fmt::format_to(ctx.out(), "{}", fmt::join(input, ", "));
+    return fmt::format_to(ctx.out(), "]");
   }
 };
 
@@ -48,9 +48,9 @@ struct fmt::formatter<sched::shop::MachineListInput> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   auto format(const sched::shop::MachineListInput& input, format_context& ctx) const -> format_context::iterator
   {
-    format_to(ctx.out(), "[");
-    format_to(ctx.out(), "{}", fmt::join(input, "; "));
-    return format_to(ctx.out(), "]");
+    fmt::format_to(ctx.out(), "[");
+    fmt::format_to(ctx.out(), "{}", fmt::join(input, "; "));
+    return fmt::format_to(ctx.out(), "]");
   }
 };
 

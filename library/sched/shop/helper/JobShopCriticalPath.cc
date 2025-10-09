@@ -15,7 +15,7 @@ namespace sched::shop {
     auto task_range = schedule.tasks();
     std::vector<JobShopTask> tasks(task_range.begin(), task_range.end());
 
-    std::sort(tasks.begin(), tasks.end(), [](const JobShopTask& lhs, const JobShopTask& rhs) {
+    std::ranges::sort(tasks, [](const JobShopTask& lhs, const JobShopTask& rhs) {
       // also check jobs and operations to handle operations with processing time of 0 (like orb07)
       return std::tie(lhs.completion, lhs.operation.job, lhs.operation.index) > std::tie(rhs.completion, rhs.operation.job, rhs.operation.index);
     });
