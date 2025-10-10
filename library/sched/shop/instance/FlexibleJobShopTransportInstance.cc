@@ -3,6 +3,8 @@
 
 #include <sched/shop/instance/FlexibleJobShopTransportInstance.h>
 
+#include <nlohmann/json.hpp>
+
 #include <fstream>
 
 #include <sched/types/ShopInstanceConcepts.h>

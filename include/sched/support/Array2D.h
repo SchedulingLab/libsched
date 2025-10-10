@@ -7,6 +7,9 @@
 
 #include <vector>
 
+#include <sched/Time.h>
+#include <sched/support/Json.h>
+
 namespace sched {
 
   template<typename T>
@@ -147,6 +150,9 @@ namespace sched {
     std::size_t m_cols;
     std::vector<T> m_data;
   };
+
+  SCHED_API void from_json(const Json& json, Array2D<Time>& data);
+  SCHED_API void to_json(Json& json, const Array2D<Time>& data);
 
 } // namespace sched
 

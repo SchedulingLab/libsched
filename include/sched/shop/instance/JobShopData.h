@@ -5,8 +5,6 @@
 
 #include <vector>
 
-#include <nlohmann/json.hpp>
-
 #include <sched/Ids.h>
 #include <sched/Time.h>
 #include <sched/support/Array2D.h>

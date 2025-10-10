@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (c) 2022-2025 Julien Bernard
-#ifndef SCHED_SWAP_ENGINE_H
-#define SCHED_SWAP_ENGINE_H
+#ifndef SCHED_SHOP_MACHINE_LIST_ENGINE_H
+#define SCHED_SHOP_MACHINE_LIST_ENGINE_H
 
 #include <optional>
 
@@ -58,4 +58,4 @@ namespace sched {
 
 }
 
-#endif // SCHED_SWAP_ENGINE_H
+#endif // SCHED_SHOP_MACHINE_LIST_ENGINE_H

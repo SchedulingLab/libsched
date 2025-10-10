@@ -13,7 +13,6 @@
 #include <sched/meta/input/ThreeInput.h>
 #include <sched/types/AssignmentTraits.h>
 #include <sched/types/EngineTraits.h>
-#include "sched/shop/helper/JobShopStates.h"
 
 namespace sched::shop {
 

@@ -49,7 +49,7 @@ namespace sched::shop {
       packet.empty_task.start = vehicle_state.time;
       packet.empty_task.completion = packet.empty_task.start + empty_time;
 
-      Time loaded_time = States::instance->transportation_time_loaded(job_state.machine, machine);
+      const Time loaded_time = States::instance->transportation_time_loaded(job_state.machine, machine);
 
       packet.loaded_task.vehicle = vehicle;
       packet.loaded_task.transportation_kind = TransportationKind::Loaded;
@@ -59,7 +59,7 @@ namespace sched::shop {
       packet.loaded_task.start = std::max({ packet.empty_task.completion, job_state.time });
       packet.loaded_task.completion = packet.loaded_task.start + loaded_time;
 
-      Time processing_time = States::instance->processing_time(operation, machine);
+      const Time processing_time = States::instance->processing_time(operation, machine);
 
       packet.task.operation = operation;
       packet.task.machine = machine;
