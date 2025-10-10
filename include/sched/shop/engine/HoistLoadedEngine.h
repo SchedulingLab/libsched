@@ -25,7 +25,7 @@ namespace sched::shop {
     using Schedule = HoistSchedule;
 
     template<typename Instance>
-      requires(concepts::ShopInstance<Instance>)
+      // requires(concepts::ShopInstance<Instance>)
     std::optional<HoistSchedule> operator()(const Instance& instance, const HoistLoadedInput& input)
     {
       using namespace sched::literals;
