@@ -59,7 +59,7 @@ namespace sched::shop {
     }
 
     sched::Time transportation_time_loaded(sched::MachineId origin, sched::MachineId target) const noexcept {
-      assert(to_index(origin) + 1 == to_index(target));
+      assert((to_index(origin) + 1) % m_data.machines == to_index(target));
       return m_data.operations[to_index(origin)].transport;
     }
 
