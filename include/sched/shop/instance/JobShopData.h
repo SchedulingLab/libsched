@@ -7,7 +7,6 @@
 
 #include <sched/Ids.h>
 #include <sched/Time.h>
-#include <sched/support/Array2D.h>
 #include <sched/support/Json.h>
 
 namespace sched::shop {
@@ -34,42 +33,6 @@ namespace sched::shop {
 
   SCHED_API void from_json(const Json& json, JobShopData& data);
   SCHED_API void to_json(Json& json, const JobShopData& data);
-
-  struct SCHED_API FlexibleOperationData {
-    std::vector<OperationData> choices;
-  };
-
-  SCHED_API void from_json(const Json& json, FlexibleOperationData& data);
-  SCHED_API void to_json(Json& json, const FlexibleOperationData& data);
-
-  struct SCHED_API FlexibleJobData {
-    std::vector<FlexibleOperationData> operations;
-  };
-
-  SCHED_API void from_json(const Json& json, FlexibleJobData& data);
-  SCHED_API void to_json(Json& json, const FlexibleJobData& data);
-
-  struct SCHED_API FlexibleJobShopData {
-    std::size_t machines = 0;
-    std::vector<FlexibleJobData> jobs;
-  };
-
-  SCHED_API void from_json(const Json& json, FlexibleJobShopData& data);
-  SCHED_API void to_json(Json& json, const FlexibleJobShopData& data);
-
-  struct SCHED_API FlexibleJobShopTransportData {
-    std::size_t machines = 0;
-    std::size_t stations = 0;
-    MachineId load = NoMachine;
-    MachineId unload = NoMachine;
-    std::vector<FlexibleJobData> jobs;
-    std::size_t vehicles = 0;
-    Array2D<Time> empty;
-    Array2D<Time> loaded;
-  };
-
-  SCHED_API void from_json(const Json& json, FlexibleJobShopTransportData& data);
-  SCHED_API void to_json(Json& json, const FlexibleJobShopTransportData& data);
 
 }
 

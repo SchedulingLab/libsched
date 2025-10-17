@@ -11,7 +11,7 @@
 #include <sched/Api.h>
 #include <sched/Ids.h>
 #include <sched/Time.h>
-#include <sched/shop/instance/JobShopData.h>
+#include <sched/shop/instance/FlexibleJobShopData.h>
 
 namespace sched::shop {
 

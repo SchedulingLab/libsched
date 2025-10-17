@@ -11,10 +11,9 @@
 #include <sched/Api.h>
 #include <sched/Ids.h>
 #include <sched/Time.h>
-#include <sched/support/Array2D.h>
-
-#include <sched/shop/instance/JobShopData.h>
 #include <sched/shop/Transportation.h>
+#include <sched/shop/instance/FlexibleJobShopTransportData.h>
+#include <sched/support/Array2D.h>
 
 namespace sched::shop {
 
