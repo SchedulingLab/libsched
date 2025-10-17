@@ -87,16 +87,17 @@ namespace sched::shop {
   void PartitionGroup::compute_partitions()
   {
     std::vector<std::size_t> partition;
-    compute_partition_recursive(0, partition);
+
+    if (m_size < AtLeast) {
+      m_partitions.emplace_back(m_size, partition);
+    } else {
+      compute_partition_recursive(0, partition);
+    }
   }
 
   void PartitionGroup::compute_partition_recursive(std::size_t j, std::vector<std::size_t>& current_partition) // NOLINT(misc-no-recursion)
   {
     m_partitions.emplace_back(m_size, current_partition);
-
-    if (m_size < AtLeast) {
-      return;
-    }
 
     for (std::size_t i = j + AtLeast; i <= m_size - AtLeast; ++i) {
       current_partition.push_back(i);
