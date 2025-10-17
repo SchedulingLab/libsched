@@ -94,6 +94,10 @@ namespace sched::shop {
   {
     m_partitions.emplace_back(m_size, current_partition);
 
+    if (m_size < AtLeast) {
+      return;
+    }
+
     for (std::size_t i = j + AtLeast; i <= m_size - AtLeast; ++i) {
       current_partition.push_back(i);
       compute_partition_recursive(i, current_partition);
