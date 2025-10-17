@@ -63,7 +63,8 @@ namespace sched::shop {
   public:
     PartitionCollection(std::size_t max_size);
 
-    const Partition& operator()(std::size_t size, double float_index) const;
+    const PartitionGroup& group(std::size_t size) const;
+    const Partition& partition(std::size_t size, double float_index) const;
 
   private:
     std::size_t m_max_size;

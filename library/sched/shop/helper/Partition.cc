@@ -113,7 +113,13 @@ namespace sched::shop {
     }
   }
 
-  const Partition& PartitionCollection::operator()(std::size_t size, double float_index) const
+  const PartitionGroup& PartitionCollection::group(std::size_t size) const
+  {
+    assert(size <= m_max_size);
+    return m_groups[size];
+  }
+
+  const Partition& PartitionCollection::partition(std::size_t size, double float_index) const
   {
     assert(size <= m_max_size);
     assert(0.0 <= float_index && float_index < 1.0);
