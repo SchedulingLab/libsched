@@ -71,6 +71,9 @@ namespace sched::shop {
     std::vector<PartitionGroup> m_groups;
   };
 
+  std::size_t partition_collection_count(std::size_t size);
+  bool reference_same_partition(double float_index0, double float_index1, std::size_t size);
+
 }
 
 #endif // SCHED_SHOP_PARTITION_H

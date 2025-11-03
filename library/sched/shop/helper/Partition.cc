@@ -137,4 +137,20 @@ namespace sched::shop {
     return group[index];
   }
 
+  /*
+   * Useful functions
+   */
+
+  std::size_t partition_collection_count(std::size_t size)
+  {
+    // TODO
+    return 1;
+  }
+
+  bool reference_same_partition(double float_index0, double float_index1, std::size_t size)
+  {
+    // TODO
+    return false;
+  }
+
 }
