@@ -44,11 +44,12 @@ namespace sched::shop {
         assert(next_iterator != empty_moves_set.end());
 
         current_machine = next_iterator->dest;
-        empty_moves_set.erase(next_iterator);
 
         if (current_machine == first_machine) {
           break;
         }
+
+        empty_moves_set.erase(next_iterator);
       }
 
       iterator = empty_moves_set.erase(iterator);
