@@ -33,10 +33,10 @@ namespace sched::shop {
     for (auto iterator = empty_moves_set.begin(); iterator != empty_moves_set.end(); ) {
       std::vector<MachineId> cycle;
 
-      const MachineId first_machine = empty_moves.front().orig;
+      const MachineId first_machine = iterator->orig;
       cycle.push_back(first_machine);
 
-      MachineId current_machine = empty_moves.front().dest;
+      MachineId current_machine = iterator->dest;
 
       for (;;) {
         cycle.push_back(current_machine);
