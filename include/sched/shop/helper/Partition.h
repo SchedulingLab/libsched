@@ -47,6 +47,8 @@ namespace sched::shop {
       return m_partitions.end();
     }
 
+    std::size_t find_partition(const Partition& partition) const;
+
   private:
     static constexpr std::size_t AtLeast = 2;
 
@@ -71,7 +73,7 @@ namespace sched::shop {
     std::vector<PartitionGroup> m_groups;
   };
 
-  std::size_t partition_collection_count(std::size_t size);
+  std::size_t partition_group_count(std::size_t size);
   bool reference_same_partition(double float_index0, double float_index1, std::size_t size);
 
 }

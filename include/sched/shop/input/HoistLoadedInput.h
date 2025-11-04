@@ -9,13 +9,17 @@
 
 #include <sched/Ids.h>
 #include <sched/meta/Instance.h>
+#include <sched/shop/Hoist.h>
 #include <sched/support/Random.h>
 #include <sched/types/InputTraits.h>
 
 namespace sched {
 
   namespace shop {
+
     using HoistLoadedInput = std::vector<MachineId>;
+
+    std::vector<Move> compute_empty_moves(const HoistLoadedInput& input);
 
   }
 

@@ -3,7 +3,19 @@
 
 #include <sched/shop/helper/Partition.h>
 
+#include <ranges>
+
 namespace sched::shop {
+
+  namespace {
+
+    constexpr std::size_t index_from_float_index(double float_index, std::size_t size)
+    {
+      return static_cast<std::size_t>(float_index * static_cast<double>(size));
+    }
+
+  }
+
 
   /*
    * Partition
@@ -84,6 +96,19 @@ namespace sched::shop {
     return m_partitions[i];
   }
 
+  std::size_t PartitionGroup::find_partition(const Partition& partition) const
+  {
+    assert(partition.size() == m_size);
+
+    for (auto [ index, partition_for_index ] : std::views::enumerate(m_partitions)) {
+      if (partition.indices() == partition_for_index.indices()) {
+        return index;
+      }
+    }
+
+    return m_partitions.size();
+  }
+
   void PartitionGroup::compute_partitions()
   {
     std::vector<std::size_t> partition;
@@ -131,7 +156,7 @@ namespace sched::shop {
 
     const PartitionGroup& group = m_groups[size];
 
-    const auto index = static_cast<std::size_t>(float_index * static_cast<double>(group.size()));
+    const std::size_t index = index_from_float_index(float_index, group.size());
     assert(index < group.size());
 
     return group[index];
@@ -141,16 +166,30 @@ namespace sched::shop {
    * Useful functions
    */
 
-  std::size_t partition_collection_count(std::size_t size)
+  std::size_t partition_group_count(std::size_t size)
   {
-    // TODO
-    return 1;
+    if (size <= 3) {
+      return 1;
+    }
+
+    std::size_t u = 1;
+    std::size_t v = 1;
+
+    for (std::size_t i = 3; i < size; ++i) {
+      const std::size_t w = u + v;
+      u = v;
+      v = w;
+    }
+
+    return v;
   }
 
   bool reference_same_partition(double float_index0, double float_index1, std::size_t size)
   {
-    // TODO
-    return false;
+    const std::size_t count = partition_group_count(size);
+    const std::size_t index0 = index_from_float_index(float_index0, count);
+    const std::size_t index1 = index_from_float_index(float_index1, count);
+    return index0 == index1;
   }
 
 }

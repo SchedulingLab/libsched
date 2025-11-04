@@ -12,11 +12,11 @@
 
 #include <sched/Api.h>
 #include <sched/Ids.h>
+#include <sched/shop/Hoist.h>
 #include <sched/shop/input/HoistLoadedInput.h>
 #include <sched/shop/schedule/HoistSchedule.h>
 #include <sched/types/EngineTraits.h>
 #include <sched/types/ShopInstanceConcepts.h>
-#include "sched/Time.h"
 
 namespace sched::shop {
 
@@ -34,7 +34,7 @@ namespace sched::shop {
       const std::size_t machine_count = instance.machine_count();
       assert(machine_count >= 2);
 
-      const std::vector<EmptyMove> empty_moves = compute_empty_moves(input);
+      const std::vector<Move> empty_moves = compute_empty_moves(input);
 
       lqp::Problem problem;
       constexpr double Infinity = 1e6;
@@ -65,7 +65,7 @@ namespace sched::shop {
 
       problem.add_constraint(t_i[1] == instance.transportation_time_loaded(0_m, 1_m));
 
-      for (const EmptyMove move : empty_moves) {
+      for (const Move move : empty_moves) {
         problem.add_constraint(t_i[move.orig] + instance.transportation_time_empty(move.orig, move.dest) <= period);
       }
 
@@ -96,7 +96,7 @@ namespace sched::shop {
         }
       }
 
-      for (const EmptyMove move : empty_moves) {
+      for (const Move move : empty_moves) {
         const MachineId i = move.orig;
         const MachineId j = move.dest;
         const Time d_ij = instance.transportation_time_empty(i, j);
@@ -157,26 +157,6 @@ namespace sched::shop {
       }
 
       return schedule;
-    }
-
-  private:
-    struct EmptyMove {
-      MachineId orig;
-      MachineId dest;
-    };
-
-    static std::vector<EmptyMove> compute_empty_moves(const HoistLoadedInput& input)
-    {
-      std::vector<EmptyMove> moves;
-
-      for (std::size_t i = 0; i < input.size(); ++i) {
-        EmptyMove move = {};
-        move.orig = machine(((input[i] + 1)) % input.size());
-        move.dest = input[(i + 1) % input.size()];
-        moves.push_back(move);
-      }
-
-      return moves;
     }
   };
 
