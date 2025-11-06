@@ -1,0 +1,5 @@
+target("sched_shop_tests")
+    set_kind("binary")
+    add_files("shop/*.cc", "main.cc")
+    add_deps("sched")
+    add_packages("gtest")

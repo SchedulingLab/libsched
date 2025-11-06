@@ -3,8 +3,10 @@
 
 #include <sched/shop/input/HoistInputConversion.h>
 
+#include <cassert>
+
 #include <algorithm>
-#include <set>
+#include <ranges>
 
 namespace sched::shop {
 
@@ -20,76 +22,49 @@ namespace sched::shop {
   HoistEmptyInput to_empty_input(const HoistLoadedInput& loaded_input, const HoistSchedulingInstance& instance)
   {
     assert(loaded_input.size() == instance.machine_count());
-    const std::vector<Move> empty_moves = compute_empty_moves(loaded_input);
-
-    /*
-     * reconstitutes the cycles
-     */
-
-    std::set<Move> empty_moves_set(empty_moves.begin(), empty_moves.end());
-
-    std::vector<std::vector<MachineId>> cycles;
-
-    for (auto iterator = empty_moves_set.begin(); iterator != empty_moves_set.end(); ) {
-      std::vector<MachineId> cycle;
-
-      const MachineId first_machine = iterator->orig;
-      cycle.push_back(first_machine);
-
-      MachineId current_machine = iterator->dest;
-
-      for (;;) {
-        cycle.push_back(current_machine);
-        auto next_iterator = std::ranges::find(empty_moves_set, current_machine, &Move::orig);
-        assert(next_iterator != empty_moves_set.end());
-
-        current_machine = next_iterator->dest;
-
-        if (current_machine == first_machine) {
-          break;
-        }
-
-        empty_moves_set.erase(next_iterator);
-      }
-
-      iterator = empty_moves_set.erase(iterator);
-
-      auto minimum_iterator = std::ranges::min_element(cycle);
-      std::ranges::rotate(cycle, minimum_iterator); // put minimum first
-
-      cycles.push_back(std::move(cycle));
-    }
-
-    std::ranges::sort(cycles, {}, [](const std::vector<MachineId>& cycle) { return cycle.front(); });
-
-    /*
-     * Recreate the empty input
-     */
-
-    HoistEmptyInput empty_input = {};
+    std::vector<Move> empty_moves = compute_empty_moves(loaded_input);
 
     std::vector<std::size_t> indices;
-    indices.reserve(cycles.size());
 
-    for (const std::vector<MachineId>& cycle : cycles) {
-      indices.push_back(cycle.size());
-      empty_input.machines.insert(empty_input.machines.end(), cycle.begin(), cycle.end());
+    auto start_iterator = empty_moves.begin();
+
+    while (start_iterator != empty_moves.end()) {
+      // put the minimum at the beginning
+
+      auto min_iterator = std::ranges::min_element(std::ranges::subrange(start_iterator, empty_moves.end()), {}, &Move::orig);
+      std::iter_swap(start_iterator, min_iterator);
+
+      // construct the cycle
+
+      sched::MachineId next_machine = start_iterator->dest;
+      auto current_iterator = std::next(start_iterator);
+
+      while (next_machine != start_iterator->orig) {
+        auto next_iterator = std::ranges::find(std::ranges::subrange(current_iterator, empty_moves.end()), next_machine, &Move::orig);
+        assert(next_iterator != empty_moves.end());
+        next_machine = next_iterator->dest;
+        std::iter_swap(current_iterator, next_iterator);
+        std::advance(current_iterator, 1);
+      }
+
+      // construct the partition
+
+      indices.push_back(std::distance(empty_moves.begin(), current_iterator));
+      start_iterator = current_iterator;
     }
 
     if (!indices.empty()) {
-      std::partial_sum(indices.begin(), indices.end(), indices.begin());
-      empty_input.count = indices.back();
-      assert(empty_input.machines.size() == empty_input.count);
+      assert(indices.back() == empty_moves.size());
       indices.pop_back();
+    }
 
-      // find the float index corresponding to partition
+    // reconstruct the empty input
 
-      Partition partition(empty_input.count, indices);
-      const PartitionGroup partition_group(empty_input.count);
-      const std::size_t index = partition_group.find_partition(partition);
-      assert(index < partition_group.size());
+    HoistEmptyInput empty_input;
+    empty_input.count = empty_moves.size();
 
-      empty_input.float_index = (static_cast<double>(index) + 0.5) / static_cast<double>(partition_group.size());
+    for (const sched::shop::Move& move : empty_moves) {
+      empty_input.machines.push_back(move.orig);
     }
 
     // put missing machines at the end
@@ -101,6 +76,15 @@ namespace sched::shop {
     }
 
     assert(empty_input.machines.size() == instance.machine_count());
+
+    // find the float index corresponding to partition
+
+    Partition partition(empty_input.count, indices);
+    const PartitionGroup partition_group(empty_input.count);
+    const std::size_t index = partition_group.find_partition(partition);
+    assert(index < partition_group.size());
+
+    empty_input.float_index = (static_cast<double>(index) + 0.5) / static_cast<double>(partition_group.size());
 
     return empty_input;
   }

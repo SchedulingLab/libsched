@@ -18,7 +18,10 @@ namespace sched::shop {
       Move move = {};
       move.orig = machine(((input[i] + 1)) % input.size());
       move.dest = input[(i + 1) % input.size()];
-      moves.push_back(move);
+
+      if (move.orig != move.dest) {
+        moves.push_back(move);
+      }
     }
 
     return moves;
