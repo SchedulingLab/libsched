@@ -74,7 +74,9 @@ TEST(HoistScheduling, InputConversion)
   sched::shop::HoistLoadedInput loaded_input = { 0_m, 10_m, 4_m, 5_m, 11_m, 1_m, 12_m, 6_m, 2_m, 7_m, 9_m, 8_m, 3_m };
 
   sched::shop::HoistEmptyInput empty_input = sched::shop::to_empty_input(loaded_input, instance);
+  sched::shop::HoistLoadedInput loaded_input_back = sched::shop::to_loaded_input(empty_input, instance);
 
+  EXPECT_EQ(loaded_input, loaded_input_back);
 }
 
 

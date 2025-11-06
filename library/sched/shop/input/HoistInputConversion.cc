@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <ranges>
 
+#include <sched/shop/helper/Partition.h>
+
 namespace sched::shop {
 
   namespace {
@@ -91,10 +93,32 @@ namespace sched::shop {
 
   HoistLoadedInput to_loaded_input(const HoistEmptyInput& empty_input, const HoistSchedulingInstance& instance)
   {
+    const PartitionGroup group(empty_input.length);
+    const Partition& partition = group.partition(empty_input.float_index);
+    const auto end = std::next(empty_input.machines.begin(), static_cast<std::ptrdiff_t>(empty_input.length));
+
     HoistLoadedInput loaded_input = {};
+    MachineId current = machine(0);
 
+    for (;;) {
+      loaded_input.push_back(current);
+      current = next_machine(current, instance); // target of the loaded move
 
+      auto iterator = std::ranges::find(empty_input.machines.begin(), end, current);
 
+      if (iterator != end) {
+        const std::size_t index = std::distance(empty_input.machines.begin(), iterator);
+        const std::size_t next_index = partition.next_index(index);
+        assert(next_index <empty_input.length);
+        current = empty_input.machines[next_index];
+      }
+
+      if (current == machine(0)) {
+        break;
+      }
+    }
+
+    assert(loaded_input.size() == instance.machine_count());
     return loaded_input;
   }
 
