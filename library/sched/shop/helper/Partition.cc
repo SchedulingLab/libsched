@@ -3,6 +3,7 @@
 
 #include <sched/shop/helper/Partition.h>
 
+#include <algorithm>
 #include <ranges>
 
 namespace sched::shop {
@@ -21,17 +22,17 @@ namespace sched::shop {
    * Partition
    */
 
-  Partition::Partition(std::size_t size, std::vector<std::size_t> partition)
-  : m_size(size)
+  Partition::Partition(std::size_t length, std::vector<std::size_t> partition)
+  : m_length(length)
   , m_partition(std::move(partition))
   {
-    assert(m_size > 0);
+    assert(m_length > 0);
   }
 
   std::size_t Partition::next_index(std::size_t i) const
   {
     if (m_partition.empty()) {
-      if (i + 1 == m_size) {
+      if (i + 1 == m_length) {
         return 0;
       }
 
@@ -46,7 +47,7 @@ namespace sched::shop {
       ++limit_index;
     }
 
-    const std::size_t limit = limit_index < m_partition.size() ? m_partition[limit_index] : m_size;
+    const std::size_t limit = limit_index < m_partition.size() ? m_partition[limit_index] : m_length;
     assert(i < limit);
 
     if (i + 1 == limit) {
@@ -65,12 +66,12 @@ namespace sched::shop {
     return m_partition.empty();
   }
 
-  std::size_t Partition::size() const
+  std::size_t Partition::length() const
   {
-    return m_size;
+    return m_length;
   }
 
-  const std::vector<std::size_t>& Partition::indices() const
+  std::span<const std::size_t> Partition::indices() const
   {
     return m_partition;
   }
@@ -79,8 +80,8 @@ namespace sched::shop {
    * PartitionGroup
    */
 
-  PartitionGroup::PartitionGroup(std::size_t size)
-  : m_size(size)
+  PartitionGroup::PartitionGroup(std::size_t length)
+  : m_length(length)
   {
     compute_partitions();
   }
@@ -96,12 +97,20 @@ namespace sched::shop {
     return m_partitions[i];
   }
 
+  const Partition& PartitionGroup::partition(double float_index) const
+  {
+    assert(0.0 <= float_index && float_index < 1.0);
+    const std::size_t index = index_from_float_index(float_index, m_partitions.size());
+    assert(index < m_partitions.size());
+    return m_partitions[index];
+  }
+
   std::size_t PartitionGroup::find_partition(const Partition& partition) const
   {
-    assert(partition.size() == m_size);
+    assert(partition.length() == m_length);
 
     for (auto [ index, partition_for_index ] : std::views::enumerate(m_partitions)) {
-      if (partition.indices() == partition_for_index.indices()) {
+      if (std::ranges::equal(partition.indices(), partition_for_index.indices())) {
         return index;
       }
     }
@@ -113,18 +122,20 @@ namespace sched::shop {
   {
     std::vector<std::size_t> partition;
 
-    if (m_size < AtLeast) {
-      m_partitions.emplace_back(m_size, partition);
+    if (m_length < AtLeast) {
+      m_partitions.emplace_back(m_length, partition);
     } else {
       compute_partition_recursive(0, partition);
     }
+
+    assert(m_partitions.size() == partition_group_count(m_length));
   }
 
   void PartitionGroup::compute_partition_recursive(std::size_t j, std::vector<std::size_t>& current_partition) // NOLINT(misc-no-recursion)
   {
-    m_partitions.emplace_back(m_size, current_partition);
+    m_partitions.emplace_back(m_length, current_partition);
 
-    for (std::size_t i = j + AtLeast; i <= m_size - AtLeast; ++i) {
+    for (std::size_t i = j + AtLeast; i <= m_length - AtLeast; ++i) {
       current_partition.push_back(i);
       compute_partition_recursive(i, current_partition);
       current_partition.pop_back();
@@ -135,47 +146,39 @@ namespace sched::shop {
    * PartitionCollection
    */
 
-  PartitionCollection::PartitionCollection(std::size_t max_size)
-  : m_max_size(max_size)
+  PartitionCollection::PartitionCollection(std::size_t max_length)
+  : m_max_length(max_length)
   {
-    for (std::size_t i = 0; i <= m_max_size; ++i) {
+    for (std::size_t i = 0; i <= m_max_length; ++i) {
       m_groups.emplace_back(i);
     }
   }
 
-  const PartitionGroup& PartitionCollection::group(std::size_t size) const
+  const PartitionGroup& PartitionCollection::group(std::size_t length) const
   {
-    assert(size <= m_max_size);
-    return m_groups[size];
+    assert(length <= m_max_length);
+    return m_groups[length];
   }
 
-  const Partition& PartitionCollection::partition(std::size_t size, double float_index) const
+  const Partition& PartitionCollection::partition(std::size_t length, double float_index) const
   {
-    assert(size <= m_max_size);
-    assert(0.0 <= float_index && float_index < 1.0);
-
-    const PartitionGroup& group = m_groups[size];
-
-    const std::size_t index = index_from_float_index(float_index, group.size());
-    assert(index < group.size());
-
-    return group[index];
+    return group(length).partition(float_index);
   }
 
   /*
    * Useful functions
    */
 
-  std::size_t partition_group_count(std::size_t size)
+  std::size_t partition_group_count(std::size_t length)
   {
-    if (size <= 3) {
+    if (length <= 3) {
       return 1;
     }
 
     std::size_t u = 1;
     std::size_t v = 1;
 
-    for (std::size_t i = 3; i < size; ++i) {
+    for (std::size_t i = 3; i < length; ++i) {
       const std::size_t w = u + v;
       u = v;
       v = w;
@@ -184,9 +187,9 @@ namespace sched::shop {
     return v;
   }
 
-  bool reference_same_partition(double float_index0, double float_index1, std::size_t size)
+  bool reference_same_partition(double float_index0, double float_index1, std::size_t length)
   {
-    const std::size_t count = partition_group_count(size);
+    const std::size_t count = partition_group_count(length);
     const std::size_t index0 = index_from_float_index(float_index0, count);
     const std::size_t index1 = index_from_float_index(float_index1, count);
     return index0 == index1;

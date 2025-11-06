@@ -61,7 +61,7 @@ namespace sched::shop {
     // reconstruct the empty input
 
     HoistEmptyInput empty_input;
-    empty_input.count = empty_moves.size();
+    empty_input.length = empty_moves.size();
 
     for (const sched::shop::Move& move : empty_moves) {
       empty_input.machines.push_back(move.orig);
@@ -79,8 +79,8 @@ namespace sched::shop {
 
     // find the float index corresponding to partition
 
-    Partition partition(empty_input.count, indices);
-    const PartitionGroup partition_group(empty_input.count);
+    Partition partition(empty_input.length, indices);
+    const PartitionGroup partition_group(empty_input.length);
     const std::size_t index = partition_group.find_partition(partition);
     assert(index < partition_group.size());
 

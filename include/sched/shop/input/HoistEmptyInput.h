@@ -6,6 +6,7 @@
 #include <cassert>
 
 #include <algorithm>
+#include <ranges>
 #include <string>
 #include <vector>
 
@@ -21,7 +22,7 @@ namespace sched {
 
     struct HoistEmptyInput {
       std::vector<MachineId> machines;
-      std::size_t count = 0;
+      std::size_t length = 0;
       double float_index = 0.0;
 
       bool empty() const
@@ -48,7 +49,15 @@ namespace sched {
 
       bool operator==(const HoistEmptyInput& other) const
       {
-        return other.machines == machines && other.count == count && reference_same_partition(other.float_index, float_index, count);
+        if (other.length != length) {
+          return false;
+        }
+
+        if (!std::ranges::equal(machines | std::views::take(length), other.machines | std::views::take(length))) {
+          return false;
+        }
+
+        return reference_same_partition(other.float_index, float_index, length);
       }
 
     };
@@ -79,7 +88,7 @@ namespace sched {
     {
       shop::HoistEmptyInput input = generate_input(instance);
       std::ranges::shuffle(input.machines, random);
-      input.count = random.compute_uniform_integer<std::size_t>(3, input.machines.size() - 1);
+      input.length = random.compute_uniform_integer<std::size_t>(3, input.machines.size() - 1);
       return input;
     }
 

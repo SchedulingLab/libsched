@@ -2,12 +2,12 @@
 
 #include <gtest/gtest.h>
 
+#include <sched/Time.h>
+#include <sched/shop/input/HoistEmptyInput.h>
+#include <sched/shop/input/HoistInputConversion.h>
+#include <sched/shop/input/HoistLoadedInput.h>
 #include <sched/shop/instance/HoistSchedulingInstance.h>
 #include <sched/shop/instance/HoistSchedulingData.h>
-#include <sched/Time.h>
-#include "sched/shop/input/HoistEmptyInput.h"
-#include "sched/shop/input/HoistInputConversion.h"
-#include "sched/shop/input/HoistLoadedInput.h"
 
 namespace {
 
