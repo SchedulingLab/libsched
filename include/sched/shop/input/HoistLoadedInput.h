@@ -19,7 +19,7 @@ namespace sched {
 
     using HoistLoadedInput = std::vector<MachineId>;
 
-    std::vector<Move> compute_empty_moves(const HoistLoadedInput& input);
+    std::vector<Move> compute_empty_moves(const HoistLoadedInput& input, MoveFilter filter = MoveFilter::All);
 
   }
 

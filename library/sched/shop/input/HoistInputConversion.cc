@@ -22,7 +22,7 @@ namespace sched::shop {
   HoistEmptyInput to_empty_input(const HoistLoadedInput& loaded_input, const HoistSchedulingInstance& instance)
   {
     assert(loaded_input.size() == instance.machine_count());
-    std::vector<Move> empty_moves = compute_empty_moves(loaded_input);
+    std::vector<Move> empty_moves = compute_empty_moves(loaded_input, MoveFilter::RemoveTrivial);
 
     std::vector<std::size_t> indices;
 

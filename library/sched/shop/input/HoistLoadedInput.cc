@@ -10,7 +10,7 @@ static_assert(sched::concepts::Input<sched::shop::HoistLoadedInput>);
 
 namespace sched::shop {
 
-  std::vector<Move> compute_empty_moves(const HoistLoadedInput& input)
+  std::vector<Move> compute_empty_moves(const HoistLoadedInput& input, MoveFilter filter)
   {
     std::vector<Move> moves;
 
@@ -19,9 +19,11 @@ namespace sched::shop {
       move.orig = machine(((input[i] + 1)) % input.size());
       move.dest = input[(i + 1) % input.size()];
 
-      if (move.orig != move.dest) {
-        moves.push_back(move);
+      if (filter == MoveFilter::RemoveTrivial && move.orig == move.dest) {
+        continue;
       }
+
+      moves.push_back(move);
     }
 
     return moves;
