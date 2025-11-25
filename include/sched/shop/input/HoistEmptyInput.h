@@ -26,6 +26,14 @@ namespace sched {
       std::size_t length = 0;
       double float_index = 0.0;
 
+      auto begin() {
+        return machines.begin();
+      }
+
+      auto end() {
+        return machines.end();
+      }
+
       bool empty() const
       {
         return machines.empty();
