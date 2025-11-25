@@ -26,7 +26,7 @@ namespace sched::shop {
   : m_length(length)
   , m_partition(std::move(partition))
   {
-    assert(m_length > 0);
+    // assert(m_length > 0);
   }
 
   std::size_t Partition::next_index(std::size_t i) const

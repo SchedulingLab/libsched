@@ -13,6 +13,7 @@
 #include <sched/Ids.h>
 #include <sched/meta/Instance.h>
 #include <sched/shop/helper/Partition.h>
+#include <sched/shop/Hoist.h>
 #include <sched/support/Random.h>
 #include <sched/types/InputTraits.h>
 
@@ -62,6 +63,9 @@ namespace sched {
 
     };
 
+    SCHED_API std::vector<Move> generate_valid_empty_moves(std::size_t machine_count, Random& random);
+    SCHED_API HoistEmptyInput convert_empty_moves_to_empty_input(std::vector<Move> empty_moves, std::size_t machine_count);
+
   }
 
   template<>
@@ -95,7 +99,8 @@ namespace sched {
     template<typename Instance>
     static shop::HoistEmptyInput generate_feasible(const Instance& instance, Random& random)
     {
-      return generate_random(instance, random);
+      std::vector<shop::Move> empty_moves = shop::generate_valid_empty_moves(instance.machine_count(), random);
+      return convert_empty_moves_to_empty_input(std::move(empty_moves), instance.machine_count());
     }
   };
 
