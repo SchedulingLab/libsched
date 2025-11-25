@@ -39,11 +39,18 @@ namespace sched::shop {
       }
 
       if (available.empty()) {
+        using namespace sched::literals;
+
+        if (current != 0_m) {
+          empty_moves.push_back({ .orig = current, .dest = 0_m });
+        }
+
         break;
       }
 
       const auto index_next = random.compute_uniform_integer<std::size_t>(0, available.size() - 1);
       const MachineId next = available[index_next];
+      tanks[to_index(next)] = TankStatus::AlreadyUnloaded;
 
       // add an empty move if not trivial
 

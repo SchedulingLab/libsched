@@ -82,4 +82,19 @@ TEST(HoistScheduling, InputConversion)
 
 }
 
+TEST(HoistScheduling, EmptyInputGeneration)
+{
+  // sched::shop::HoistSchedulingInstance instance = load_instance();
+
+  constexpr std::size_t MachineCount = 10;
+
+  std::random_device dev;
+  sched::Random random(dev());
+
+  auto empty_moves = sched::shop::generate_valid_empty_moves(MachineCount, random);
+  sched::shop::HoistEmptyInput input = convert_empty_moves_to_empty_input(empty_moves, MachineCount);
+
+  fmt::println("input: {}", input);
+}
+
 
