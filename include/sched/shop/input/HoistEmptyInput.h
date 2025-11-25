@@ -30,7 +30,15 @@ namespace sched {
         return machines.begin();
       }
 
+      auto begin() const {
+        return machines.begin();
+      }
+
       auto end() {
+        return machines.end();
+      }
+
+      auto end() const {
         return machines.end();
       }
 
