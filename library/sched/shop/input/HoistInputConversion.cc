@@ -6,7 +6,6 @@
 #include <cassert>
 
 #include <algorithm>
-#include <ranges>
 
 #include <sched/shop/helper/Partition.h>
 
@@ -28,7 +27,7 @@ namespace sched::shop {
     return convert_empty_moves_to_empty_input(std::move(empty_moves), machine_count);
   }
 
-  HoistLoadedInput to_loaded_input(const HoistEmptyInput& empty_input, std::size_t machine_count)
+  std::optional<HoistLoadedInput> to_loaded_input(const HoistEmptyInput& empty_input, std::size_t machine_count)
   {
     const PartitionGroup group(empty_input.length);
     const Partition& partition = group.partition(empty_input.float_index);
@@ -46,7 +45,7 @@ namespace sched::shop {
       if (iterator != end) {
         const std::size_t index = std::distance(empty_input.machines.begin(), iterator);
         const std::size_t next_index = partition.next_index(index);
-        assert(next_index <empty_input.length);
+        assert(next_index < empty_input.length);
         current = empty_input.machines[next_index];
       }
 
@@ -55,7 +54,11 @@ namespace sched::shop {
       }
     }
 
-    assert(loaded_input.size() == machine_count);
+    if (loaded_input.size() != machine_count) {
+      // the empty input was not a valid sequence of empty moves
+      return std::nullopt;
+    }
+
     return loaded_input;
   }
 

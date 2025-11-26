@@ -25,8 +25,14 @@ namespace sched::shop {
       // requires(concepts::ShopInstance<Instance>)
     std::optional<HoistSchedule> operator()(const Instance& instance, const HoistEmptyInput& input)
     {
+      std::optional<HoistLoadedInput> maybe_loaded_input = to_loaded_input(input, instance.machine_count());
+
+      if (!maybe_loaded_input) {
+        return std::nullopt;
+      }
+
       HoistLoadedEngine engine;
-      return engine(instance, to_loaded_input(input, instance.machine_count()));
+      return engine(instance, maybe_loaded_input.value());
     }
   };
 

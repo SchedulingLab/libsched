@@ -89,7 +89,7 @@ namespace sched {
 
         // selection
 
-        auto selected = compute_selection(population, population_size, random);
+        std::vector<Solution> selected = compute_selection(population, population_size, random);
         visitor.after_selection(generation, selected);
 
         // crossover
@@ -167,7 +167,15 @@ namespace sched {
           j = selected_distribution(random);
         }
 
-        auto [child0, child1] = crossover(selected[i].input, selected[j].input, random);
+        assert(j < selected.size());
+
+        const Input& parent0 = selected[i].input;
+        const Input& parent1 = selected[j].input;
+
+        auto [child0, child1] = crossover(parent0, parent1, random);
+
+        assert(child0.size() == parent0.size());
+        assert(child1.size() == parent1.size());
 
         offsprings.push_back(compute_solution(instance, std::move(child0)));
         offsprings.push_back(compute_solution(instance, std::move(child1)));

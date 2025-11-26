@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 #include <sched/Time.h>
+#include <sched/meta/crossover/OrderCrossover.h>
 #include <sched/shop/input/HoistEmptyInput.h>
 #include <sched/shop/input/HoistInputConversion.h>
 #include <sched/shop/input/HoistInputFmt.h>
@@ -71,13 +72,14 @@ TEST(HoistScheduling, InputConversion)
 {
   using namespace sched::literals;
 
-  sched::shop::HoistLoadedInput loaded_input = { 0_m, 1_m, 2_m, 3_m, 4_m, 5_m, 6_m, 7_m, 8_m };
+  sched::shop::HoistLoadedInput loaded_input = { 0_m, 1_m, 2_m, 3_m, 4_m, 5_m, 6_m, 7_m };
   const std::size_t machine_count = loaded_input.size();
 
   do {
     sched::shop::HoistEmptyInput empty_input = sched::shop::to_empty_input(loaded_input, machine_count);
-    sched::shop::HoistLoadedInput loaded_input_back = sched::shop::to_loaded_input(empty_input, machine_count);
-    EXPECT_EQ(loaded_input, loaded_input_back);
+    std::optional<sched::shop::HoistLoadedInput> loaded_input_back = sched::shop::to_loaded_input(empty_input, machine_count);
+    EXPECT_TRUE(loaded_input_back);
+    EXPECT_EQ(loaded_input, *loaded_input_back);
   } while (std::ranges::next_permutation(loaded_input.begin() + 1, loaded_input.end()).found);
 
 }
@@ -86,7 +88,7 @@ TEST(HoistScheduling, EmptyInputGeneration)
 {
   // sched::shop::HoistSchedulingInstance instance = load_instance();
 
-  constexpr std::size_t MachineCount = 10;
+  constexpr std::size_t MachineCount = 13;
 
   std::random_device dev;
   sched::Random random(dev());
@@ -97,4 +99,32 @@ TEST(HoistScheduling, EmptyInputGeneration)
   fmt::println("input: {}", input);
 }
 
+TEST(HoistScheduling, EmptyInputCrossover)
+{
+  std::random_device dev;
+  sched::Random random(dev());
 
+  sched::shop::HoistSchedulingInstance instance = load_instance();
+
+  sched::shop::HoistEmptyInput input1 = sched::InputTraits<sched::shop::HoistEmptyInput>::generate_feasible(instance, random);
+  sched::shop::HoistEmptyInput input2 = sched::InputTraits<sched::shop::HoistEmptyInput>::generate_feasible(instance, random);
+
+  fmt::println("input1: {}", input1);
+  fmt::println("input2: {}", input2);
+
+  sched::OrderCrossover<2> crossover = {};
+
+  auto [ child1, child2 ] = crossover(input1, input2, random);
+
+  fmt::println("child1: {}", child1);
+  fmt::println("child2: {}", child2);
+
+  EXPECT_EQ(child1.length, input1.length);
+  EXPECT_EQ(child2.length, input2.length);
+
+  EXPECT_EQ(child1.float_index, input1.float_index);
+  EXPECT_EQ(child2.float_index, input2.float_index);
+
+  EXPECT_EQ(child1.size(), instance.machine_count());
+  EXPECT_EQ(child2.size(), instance.machine_count());
+}
