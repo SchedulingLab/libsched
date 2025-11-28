@@ -46,7 +46,7 @@ namespace sched {
     static shop::HoistLoadedInput generate_random(const Instance& instance, Random& random)
     {
       shop::HoistLoadedInput input = generate_input(instance);
-      std::ranges::shuffle(input, random);
+      std::ranges::shuffle(input.begin() + 1, input.end(), random); // keep 0_m at the beginning
       return input;
     }
 
