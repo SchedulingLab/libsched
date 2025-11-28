@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 #include <sched/Time.h>
-#include <sched/meta/crossover/OrderCrossover.h>
+#include <sched/meta/crossover/LinearOrderCrossover.h>
 #include <sched/shop/input/HoistEmptyInput.h>
 #include <sched/shop/input/HoistInputConversion.h>
 #include <sched/shop/input/HoistInputFmt.h>
@@ -117,7 +117,7 @@ TEST(HoistScheduling, EmptyInputCrossover)
   fmt::println("input1: {}", input1);
   fmt::println("input2: {}", input2);
 
-  sched::OrderCrossover<2> crossover = {};
+  sched::LinearOrderCrossover<2> crossover = {};
 
   auto [ child1, child2 ] = crossover(input1, input2, random);
 
