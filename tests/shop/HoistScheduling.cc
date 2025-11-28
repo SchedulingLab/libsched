@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2022-2025 Julien Bernard
+
 #include <sstream>
 
 #include <gtest/gtest.h>
@@ -95,6 +98,8 @@ TEST(HoistScheduling, EmptyInputGeneration)
 
   auto empty_moves = sched::shop::generate_valid_empty_moves(MachineCount, random);
   sched::shop::HoistEmptyInput input = convert_empty_moves_to_empty_input(empty_moves, MachineCount);
+
+  EXPECT_EQ(input.size(), MachineCount);
 
   fmt::println("input: {}", input);
 }

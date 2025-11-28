@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (c) 2022-2025 Julien Bernard
-#ifndef SCHED_ORDER_CROSSOVER_H
-#define SCHED_ORDER_CROSSOVER_H
+#ifndef SCHED_LINEAR_ORDER_CROSSOVER_H
+#define SCHED_LINEAR_ORDER_CROSSOVER_H
 
 #include <cassert>
 
@@ -15,7 +15,7 @@
 namespace sched {
 
   template<std::size_t N>
-  struct OrderCrossover1 {
+  struct LinearOrderCrossover {
 
     template<typename Input>
     std::tuple<Input, Input> operator()(const Input& parent0, const Input& parent1, Random& random)
@@ -48,7 +48,7 @@ namespace sched {
 
       auto index_of = [&](Element element, const Input& input) {
         if (auto iterator = std::ranges::find(input, element); iterator != input.end()) {
-          return static_cast<std::size_t>((std::distance(input.begin(), iterator) + points[1 % N]) % size);
+          return static_cast<std::size_t>(std::distance(input.begin(), iterator));
         }
 
         assert(false && "are you sure your input is a permutation?");
@@ -78,9 +78,8 @@ namespace sched {
 
       return std::make_tuple(child0, child1);
     }
-
   };
 
 }
 
-#endif // SCHED_ORDER_CROSSOVER_H
+#endif // SCHED_LINEAR_ORDER_CROSSOVER_H
