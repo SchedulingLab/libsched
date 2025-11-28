@@ -15,9 +15,9 @@ namespace sched {
   template<std::size_t N>
   std::array<std::size_t, N> choose_points(std::size_t size, Random& random)
   {
-    assert(size >= N);
-    std::vector<std::size_t> possible_points(size);
-    std::ranges::iota(possible_points, 0);
+    assert(size > N);
+    std::vector<std::size_t> possible_points(size - 1);
+    std::ranges::iota(possible_points, 1);
     std::ranges::shuffle(possible_points, random);
 
     std::array<std::size_t, N> points;
