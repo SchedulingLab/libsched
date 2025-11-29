@@ -7,6 +7,7 @@
 
 #include <array>
 #include <algorithm>
+#include <numeric>
 
 #include <sched/support/Random.h>
 
