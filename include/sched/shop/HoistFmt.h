@@ -3,20 +3,22 @@
 #ifndef SCHED_SHOP_HOIST_FMT_H
 #define SCHED_SHOP_HOIST_FMT_H
 
-#include <fmt/core.h>
+#include <format>
 
 #include <sched/IdsFmt.h>
 #include <sched/shop/Hoist.h>
 
 template<>
-struct fmt::formatter<sched::shop::Move> {
+struct std::formatter<sched::shop::Move> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator { return ctx.end(); }
+  template<typename Context>
+  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  auto format(const sched::shop::Move& move, format_context& ctx) const -> format_context::iterator
+  template<typename Context>
+  auto format(const sched::shop::Move& move, Context& ctx) const -> Context::iterator
   {
-    return fmt::format_to(ctx.out(), "({}, {})", move.orig, move.dest);
+    return std::format_to(ctx.out(), "({}, {})", move.orig, move.dest);
   }
 
 };

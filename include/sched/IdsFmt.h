@@ -3,42 +3,70 @@
 #ifndef SCHED_IDS_FMT_H
 #define SCHED_IDS_FMT_H
 
-#include <fmt/format.h>
+#include <format>
+#include <type_traits>
 
 #include "Ids.h"
 
-namespace sched {
-
-  inline auto format_as(MachineId id) { return fmt::underlying(id); }
-  inline auto format_as(VehicleId id) { return fmt::underlying(id); }
-
-}
-
 template<>
-struct fmt::formatter<sched::JobId> {
+struct std::formatter<sched::MachineId>
+{
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator { return ctx.end(); }
+  template<typename Context>
+  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  auto format(sched::JobId id, format_context& ctx) const -> format_context::iterator
+  template<typename Context>
+  auto format(sched::MachineId id, Context& ctx) const -> Context::iterator
   {
-    if (id == sched::AnyJob) {
-      return format_to(ctx.out(), "any");
-    }
-
-    return format_to(ctx.out(), "{}", static_cast<std::size_t>(id));
+    return std::format_to(ctx.out(), "{}", std::to_underlying(id));
   }
 };
 
 template<>
-struct fmt::formatter<sched::OperationId> {
+struct std::formatter<sched::VehicleId>
+{
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  constexpr auto parse(format_parse_context& ctx) -> format_parse_context::iterator { return ctx.end(); }
+  template<typename Context>
+  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  auto format(sched::OperationId id, format_context& ctx) const -> format_context::iterator
+  template<typename Context>
+  auto format(sched::VehicleId id, Context& ctx) const -> Context::iterator
   {
-    return format_to(ctx.out(), "({}, {})", id.job, id.index);
+    return std::format_to(ctx.out(), "{}", std::to_underlying(id));
+  }
+};
+
+template<>
+struct std::formatter<sched::JobId> {
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  template<typename Context>
+  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  template<typename Context>
+  auto format(sched::JobId id, Context& ctx) const -> Context::iterator
+  {
+    if (id == sched::AnyJob) {
+      return std::format_to(ctx.out(), "any");
+    }
+
+    return std::format_to(ctx.out(), "{}", static_cast<std::size_t>(id));
+  }
+};
+
+template<>
+struct std::formatter<sched::OperationId> {
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  template<typename Context>
+  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  template<typename Context>
+  auto format(sched::OperationId id, Context& ctx) const -> Context::iterator
+  {
+    return std::format_to(ctx.out(), "({}, {})", id.job, id.index);
   }
 };
 

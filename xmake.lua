@@ -4,7 +4,6 @@ set_version("0.1.0")
 add_repositories("sched-repo https://github.com/SchedulingLab/xmake-repo")
 
 add_requires("lqp", "nlohmann_json")
-add_requires("fmt", { system = false, configs = { header_only = true }})
 add_requires("gtest", { configs = { gmock = false }})
 
 add_rules("mode.debug", "mode.releasedbg", "mode.release")
@@ -38,7 +37,7 @@ target("sched")
     add_files("library/**.cc")
     add_headerfiles("include/(sched/**.h)")
     add_includedirs("include", { public = true })
-    add_packages("fmt", "lqp", "nlohmann_json", { public = true })
+    add_packages("lqp", "nlohmann_json", { public = true })
     set_license("GPL-3.0")
 
 

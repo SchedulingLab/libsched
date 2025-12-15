@@ -5,8 +5,7 @@
 
 #include <chrono>
 #include <limits>
-
-#include <fmt/chrono.h>
+#include <print>
 
 namespace sched {
   namespace {
@@ -39,7 +38,7 @@ namespace sched {
     auto now = std::chrono::system_clock::now();
 
     const std::lock_guard<std::mutex> lock(g_log_mutex);
-    fmt::print("[{}] {}{}\n", now, std::string(g_indent, '\t'), string);
+    std::print("[{}] {}{}\n", now, std::string(g_indent, '\t'), string);
   }
 
   std::mutex Log::g_log_mutex;

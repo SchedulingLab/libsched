@@ -4,8 +4,7 @@
 #define SCHED_LOG_H
 
 #include <mutex>
-
-#include <fmt/core.h>
+#include <format>
 
 #include <sched/Api.h>
 
@@ -15,13 +14,13 @@ namespace sched {
     Log() = delete;
 
     template<typename... T>
-    static void println(fmt::format_string<T...> fmt, T&&... args)
+    static void println(std::format_string<T...> fmt, T&&... args)
     {
       if (current_indent_depth() > g_max_scope) {
         return;
       }
 
-      auto string = fmt::format(fmt, std::forward<T>(args)...);
+      const std::string string = std::format(fmt, std::forward<T>(args)...);
       print_line_string(string);
     }
 

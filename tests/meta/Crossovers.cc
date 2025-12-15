@@ -6,8 +6,6 @@
 #include <sched/meta/crossover/OrderCrossover.h>
 #include <sched/meta/crossover/LinearOrderCrossover.h>
 
-#include <fmt/ranges.h>
-
 TEST(CrossoverTest, OrderCrossover1) {
   static constexpr std::size_t InputSize = 8;
   using Input = std::array<int, InputSize>;

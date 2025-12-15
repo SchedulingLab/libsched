@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (c) 2022-2025 Julien Bernard
 
-#include <sstream>
+#include <print>
 
 #include <gtest/gtest.h>
 
@@ -101,7 +101,7 @@ TEST(HoistScheduling, EmptyInputGeneration)
 
   EXPECT_EQ(input.size(), MachineCount);
 
-  fmt::println("input: {}", input);
+  std::println("input: {}", input);
 }
 
 TEST(HoistScheduling, EmptyInputCrossover)
@@ -114,15 +114,15 @@ TEST(HoistScheduling, EmptyInputCrossover)
   sched::shop::HoistEmptyInput input1 = sched::InputTraits<sched::shop::HoistEmptyInput>::generate_feasible(instance, random);
   sched::shop::HoistEmptyInput input2 = sched::InputTraits<sched::shop::HoistEmptyInput>::generate_feasible(instance, random);
 
-  fmt::println("input1: {}", input1);
-  fmt::println("input2: {}", input2);
+  std::println("input1: {}", input1);
+  std::println("input2: {}", input2);
 
   sched::LinearOrderCrossover<2> crossover = {};
 
   auto [ child1, child2 ] = crossover(input1, input2, random);
 
-  fmt::println("child1: {}", child1);
-  fmt::println("child2: {}", child2);
+  std::println("child1: {}", child1);
+  std::println("child2: {}", child2);
 
   EXPECT_EQ(child1.length, input1.length);
   EXPECT_EQ(child2.length, input2.length);
