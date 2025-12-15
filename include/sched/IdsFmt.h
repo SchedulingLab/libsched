@@ -4,7 +4,7 @@
 #define SCHED_IDS_FMT_H
 
 #include <format>
-#include <type_traits>
+#include <utility>
 
 #include "Ids.h"
 

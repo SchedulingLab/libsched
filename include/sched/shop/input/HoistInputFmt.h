@@ -8,12 +8,27 @@
 
 #include <sched/IdsFmt.h>
 #include <sched/shop/input/HoistEmptyInput.h>
+#include <sched/shop/input/HoistLoadedInput.h>
+
+template<>
+struct std::formatter<sched::shop::HoistLoadedInput> {
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  template<typename Context>
+  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  template<typename Context>
+  auto format(const sched::shop::HoistLoadedInput& input, Context& ctx) const -> Context::iterator
+  {
+    return std::format_to(ctx.out(), "{}", input);
+  }
+};
 
 template<>
 struct std::formatter<sched::shop::HoistEmptyInput> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
-  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.begin(); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>

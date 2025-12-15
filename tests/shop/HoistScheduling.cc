@@ -97,7 +97,7 @@ TEST(HoistScheduling, EmptyInputGeneration)
   sched::Random random(dev());
 
   auto empty_moves = sched::shop::generate_valid_empty_moves(MachineCount, random);
-  sched::shop::HoistEmptyInput input = convert_empty_moves_to_empty_input(empty_moves, MachineCount);
+  const sched::shop::HoistEmptyInput input = convert_empty_moves_to_empty_input(empty_moves, MachineCount);
 
   EXPECT_EQ(input.size(), MachineCount);
 
