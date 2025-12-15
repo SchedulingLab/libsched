@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (c) 2022-2025 Julien Bernard
 
-#include <print>
-
 #include <gtest/gtest.h>
 
 #include <sched/Time.h>
@@ -13,6 +11,7 @@
 #include <sched/shop/input/HoistLoadedInput.h>
 #include <sched/shop/instance/HoistSchedulingInstance.h>
 #include <sched/shop/instance/HoistSchedulingData.h>
+#include <sched/support/Log.h>
 
 namespace {
 
@@ -101,7 +100,7 @@ TEST(HoistScheduling, EmptyInputGeneration)
 
   EXPECT_EQ(input.size(), MachineCount);
 
-  std::println("input: {}", input);
+  sched::Log::println("input: {}", input);
 }
 
 TEST(HoistScheduling, EmptyInputCrossover)
@@ -114,15 +113,15 @@ TEST(HoistScheduling, EmptyInputCrossover)
   sched::shop::HoistEmptyInput input1 = sched::InputTraits<sched::shop::HoistEmptyInput>::generate_feasible(instance, random);
   sched::shop::HoistEmptyInput input2 = sched::InputTraits<sched::shop::HoistEmptyInput>::generate_feasible(instance, random);
 
-  std::println("input1: {}", input1);
-  std::println("input2: {}", input2);
+  sched::Log::println("input1: {}", input1);
+  sched::Log::println("input2: {}", input2);
 
   sched::LinearOrderCrossover<2> crossover = {};
 
   auto [ child1, child2 ] = crossover(input1, input2, random);
 
-  std::println("child1: {}", child1);
-  std::println("child2: {}", child2);
+  sched::Log::println("child1: {}", child1);
+  sched::Log::println("child2: {}", child2);
 
   EXPECT_EQ(child1.length, input1.length);
   EXPECT_EQ(child2.length, input2.length);

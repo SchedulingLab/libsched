@@ -4,8 +4,8 @@
 #include <sched/support/Log.h>
 
 #include <chrono>
+#include <iostream>
 #include <limits>
-#include <print>
 
 namespace sched {
   namespace {
@@ -38,7 +38,7 @@ namespace sched {
     auto now = std::chrono::system_clock::now();
 
     const std::lock_guard<std::mutex> lock(g_log_mutex);
-    std::print("[{}] {}{}\n", now, std::string(g_indent, '\t'), string);
+    std::cout << std::format("[{}] {}{}\n", now, std::string(g_indent, '\t'), string);
   }
 
   std::mutex Log::g_log_mutex;

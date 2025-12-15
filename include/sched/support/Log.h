@@ -5,6 +5,7 @@
 
 #include <mutex>
 #include <format>
+#include <string_view>
 
 #include <sched/Api.h>
 
@@ -14,13 +15,13 @@ namespace sched {
     Log() = delete;
 
     template<typename... T>
-    static void println(std::format_string<T...> fmt, T&&... args)
+    static void println(std::string_view fmt, T&&... args)
     {
       if (current_indent_depth() > g_max_scope) {
         return;
       }
 
-      const std::string string = std::format(fmt, std::forward<T>(args)...);
+      const std::string string = std::vformat(fmt, std::make_format_args(std::forward<T>(args)...));
       print_line_string(string);
     }
 
