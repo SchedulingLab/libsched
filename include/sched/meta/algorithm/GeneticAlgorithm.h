@@ -105,15 +105,21 @@ namespace sched {
 
         // replacement
 
+        std::ranges::sort(offsprings, solution_compare);
+        offsprings.erase(std::ranges::unique(offsprings, {}, &Solution::input).begin(), offsprings.end());
+
         if (offsprings.size() > offsprings_size_max) {
-          std::ranges::sort(offsprings, solution_compare);
           offsprings.resize(offsprings_size_max);
         }
 
         offsprings.insert(offsprings.end(), population.begin(), population.end());
-        assert(offsprings.size() >= population_size);
-        offsprings.resize(population_size);
         std::ranges::sort(offsprings, solution_compare);
+        offsprings.erase(std::ranges::unique(offsprings, {}, &Solution::input).begin(), offsprings.end());
+
+        if (offsprings.size() > population_size) {
+          offsprings.resize(population_size);
+        }
+
         population = std::move(offsprings);
         assert(std::ranges::is_sorted(population, solution_compare));
 
