@@ -113,7 +113,7 @@ namespace sched {
         }
 
         offsprings.insert(offsprings.end(), population.begin(), population.end());
-        std::ranges::sort(offsprings, solution_compare);
+        std::ranges::stable_sort(offsprings, solution_compare);
         offsprings.erase(std::ranges::unique(offsprings, {}, &Solution::input).begin(), offsprings.end());
 
         if (offsprings.size() > population_size) {
