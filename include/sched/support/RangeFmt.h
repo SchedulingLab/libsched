@@ -4,30 +4,30 @@
 #define SCHED_RANGE_FMT_H
 
 #include <format>
-#include <ranges>
+#include <vector>
 
-namespace sched::details {
-
-  // formatting range with std requires gcc-15, so use this hack until then
+template <typename T>
+struct std::formatter<std::vector<T>> {
   template<typename Context>
-  Context range_format_to(Context ctx, std::ranges::range auto r)
-  {
+  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+
+  template <typename Context>
+  auto format(const std::vector<T>& r, Context& ctx) const -> Context::iterator {
     bool first = true;
-    std::format_to(ctx, "[");
+    std::format_to(ctx.out(), "[");
 
     for (auto&& element : r) {
       if (first) {
         first = false;
       } else {
-        std::format_to(ctx, ", ");
+        std::format_to(ctx.out(), ", ");
       }
 
-      std::format_to(ctx, "{}", element);
+      std::format_to(ctx.out(), "{}", element);
     }
 
-    return std::format_to(ctx, "]");
+    return std::format_to(ctx.out(), "]");
   }
-
-}
+};
 
 #endif // SCHED_RANGE_FMT_H

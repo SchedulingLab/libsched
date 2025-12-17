@@ -52,7 +52,7 @@ struct std::formatter<sched::JobId> {
       return std::format_to(ctx.out(), "any");
     }
 
-    return std::format_to(ctx.out(), "{}", static_cast<std::size_t>(id));
+    return std::format_to(ctx.out(), "{}", std::to_underlying(id));
   }
 };
 

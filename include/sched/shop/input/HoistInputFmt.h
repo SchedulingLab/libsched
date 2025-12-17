@@ -9,26 +9,11 @@
 
 #include <sched/IdsFmt.h>
 #include <sched/shop/input/HoistEmptyInput.h>
-#include <sched/shop/input/HoistLoadedInput.h>
 #include <sched/support/RangeFmt.h>
-
-template<>
-struct std::formatter<sched::shop::HoistLoadedInput> {
-  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  template<typename Context>
-  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
-
-  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  template<typename Context>
-  auto format(const sched::shop::HoistLoadedInput& input, Context& ctx) const -> Context::iterator
-  {
-    return sched::details::range_format_to(ctx.out(), input);
-  }
-};
 
 namespace details {
 
-  std::vector<sched::MachineId> extract_cycle(const sched::shop::HoistEmptyInput& input, std::size_t i, std::size_t j)
+  inline std::vector<sched::MachineId> extract_cycle(const sched::shop::HoistEmptyInput& input, std::size_t i, std::size_t j)
   {
     assert(i < input.machines.size());
     assert(j <= input.machines.size());
@@ -55,12 +40,12 @@ struct std::formatter<sched::shop::HoistEmptyInput> {
 
     for (const std::size_t index : partition.indices()) {
       const std::vector<sched::MachineId> cycle = details::extract_cycle(input, start, index);
-      sched::details::range_format_to(ctx.out(), cycle);
+      std::format_to(ctx.out(), "{}", cycle);
       start = index;
     }
 
     const std::vector<sched::MachineId> cycle = details::extract_cycle(input, start, partition.length());
-    sched::details::range_format_to(ctx.out(), cycle);
+    std::format_to(ctx.out(), "{}", cycle);
     return std::format_to(ctx.out(), ">");
   }
 
