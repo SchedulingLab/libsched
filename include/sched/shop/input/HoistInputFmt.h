@@ -3,12 +3,14 @@
 #ifndef SCHED_SHOP_HOIST_INPUT_FMT_H
 #define SCHED_SHOP_HOIST_INPUT_FMT_H
 
+#include <cassert>
+
 #include <format>
-#include <ranges>
 
 #include <sched/IdsFmt.h>
 #include <sched/shop/input/HoistEmptyInput.h>
 #include <sched/shop/input/HoistLoadedInput.h>
+#include <sched/support/RangeFmt.h>
 
 template<>
 struct std::formatter<sched::shop::HoistLoadedInput> {
@@ -20,9 +22,20 @@ struct std::formatter<sched::shop::HoistLoadedInput> {
   template<typename Context>
   auto format(const sched::shop::HoistLoadedInput& input, Context& ctx) const -> Context::iterator
   {
-    return std::format_to(ctx.out(), "{}", input);
+    return sched::details::range_format_to(ctx.out(), input);
   }
 };
+
+namespace details {
+
+  std::vector<sched::MachineId> extract_cycle(const sched::shop::HoistEmptyInput& input, std::size_t i, std::size_t j)
+  {
+    assert(i < input.machines.size());
+    assert(j <= input.machines.size());
+    return { input.machines.data() + i, input.machines.data() + j };
+  }
+
+}
 
 template<>
 struct std::formatter<sched::shop::HoistEmptyInput> {
@@ -38,15 +51,16 @@ struct std::formatter<sched::shop::HoistEmptyInput> {
     const sched::shop::Partition& partition = group.partition(input.float_index);
 
     std::format_to(ctx.out(), "<");
-    auto start = input.machines.begin();
+    std::size_t start = 0;
 
     for (const std::size_t index : partition.indices()) {
-      auto end = std::next(input.machines.begin(), static_cast<std::ptrdiff_t>(index));
-      std::format_to(ctx.out(), "{}", std::ranges::subrange(start, end));
-      start = end;
+      const std::vector<sched::MachineId> cycle = details::extract_cycle(input, start, index);
+      sched::details::range_format_to(ctx.out(), cycle);
+      start = index;
     }
 
-    std::format_to(ctx.out(), "{}", std::ranges::subrange(start, std::next(input.machines.begin(), static_cast<std::ptrdiff_t>(partition.length()))));
+    const std::vector<sched::MachineId> cycle = details::extract_cycle(input, start, partition.length());
+    sched::details::range_format_to(ctx.out(), cycle);
     return std::format_to(ctx.out(), ">");
   }
 

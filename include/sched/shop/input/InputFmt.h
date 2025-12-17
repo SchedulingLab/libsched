@@ -10,6 +10,7 @@
 #include <sched/shop/input/JobListInput.h>
 #include <sched/shop/input/MachineListInput.h>
 #include <sched/shop/input/OperationListInput.h>
+#include <sched/support/RangeFmt.h>
 
 template<>
 struct std::formatter<sched::shop::JobListInput> {
@@ -21,7 +22,7 @@ struct std::formatter<sched::shop::JobListInput> {
   template<typename Context>
   auto format(const sched::shop::JobListInput& input, Context& ctx) const -> Context::iterator
   {
-    return std::format_to(ctx.out(), "{}", input);
+    return sched::details::range_format_to(ctx.out(), input);
   }
 };
 
@@ -35,7 +36,7 @@ struct std::formatter<sched::shop::OperationListInput> {
   template<typename Context>
   auto format(const sched::shop::OperationListInput& input, Context& ctx) const -> Context::iterator
   {
-    return std::format_to(ctx.out(), "{}", input);
+    return sched::details::range_format_to(ctx.out(), input);
   }
 };
 
@@ -49,7 +50,7 @@ struct std::formatter<sched::shop::MachineListInput> {
   template<typename Context>
   auto format(const sched::shop::MachineListInput& input, Context& ctx) const -> Context::iterator
   {
-    return std::format_to(ctx.out(), "{}", input);
+    return sched::details::range_format_to(ctx.out(), input);
   }
 };
 
