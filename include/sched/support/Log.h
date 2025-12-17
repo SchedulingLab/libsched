@@ -14,14 +14,14 @@ namespace sched {
   struct SCHED_API Log {
     Log() = delete;
 
-    template<typename... T>
-    static void println(std::string_view fmt, T&&... args)
+    template<typename... Args>
+    static void println(std::format_string<Args...> fmt, Args&&... args)
     {
       if (current_indent_depth() > g_max_scope) {
         return;
       }
 
-      const std::string string = std::vformat(fmt, std::make_format_args(std::forward<T>(args)...));
+      const std::string string = std::format(fmt, std::forward<Args>(args)...);
       print_line_string(string);
     }
 
