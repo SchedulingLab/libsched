@@ -10,6 +10,7 @@
 #include <sched/IdsFmt.h>
 #include <sched/shop/input/HoistEmptyInput.h>
 #include <sched/support/RangeFmt.h>
+#include <sched/support/FmtHelper.h>
 
 namespace details {
 
@@ -26,7 +27,7 @@ template<>
 struct std::formatter<sched::shop::HoistEmptyInput> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
-  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.begin(); }
+  constexpr auto parse(Context& ctx) -> Context::iterator { return sched::details::parse_empty_context(ctx); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>

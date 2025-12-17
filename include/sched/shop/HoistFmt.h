@@ -7,12 +7,13 @@
 
 #include <sched/IdsFmt.h>
 #include <sched/shop/Hoist.h>
+#include <sched/support/FmtHelper.h>
 
 template<>
 struct std::formatter<sched::shop::Move> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
-  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+  constexpr auto parse(Context& ctx) -> Context::iterator { return sched::details::parse_empty_context(ctx); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>

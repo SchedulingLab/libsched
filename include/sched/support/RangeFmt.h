@@ -6,10 +6,12 @@
 #include <format>
 #include <vector>
 
+#include <sched/support/FmtHelper.h>
+
 template <typename T>
 struct std::formatter<std::vector<T>> {
   template<typename Context>
-  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+  constexpr auto parse(Context& ctx) -> Context::iterator { return sched::details::parse_empty_context(ctx); }
 
   template <typename Context>
   auto format(const std::vector<T>& r, Context& ctx) const -> Context::iterator {

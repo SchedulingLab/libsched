@@ -6,14 +6,15 @@
 #include <format>
 #include <utility>
 
-#include "Ids.h"
+#include <sched/Ids.h>
+#include <sched/support/FmtHelper.h>
 
 template<>
 struct std::formatter<sched::MachineId>
 {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
-  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+  constexpr auto parse(Context& ctx) -> Context::iterator { return sched::details::parse_empty_context(ctx); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
@@ -28,7 +29,7 @@ struct std::formatter<sched::VehicleId>
 {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
-  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+  constexpr auto parse(Context& ctx) -> Context::iterator { return sched::details::parse_empty_context(ctx); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
@@ -42,7 +43,7 @@ template<>
 struct std::formatter<sched::JobId> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
-  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+  constexpr auto parse(Context& ctx) -> Context::iterator { return sched::details::parse_empty_context(ctx); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
@@ -60,7 +61,7 @@ template<>
 struct std::formatter<sched::OperationId> {
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
-  constexpr auto parse(Context& ctx) -> Context::iterator { return ctx.end(); }
+  constexpr auto parse(Context& ctx) -> Context::iterator { return sched::details::parse_empty_context(ctx); }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
