@@ -3,10 +3,11 @@
 #ifndef SCHED_SHOP_BENCHMARK_FMT_H
 #define SCHED_SHOP_BENCHMARK_FMT_H
 
+#include <format>
+
 #include <sched/shop/instance/JobShopBenchmark.h>
 #include <sched/shop/instance/FlexibleJobShopBenchmark.h>
 #include <sched/shop/instance/FlexibleJobShopTransportBenchmark.h>
-#include <sched/support/FmtHelper.h>
 
 template<>
 struct std::formatter<sched::shop::JobShopBenchmark> : std::formatter<std::string>
