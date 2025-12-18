@@ -21,8 +21,9 @@ namespace sched::shop {
 
     HoistSchedulingInstance() = default;
 
-    HoistSchedulingInstance(HoistSchedulingData data)
+    HoistSchedulingInstance(HoistSchedulingData data, HoistSchedulingVariant variant)
     : m_data(std::move(data))
+    , m_variant(variant)
     {
       assert(m_data.empty.rows() == m_data.machines && m_data.empty.cols() == m_data.machines);
     }
@@ -51,7 +52,7 @@ namespace sched::shop {
     }
 
     constexpr std::size_t vehicle_count() const noexcept {
-      return m_data.vehicles;
+      return m_variant.vehicles;
     }
 
     sched::Time transportation_time_empty(sched::MachineId origin, sched::MachineId target) const noexcept {
@@ -63,11 +64,17 @@ namespace sched::shop {
       return m_data.operations[to_index(origin)].transport;
     }
 
+    HoistSchedulingVariant variant() const
+    {
+      return m_variant;
+    }
+
   private:
     HoistSchedulingData m_data;
+    HoistSchedulingVariant m_variant;
   };
 
-  SCHED_API HoistSchedulingInstance load_hoist_scheduling_instance(const std::filesystem::path& filename);
+  SCHED_API HoistSchedulingInstance load_hoist_scheduling_instance(const std::filesystem::path& filename, HoistSchedulingVariant variant);
 
 }
 

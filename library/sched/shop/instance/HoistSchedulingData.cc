@@ -16,6 +16,7 @@ namespace sched::shop {
       data.processing.hi = TimeMax;
     }
 
+    json.at("machines").get_to(data.machines);
     json.at("transport").get_to(data.transport);
   }
 
@@ -23,6 +24,7 @@ namespace sched::shop {
   {
     json = {
       { "processing", { "lo", data.processing.lo } },
+      { "machines", data.machines },
       { "transport", data.transport },
     };
 
@@ -35,7 +37,6 @@ namespace sched::shop {
   {
     json.at("machines").get_to(data.machines);
     json.at("operations").get_to(data.operations);
-    json.at("vehicles").get_to(data.vehicles);
     data.empty = { data.machines, data.machines };
     json.at("empty").get_to(data.empty);
   }
@@ -45,7 +46,6 @@ namespace sched::shop {
     json = {
       { "machines", data.machines },
       { "operations", data.operations },
-      { "vehicles", data.vehicles },
       { "empty", data.empty },
     };
   }

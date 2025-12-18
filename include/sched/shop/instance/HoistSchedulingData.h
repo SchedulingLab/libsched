@@ -3,6 +3,8 @@
 #ifndef SCHED_SHOP_HOIST_SCHEDULING_DATA_H
 #define SCHED_SHOP_HOIST_SCHEDULING_DATA_H
 
+#include <cstdint>
+
 #include <vector>
 
 #include <nlohmann/json.hpp>
@@ -16,6 +18,7 @@ namespace sched::shop {
 
   struct SCHED_API HoistSchedulingOperationData {
     TimeWindow processing = {};
+    std::size_t machines = 1;
     Time transport = 0;
   };
 
@@ -24,16 +27,28 @@ namespace sched::shop {
 
   struct SCHED_API HoistSchedulingData {
     std::size_t machines = 0;
-    // std::size_t stations = 0;
-    // MachineId load = NoMachine;
-    // MachineId unload = NoMachine;
     std::vector<HoistSchedulingOperationData> operations;
-    std::size_t vehicles = 0;
     Array2D<Time> empty;
   };
 
   SCHED_API void from_json(const Json& json, HoistSchedulingData& data);
   SCHED_API void to_json(Json& json, const HoistSchedulingData& data);
+
+  enum class HoistMachineType : uint8_t {
+    Single,
+    Multi
+  };
+
+  enum class HoistCarrierConstraint : uint8_t {
+    NoRestriction,
+    Circulation,
+  };
+
+  struct SCHED_API HoistSchedulingVariant {
+    std::size_t vehicles = 1;
+    HoistMachineType machine_type = HoistMachineType::Single;
+    HoistCarrierConstraint carrier_constraint = HoistCarrierConstraint::Circulation;
+  };
 
 }
 

@@ -7,7 +7,7 @@
 
 namespace sched::shop {
 
-  HoistSchedulingInstance load_hoist_scheduling_instance(const std::filesystem::path& filename)
+  HoistSchedulingInstance load_hoist_scheduling_instance(const std::filesystem::path& filename, HoistSchedulingVariant variant)
   {
     HoistSchedulingData data;
 
@@ -17,7 +17,7 @@ namespace sched::shop {
 
     root.get_to(data);
 
-    return { std::move(data) };
+    return { std::move(data), variant };
   }
 
 }
