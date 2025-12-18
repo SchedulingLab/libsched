@@ -64,7 +64,7 @@ namespace {
     sched::shop::HoistSchedulingData data;
     root.get_to(data);
 
-    return { std::move(data) };
+    return { std::move(data), {} };
   }
 
 }
