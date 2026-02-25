@@ -20,6 +20,8 @@ namespace sched {
       using reference = value_type;
       using iterator_category = std::bidirectional_iterator_tag;
 
+      using underlying_type = std::conditional_t<std::is_enum_v<Id>, std::underlying_type_t<Id>, Id>;
+
       std::size_t index;
 
       void swap(Iterator& other) noexcept
@@ -30,12 +32,12 @@ namespace sched {
 
       reference operator*() noexcept
       {
-        return Id{ static_cast<std::underlying_type_t<Id>>(index) };
+        return Id{ static_cast<underlying_type>(index) };
       }
 
       pointer operator->() noexcept
       {
-        return Id{ static_cast<std::underlying_type_t<Id>>(index) };
+        return Id{ static_cast<underlying_type>(index) };
       }
 
       Iterator& operator++() noexcept
