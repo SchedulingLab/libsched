@@ -3,10 +3,11 @@
 #ifndef SCHED_IDS_H
 #define SCHED_IDS_H
 
-#include <cstddef>
+#include <cstdint>
 
 #include <limits>
 #include <string>
+#include <utility>
 
 #include <sched/Api.h>
 
@@ -14,8 +15,8 @@ namespace sched {
 
   namespace details {
 
-    constexpr std::size_t NoId = std::numeric_limits<std::size_t>::max();
-    constexpr std::size_t AnyId = NoId - 1;
+    constexpr uint32_t NoId = std::numeric_limits<uint32_t>::max();
+    constexpr uint32_t AnyId = NoId - 1;
 
   }
 
@@ -23,12 +24,12 @@ namespace sched {
    * MachineId
    */
 
-  enum MachineId : std::size_t {
+  enum MachineId : uint32_t {
   };
 
-  constexpr MachineId machine(std::size_t i)
+  constexpr MachineId to_machine(std::size_t i)
   {
-    return MachineId{ i };
+    return MachineId{ static_cast<uint32_t>(i) };
   }
 
   constexpr std::size_t to_index(MachineId id)
@@ -41,19 +42,19 @@ namespace sched {
 
   inline std::string to_string(MachineId id)
   {
-    return std::to_string(static_cast<std::size_t>(id));
+    return std::to_string(std::to_underlying(id));
   }
 
   /*
    * JobId
    */
 
-  enum JobId : std::size_t {
+  enum JobId : uint32_t {
   };
 
-  constexpr JobId job(std::size_t i)
+  constexpr JobId to_job(std::size_t i)
   {
-    return JobId{ i };
+    return JobId{ static_cast<uint32_t>(i) };
   }
 
   constexpr std::size_t to_index(JobId id)
@@ -66,7 +67,7 @@ namespace sched {
 
   inline std::string to_string(JobId id)
   {
-    return std::to_string(static_cast<std::size_t>(id));
+    return std::to_string(std::to_underlying(id));
   }
 
   /*
@@ -75,12 +76,12 @@ namespace sched {
 
   struct SCHED_API OperationId {
     JobId job;
-    std::size_t index;
+    uint32_t index;
   };
 
-  constexpr OperationId operation(JobId job, std::size_t index)
+  constexpr OperationId to_operation(JobId job, std::size_t index)
   {
-    return { .job = job, .index = index };
+    return { .job = job, .index = static_cast<uint32_t>(index) };
   }
 
   constexpr bool operator<(const OperationId& lhs, const OperationId& rhs)
@@ -111,8 +112,13 @@ namespace sched {
    * VehicleId
    */
 
-  enum VehicleId : std::size_t {
+  enum VehicleId : uint32_t {
   };
+
+  constexpr VehicleId to_vehicle(std::size_t i)
+  {
+    return VehicleId{ static_cast<uint32_t>(i) };
+  }
 
   constexpr std::size_t to_index(VehicleId id)
   {
@@ -121,7 +127,7 @@ namespace sched {
 
   inline std::string to_string(VehicleId id)
   {
-    return std::to_string(static_cast<std::size_t>(id));
+    return std::to_string(std::to_underlying(id));
   }
 
   /*

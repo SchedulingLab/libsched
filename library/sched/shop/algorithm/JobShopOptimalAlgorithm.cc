@@ -33,7 +33,7 @@ namespace sched::shop {
 
     for (auto job : jobs(instance)) {
       for (std::size_t i = 0; i < instance.operation_count(job); ++i) {
-        const OperationId operation = { .job = job, .index = i };
+        const OperationId operation = to_operation(job, i);;
         const MachineId machine = instance.assigned_machine_for_operation(operation);
         operation_by_machines[machine].push_back(operation);
       }
@@ -74,8 +74,8 @@ namespace sched::shop {
 
     for (auto job : jobs(instance)) {
       for (std::size_t i = 1; i < instance.operation_count(job); ++i) {
-        const OperationId current = { .job = job, .index = i };
-        const OperationId previous = { .job = job, .index = i - 1 };
+        const OperationId current = to_operation(job, i);
+        const OperationId previous = to_operation(job, i - 1);
         const MachineId machine = instance.assigned_machine_for_operation(previous);
         const auto processing_time = static_cast<double>(instance.processing_time(previous, machine));
 

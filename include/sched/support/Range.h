@@ -30,12 +30,12 @@ namespace sched {
 
       reference operator*() noexcept
       {
-        return Id{ index };
+        return Id{ static_cast<std::underlying_type_t<Id>>(index) };
       }
 
       pointer operator->() noexcept
       {
-        return Id{ index };
+        return Id{ static_cast<std::underlying_type_t<Id>>(index) };
       }
 
       Iterator& operator++() noexcept

@@ -31,7 +31,7 @@ namespace sched {
     template<typename Input>
     std::tuple<Input, Input> compute_crossover(const Input& parent0, const Input& parent1, const std::array<std::size_t, N>& points)
     {
-      const std::size_t size = parent0.size();
+      [[maybe_unused]] const std::size_t size = parent0.size();
       assert(size == parent1.size());
       assert(size >= N);
 

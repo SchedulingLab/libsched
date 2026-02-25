@@ -106,7 +106,7 @@ namespace sched::shop {
 
         if (machine_operation.index == job_operation.index) {
           // we found one
-          schedulable_operations.emplace_back(machine_operation, MachineId{ machine_index });
+          schedulable_operations.emplace_back(machine_operation, to_machine(machine_index));
         }
       }
 

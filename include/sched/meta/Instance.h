@@ -3,6 +3,7 @@
 #ifndef SCHED_INSTANCE_H
 #define SCHED_INSTANCE_H
 
+#include <cstdint>
 #include <sched/Ids.h>
 #include <sched/support/Range.h>
 #include <sched/types/InstanceConcepts.h>
@@ -49,7 +50,7 @@ namespace sched {
       using iterator_category = std::bidirectional_iterator_tag;
 
       JobId job;
-      std::size_t index;
+      uint32_t index;
 
       void swap(Iterator& other) noexcept
       {
@@ -104,7 +105,7 @@ namespace sched {
 
     constexpr Iterator end() const noexcept
     {
-      return Iterator{ .job = job, .index = size };
+      return Iterator{ .job = job, .index = static_cast<uint32_t>(size) };
     }
   };
 

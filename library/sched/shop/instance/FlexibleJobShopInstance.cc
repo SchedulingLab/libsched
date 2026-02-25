@@ -61,7 +61,7 @@ namespace sched::shop {
 
         for (std::size_t j = 0; j < operation_machine_count; ++j) {
           stream >> machine >> processing;
-          operation.choices.emplace_back(MachineId{ machine }, processing);
+          operation.choices.emplace_back(to_machine(machine), processing);
         }
 
         job.operations.push_back(std::move(operation));

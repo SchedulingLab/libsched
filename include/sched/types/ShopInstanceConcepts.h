@@ -21,7 +21,7 @@ namespace sched::concepts {
 
     requires(I::Flexible && requires(I instance, OperationId operation) {
       { instance.machines_for_operation(operation) } -> std::same_as<std::vector<MachineId>>;
-    }) || requires(I instance, OperationId operation, MachineId machine) {
+    }) || requires(I instance, OperationId operation) {
       { instance.assigned_machine_for_operation(operation) } -> std::same_as<MachineId>;
     };
 

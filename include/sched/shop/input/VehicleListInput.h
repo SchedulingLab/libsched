@@ -37,7 +37,7 @@ namespace sched {
       input.reserve(input_size);
 
       for (std::size_t i = 0; i < input_size; ++i) {
-        input.push_back(VehicleId{ i % vehicle_count });
+        input.push_back(to_vehicle(i % vehicle_count));
       }
 
       return input;

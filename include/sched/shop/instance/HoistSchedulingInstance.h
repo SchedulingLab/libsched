@@ -42,7 +42,7 @@ namespace sched::shop {
 
     sched::MachineId assigned_machine_for_operation([[maybe_unused]] sched::OperationId op) const {
       assert(op.index < m_data.operations.size());
-      return machine(op.index);
+      return to_machine(op.index);
     }
 
     sched::TimeWindow processing_time(sched::OperationId op, [[maybe_unused]] sched::MachineId machine) const {
@@ -59,7 +59,7 @@ namespace sched::shop {
       return m_data.empty(sched::to_index(origin), sched::to_index(target));
     }
 
-    sched::Time transportation_time_loaded(sched::MachineId origin, sched::MachineId target) const noexcept {
+    sched::Time transportation_time_loaded(sched::MachineId origin, [[maybe_unused]] sched::MachineId target) const noexcept {
       assert((to_index(origin) + 1) % m_data.machines == to_index(target));
       return m_data.operations[to_index(origin)].transport;
     }

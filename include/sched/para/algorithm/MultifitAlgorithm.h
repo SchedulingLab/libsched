@@ -76,7 +76,7 @@ namespace sched::para {
         for (auto& job : group) {
           ParallelTask task = {};
           task.job = job.id;
-          task.machine = MachineId{ machine };
+          task.machine = to_machine(machine);
           task.start = time;
           task.completion = task.start + job.processing_time;
           schedule.append(task);

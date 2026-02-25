@@ -46,7 +46,7 @@ namespace sched::shop {
       Time processing = 0;
 
       while (stream >> machine >> processing) {
-        job.operations.emplace_back(MachineId{ machine }, processing);
+        job.operations.emplace_back(to_machine(machine), processing);
       }
 
       data.jobs.push_back(std::move(job));

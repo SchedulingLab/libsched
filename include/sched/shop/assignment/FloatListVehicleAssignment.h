@@ -27,7 +27,7 @@ namespace sched::shop {
       for (auto value : input) {
         auto id = static_cast<std::size_t>(value * vehicle_count);
         assert(id < vehicle_count);
-        assignment.push_back(VehicleId{ id });
+        assignment.push_back(to_vehicle(id));
       }
 
       return assignment;

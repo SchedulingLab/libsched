@@ -78,10 +78,10 @@ namespace sched::shop {
 
       for (std::size_t i = 0; i < machine_count; ++i) {
         const std::size_t next_i = (i + 1) % machine_count;
-        const Time r_i = instance.transportation_time_loaded(sched::machine(i), sched::machine(next_i));
+        const Time r_i = instance.transportation_time_loaded(sched::to_machine(i), sched::to_machine(next_i));
 
-        const OperationId operation = sched::operation(sched::AnyJob, i);
-        const TimeWindow time_window = instance.processing_time(operation, sched::machine(i));
+        const OperationId operation = sched::to_operation(sched::AnyJob, i);
+        const TimeWindow time_window = instance.processing_time(operation, sched::to_machine(i));
 
         problem.add_constraint(-b_i[i] * Infinity + double(time_window.lo) <= (t_i[next_i] - r_i) - t_i[i]);
 
@@ -101,7 +101,7 @@ namespace sched::shop {
         const MachineId j = move.dest;
         const Time d_ij = instance.transportation_time_empty(i, j);
         const std::size_t next_j = (to_index(j) + 1) % machine_count;
-        const Time r_j = instance.transportation_time_loaded(j, sched::machine(next_j));
+        const Time r_j = instance.transportation_time_loaded(j, sched::to_machine(next_j));
 
         if (j == 0_m) {
           problem.add_constraint(t_i[to_index(i)] + d_ij <= period + t_i[next_j] - r_j);
@@ -142,10 +142,10 @@ namespace sched::shop {
 
       for (std::size_t i = 0; i < machine_count; ++i) {
         const std::size_t next_i = (i + 1) % machine_count;
-        const Time r_i = instance.transportation_time_loaded(sched::machine(i), sched::machine(next_i));
+        const Time r_i = instance.transportation_time_loaded(sched::to_machine(i), sched::to_machine(next_i));
 
         HoistSchedulingTask task = {};
-        task.operation = operation(sched::AnyJob, i);
+        task.operation = to_operation(sched::AnyJob, i);
         task.start = static_cast<sched::Time>(solution.value(t_i[i]));
         task.completion = static_cast<sched::Time>(solution.value(t_i[next_i])) - r_i;
 

@@ -34,7 +34,7 @@ namespace sched::shop {
     const auto end = std::next(empty_input.machines.begin(), static_cast<std::ptrdiff_t>(empty_input.length));
 
     HoistLoadedInput loaded_input = {};
-    MachineId current = machine(0);
+    MachineId current = to_machine(0);
 
     for (;;) {
       loaded_input.push_back(current);
@@ -49,7 +49,7 @@ namespace sched::shop {
         current = empty_input.machines[next_index];
       }
 
-      if (current == machine(0)) {
+      if (current == to_machine(0)) {
         break;
       }
     }

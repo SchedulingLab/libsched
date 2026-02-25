@@ -33,7 +33,7 @@ namespace sched::shop {
       for (const double value : input) {
         auto id = static_cast<std::size_t>(value * vehicle_count);
         assert(id < vehicle_count);
-        vehicle_list.push_back(VehicleId{ id });
+        vehicle_list.push_back(to_vehicle(id));
       }
 
       TransportationVehicleListEngine<Comparator> engine;

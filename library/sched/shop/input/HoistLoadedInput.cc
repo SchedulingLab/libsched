@@ -16,7 +16,7 @@ namespace sched::shop {
 
     for (std::size_t i = 0; i < input.size(); ++i) {
       Move move = {};
-      move.orig = machine(((input[i] + 1)) % input.size());
+      move.orig = to_machine(((input[i] + 1)) % input.size());
       move.dest = input[(i + 1) % input.size()];
 
       if (filter == MoveFilter::RemoveTrivial && move.orig == move.dest) {

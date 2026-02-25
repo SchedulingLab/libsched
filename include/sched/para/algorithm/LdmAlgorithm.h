@@ -135,7 +135,7 @@ namespace sched::para {
         for (const ParallelJob& job : set.members) {
           ParallelTask task = {};
           task.job = job.id;
-          task.machine = MachineId{ machine };
+          task.machine = to_machine(machine);
           task.start = time;
           task.completion = task.start + job.processing_time;
           schedule.append(task);

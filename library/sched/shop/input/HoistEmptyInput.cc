@@ -23,7 +23,7 @@ namespace sched::shop {
     // initialize
 
     tanks[0] = TankStatus::AlreadyUnloaded;
-    MachineId current = machine(1);
+    MachineId current = to_machine(1);
 
     std::vector<Move> empty_moves;
 
@@ -34,7 +34,7 @@ namespace sched::shop {
 
       for (std::size_t i = 0; i < machine_count; ++i) {
         if (tanks[i] == TankStatus::Available) {
-          available.push_back(machine(i));
+          available.push_back(to_machine(i));
         }
       }
 
@@ -60,7 +60,7 @@ namespace sched::shop {
 
       // select the new tank
 
-      current = machine((to_index(next) + 1) % machine_count);
+      current = to_machine((to_index(next) + 1) % machine_count);
     }
 
     return empty_moves;
