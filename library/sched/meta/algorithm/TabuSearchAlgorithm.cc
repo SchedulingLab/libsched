@@ -2,4 +2,3 @@
 // Copyright (c) 2022-2025 Julien Bernard
 
 #include <sched/meta/algorithm/TabuSearchAlgorithm.h>
-

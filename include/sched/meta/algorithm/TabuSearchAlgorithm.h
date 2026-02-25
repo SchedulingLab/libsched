@@ -4,6 +4,7 @@
 #define SCHED_TABU_SEARCH_ALGORITHM_H
 
 #include <cmath>
+#include <cstdint>
 
 #include <algorithm>
 #include <deque>
@@ -31,8 +32,7 @@ namespace sched {
       const std::size_t m = instance.machine_count();
 
       auto operation_count = input_size_for(instance);
-      auto tabu_duration = static_cast<std::size_t>(((n + m / 2.0) * std::exp(-1.0 * n / (5.0 * m))) + (operation_count / 2.0 * std::exp(-(5.0 * m) / n)));
-
+      auto tabu_duration = static_cast<std::size_t>(((n + (m / 2.0)) * std::exp(-1.0 * n / (5.0 * m))) + (operation_count / 2.0 * std::exp(-(5.0 * m) / n)));
 
       Solution best = compute_first_solution(instance, start, random);
 
@@ -40,14 +40,15 @@ namespace sched {
       std::size_t iteration = 0;
 
       struct Tabu {
-        Input input;
+        uint64_t input_hash;
         std::size_t iteration;
       };
 
       std::deque<Tabu> tabu_list;
 
       auto is_tabu = [&](const Input& input) {
-        return std::ranges::find_if(tabu_list, [&](const Tabu& tabu) { return tabu.input == input; }) != tabu_list.end();
+        const uint64_t hash = InputTraits<Input>::hash(input);
+        return std::ranges::contains(tabu_list, hash, &Tabu::input_hash);
       };
 
       termination.start();
@@ -87,7 +88,7 @@ namespace sched {
 
         if (has_candidate) {
           current = std::move(candidate);
-          tabu_list.push_back({ current.input, iteration });
+          tabu_list.push_back({ InputTraits<Input>::hash(current.input), iteration });
         } else {
           tabu_list.clear();
           const Input new_input = InputTraits<Input>::generate_feasible(instance, random);
