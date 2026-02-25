@@ -47,7 +47,7 @@ namespace sched::shop {
 
     sched::TimeWindow processing_time(sched::OperationId op, [[maybe_unused]] sched::MachineId machine) const {
       assert(op.index < m_data.operations.size());
-      assert(sched::machine(op.index) == machine);
+      assert(to_machine(op.index) == machine);
       return m_data.operations[op.index].processing;
     }
 
