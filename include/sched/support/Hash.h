@@ -38,9 +38,9 @@ namespace sched {
 
   // based on https://github.com/boostorg/container_hash/blob/7288df8beea1c3c8222cd48af1c07c589f7d3f8a/include/boost/container_hash/hash.hpp#L469
   // License: Boost Software License, Version 1.0.
-  constexpr void hash_combine(uint64_t& state, uint64_t value)
+  constexpr uint64_t hash_combine(uint64_t state, uint64_t value)
   {
-    state = hash_mix(state + UINT64_C(0x9E3779B9) + value);
+    return hash_mix(state + UINT64_C(0x9E3779B9) + value);
   }
 
 }

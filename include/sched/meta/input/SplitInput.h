@@ -5,6 +5,7 @@
 
 #include <string>
 
+#include <sched/support/Hash.h>
 #include <sched/support/Random.h>
 #include <sched/types/InputTraits.h>
 #include <sched/types/InputConcepts.h>
@@ -64,6 +65,13 @@ namespace sched {
       input.input0 = InputTraits<Input0>::generate_feasible(instance, random);
       input.input1 = InputTraits<Input1>::generate_feasible(instance, random);
       return input;
+    }
+
+    static uint64_t hash(const SplitInput<Input0, Input1>& input)
+    {
+      const uint64_t h0 = InputTraits<Input0>::hash(input.input0);
+      const uint64_t h1 = InputTraits<Input1>::hash(input.input1);
+      return hash_combine(h0, h1);
     }
   };
 

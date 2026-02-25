@@ -8,6 +8,7 @@
 
 #include <sched/meta/Instance.h>
 #include <sched/meta/input/InputSize.h>
+#include <sched/support/Hash.h>
 #include <sched/support/Random.h>
 #include <sched/types/InputTraits.h>
 
@@ -46,6 +47,12 @@ namespace sched {
     static FloatListInput generate_feasible(const Instance& instance, Random& random)
     {
       return generate_random(instance, random);
+    }
+
+    static uint64_t hash(const FloatListInput& input)
+    {
+      std::span span(input.begin(), input.end());
+      return hash_bytes(std::as_bytes(span));
     }
   };
 }

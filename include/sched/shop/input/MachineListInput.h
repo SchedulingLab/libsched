@@ -92,7 +92,7 @@ namespace sched {
 
       for (const std::vector<OperationId>& operations : input) {
         std::span span(operations.begin(), operations.end());
-        hash_combine(h, hash_bytes(std::as_bytes(span)));
+        h = hash_combine(h, hash_bytes(std::as_bytes(span)));
       }
 
       return h;
