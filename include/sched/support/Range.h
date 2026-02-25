@@ -20,7 +20,7 @@ namespace sched {
       using reference = value_type;
       using iterator_category = std::bidirectional_iterator_tag;
 
-      using underlying_type = std::conditional_t<std::is_enum_v<Id>, std::underlying_type_t<Id>, Id>;
+      using underlying_type = std::conditional_t<std::is_enum_v<Id>, std::underlying_type<Id>, std::type_identity<Id>>::type;
 
       std::size_t index;
 
