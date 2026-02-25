@@ -12,6 +12,7 @@
 #include <sched/Ids.h>
 #include <sched/meta/Instance.h>
 #include <sched/support/Random.h>
+#include <sched/support/Hash.h>
 #include <sched/types/InputTraits.h>
 
 namespace sched {
@@ -77,12 +78,24 @@ namespace sched {
 
       for (const JobId job : job_list) {
         const std::size_t index = operations[to_index(job)]++;
-        const OperationId operation = { .job = job, .index = index };
+        const OperationId operation = to_operation(job, index);
         const MachineId machine = instance.assigned_machine_for_operation(operation);
         input[to_index(machine)].push_back(operation);
       }
 
       return input;
+    }
+
+    static uint64_t hash(const shop::MachineListInput& input)
+    {
+      uint64_t h = UINT64_C(0x0123456789ABCDEF);
+
+      for (const std::vector<OperationId>& operations : input) {
+        std::span span(operations.begin(), operations.end());
+        hash_combine(h, hash_bytes(std::as_bytes(span)));
+      }
+
+      return h;
     }
   };
 

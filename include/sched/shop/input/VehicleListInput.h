@@ -9,6 +9,7 @@
 #include <sched/Ids.h>
 #include <sched/meta/Instance.h>
 #include <sched/meta/input/InputSize.h>
+#include <sched/support/Hash.h>
 #include <sched/support/Random.h>
 #include <sched/types/InputTraits.h>
 
@@ -56,6 +57,12 @@ namespace sched {
     {
       // all inputs are feasible
       return generate_random(instance, random);
+    }
+
+    static uint64_t hash(const shop::VehicleListInput& input)
+    {
+      std::span span(input.begin(), input.end());
+      return hash_bytes(std::as_bytes(span));
     }
   };
 

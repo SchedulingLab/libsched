@@ -14,6 +14,7 @@
 #include <sched/meta/Instance.h>
 #include <sched/shop/helper/Partition.h>
 #include <sched/shop/Hoist.h>
+#include <sched/support/Hash.h>
 #include <sched/support/Random.h>
 #include <sched/types/InputTraits.h>
 
@@ -117,6 +118,12 @@ namespace sched {
     {
       std::vector<shop::Move> empty_moves = shop::generate_valid_empty_moves(instance.machine_count(), random);
       return convert_empty_moves_to_empty_input(std::move(empty_moves), instance.machine_count());
+    }
+
+    static uint64_t hash(const shop::HoistEmptyInput& input)
+    {
+      std::span span(input.begin(), input.length);
+      return hash_bytes(std::as_bytes(span));
     }
   };
 

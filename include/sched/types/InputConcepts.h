@@ -46,6 +46,7 @@ namespace sched::concepts {
     { InputTraits<I>::generate_input(instance) } -> std::same_as<I>;
     { InputTraits<I>::generate_random(instance, random) } -> std::same_as<I>;
     { InputTraits<I>::generate_feasible(instance, random) } -> std::same_as<I>;
+    { InputTraits<I>::hash(input) } -> std::same_as<uint64_t>;
   };
 
 }

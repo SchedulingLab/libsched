@@ -5,4 +5,11 @@
 
 #include <sched/types/InputConcepts.h>
 
+namespace {
+
+  struct DummyInstance { };
+
+}
+
 static_assert(sched::concepts::InputArray<sched::shop::MachineListInput>);
+static_assert(sched::concepts::InputFor<sched::shop::MachineListInput, DummyInstance>);

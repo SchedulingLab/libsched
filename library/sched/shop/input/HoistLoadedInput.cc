@@ -5,8 +5,14 @@
 
 #include <sched/types/InputConcepts.h>
 
-static_assert(sched::concepts::Input<sched::shop::HoistLoadedInput>);
+namespace {
 
+  struct DummyInstance { };
+
+}
+
+static_assert(sched::concepts::Input<sched::shop::HoistLoadedInput>);
+static_assert(sched::concepts::InputFor<sched::shop::HoistLoadedInput, DummyInstance>);
 
 namespace sched::shop {
 

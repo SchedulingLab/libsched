@@ -9,6 +9,7 @@
 
 #include <sched/Ids.h>
 #include <sched/meta/Instance.h>
+#include <sched/support/Hash.h>
 #include <sched/support/Random.h>
 #include <sched/types/InputTraits.h>
 
@@ -67,11 +68,17 @@ namespace sched {
 
       for (const JobId job : job_list) {
         const std::size_t index = operations[to_index(job)]++;
-        const OperationId operation = { .job = job, .index = index };
+        const OperationId operation = to_operation(job, index);
         input.push_back(operation);
       }
 
       return input;
+    }
+
+    static uint64_t hash(const shop::OperationListInput& input)
+    {
+      std::span span(input.begin(), input.end());
+      return hash_bytes(std::as_bytes(span));
     }
   };
 

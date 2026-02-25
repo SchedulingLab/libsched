@@ -7,7 +7,14 @@
 
 #include <sched/types/InputConcepts.h>
 
+namespace {
+
+  struct DummyInstance { };
+
+}
+
 static_assert(sched::concepts::Input<sched::shop::HoistEmptyInput>);
+static_assert(sched::concepts::InputFor<sched::shop::HoistEmptyInput, DummyInstance>);
 
 namespace sched::shop {
 
