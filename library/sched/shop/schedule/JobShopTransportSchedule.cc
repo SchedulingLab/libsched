@@ -33,11 +33,11 @@ namespace sched::shop {
 
       std::ranges::sort(processing_tasks, [](const JobShopTask& lhs, const JobShopTask& rhs) {
         // also check operations to handle operations with processing time of 0 (like orb07)
-        return std::tie(lhs.completion, lhs.operation.index) < std::tie(rhs.completion, rhs.operation.index);
+        return std::tie(lhs.start, lhs.completion, lhs.operation.index) < std::tie(rhs.start, rhs.completion, rhs.operation.index);
       });
 
       std::ranges::sort(transportation_tasks, [](const TransportationTask& lhs, const TransportationTask& rhs) {
-        return lhs.completion < rhs.completion;
+        return std::tie(lhs.start, lhs.completion) < std::tie(rhs.start, rhs.completion);
       });
 
       uint32_t index = 0;
