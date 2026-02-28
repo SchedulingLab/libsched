@@ -39,6 +39,33 @@ namespace sched::shop {
 
       JobShopTransportTaskPacket packet = {};
 
+      if (job_state.machine == machine) [[unlikely]] {
+        packet.empty_task.vehicle = NoVehicle;
+        packet.empty_task.transportation_kind = TransportationKind::Empty;
+        packet.empty_task.origin = vehicle_state.machine;
+        packet.empty_task.target = vehicle_state.machine;
+        packet.empty_task.job = NoJob;
+        packet.empty_task.start = vehicle_state.time;
+        packet.empty_task.completion = vehicle_state.time;
+
+        packet.loaded_task.vehicle = NoVehicle;
+        packet.loaded_task.transportation_kind = TransportationKind::Loaded;
+        packet.loaded_task.origin = vehicle_state.machine;
+        packet.loaded_task.target = vehicle_state.machine;
+        packet.loaded_task.job = NoJob;
+        packet.loaded_task.start = vehicle_state.time;
+        packet.loaded_task.completion = vehicle_state.time;
+
+        const Time processing_time = States::instance->processing_time(operation, machine);
+
+        packet.task.operation = operation;
+        packet.task.machine = machine;
+        packet.task.start = std::max({ machine_state.time, States::instance->release_date(operation.job) });
+        packet.task.completion = packet.task.start + processing_time;
+
+        return packet;
+      }
+
       const Time empty_time = States::instance->transportation_time_empty(vehicle_state.machine, job_state.machine);
 
       packet.empty_task.vehicle = vehicle;
@@ -80,22 +107,26 @@ namespace sched::shop {
       MachineState& machine_state = States::machines[to_index(machine)];
 
       const VehicleId vehicle = packet.loaded_task.vehicle;
-      assert(to_index(vehicle) < vehicles.size());
-      VehicleState& vehicle_state = vehicles[to_index(vehicle)];
 
       ++job_state.operation;
       job_state.machine = machine;
       job_state.time = packet.task.completion;
 
-      vehicle_state.machine = machine;
-      vehicle_state.time = packet.loaded_task.completion;
-
       machine_state.time = packet.task.completion;
       ++machine_state.index;
 
       schedule.append(packet.task);
-      schedule.append_transportation_task(packet.empty_task);
-      schedule.append_transportation_task(packet.loaded_task);
+
+      if (vehicle != NoVehicle) [[likely]] {
+        assert(to_index(vehicle) < vehicles.size());
+        VehicleState& vehicle_state = vehicles[to_index(vehicle)];
+
+        vehicle_state.machine = machine;
+        vehicle_state.time = packet.loaded_task.completion;
+
+        schedule.append_transportation_task(packet.empty_task);
+        schedule.append_transportation_task(packet.loaded_task);
+      }
     }
 
     template<typename Comparator>

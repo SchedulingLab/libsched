@@ -125,6 +125,9 @@ namespace sched {
     return static_cast<std::size_t>(id);
   }
 
+  constexpr VehicleId AnyVehicle = VehicleId{ details::AnyId };
+  constexpr VehicleId NoVehicle = VehicleId{ details::NoId };
+
   inline std::string to_string(VehicleId id)
   {
     return std::to_string(std::to_underlying(id));
