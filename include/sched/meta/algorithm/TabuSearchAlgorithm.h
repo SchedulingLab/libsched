@@ -31,7 +31,7 @@ namespace sched {
       const std::size_t n = instance.job_count();
       const std::size_t m = instance.machine_count();
 
-      auto operation_count = input_size_for(instance);
+      const std::size_t operation_count = input_size_for(instance);
       auto tabu_duration = static_cast<std::size_t>(((n + (m / 2.0)) * std::exp(-1.0 * n / (5.0 * m))) + (operation_count / 2.0 * std::exp(-(5.0 * m) / n)));
 
       Solution best = compute_first_solution(instance, start, random);

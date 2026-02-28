@@ -12,10 +12,10 @@ namespace sched::shop {
 
   bool is_schedule_valid(const JobShopSchedule& schedule)
   {
-    auto task_range = schedule.tasks();
+    const JobShopSchedule::ConstTaskRange task_range = schedule.tasks();
     std::vector<JobShopTask> tasks(task_range.begin(), task_range.end());
 
-    std::sort(tasks.begin(), tasks.end(), [](const JobShopTask& lhs, const JobShopTask& rhs) {
+    std::ranges::sort(tasks, [](const JobShopTask& lhs, const JobShopTask& rhs) {
       // also check jobs and operations to handle operations with processing time of 0 (like orb07)
       return std::tie(lhs.completion, lhs.operation.job, lhs.operation.index) < std::tie(rhs.completion, rhs.operation.job, rhs.operation.index);
     });
@@ -23,7 +23,7 @@ namespace sched::shop {
     std::size_t machine_count = 0;
     std::size_t job_count = 0;
 
-    for (auto& task : tasks) {
+    for (const JobShopTask& task : tasks) {
       machine_count = std::max(machine_count, to_index(task.machine) + 1);
       job_count = std::max(job_count, to_index(task.operation.job) + 1);
     }
@@ -36,10 +36,10 @@ namespace sched::shop {
     std::vector<JobState> jobs(job_count, JobState{});
     std::vector<Time> machines(machine_count, Time{ 0 });
 
-    for (auto& task : tasks) {
-      auto job_index = to_index(task.operation.job);
+    for (const JobShopTask& task : tasks) {
+      const std::size_t job_index = to_index(task.operation.job);
       assert(job_index < job_count);
-      auto machine_index = to_index(task.machine);
+      const std::size_t machine_index = to_index(task.machine);
       assert(machine_index < machine_count);
 
       if (task.start < jobs[job_index].time || task.start < machines[machine_index]) {
@@ -60,10 +60,10 @@ namespace sched::shop {
 
   JobShopSchedule make_schedule_active(const JobShopSchedule& original_schedule)
   {
-    auto task_range = original_schedule.tasks();
+    const JobShopSchedule::ConstTaskRange task_range = original_schedule.tasks();
     std::vector<JobShopTask> tasks(task_range.begin(), task_range.end());
 
-    std::sort(tasks.begin(), tasks.end(), [](const JobShopTask& lhs, const JobShopTask& rhs) {
+    std::ranges::sort(tasks, [](const JobShopTask& lhs, const JobShopTask& rhs) {
       // also check jobs and operations to handle operations with processing time of 0 (like orb07)
       return std::tie(lhs.completion, lhs.operation.job, lhs.operation.index) < std::tie(rhs.completion, rhs.operation.job, rhs.operation.index);
     });
@@ -71,7 +71,7 @@ namespace sched::shop {
     std::size_t job_count = 0;
     std::size_t machine_count = 0;
 
-    for (auto& task : tasks) {
+    for (const JobShopTask& task : tasks) {
       job_count = std::max(job_count, to_index(task.operation.job) + 1);
       machine_count = std::max(machine_count, to_index(task.machine) + 1);
     }
@@ -81,10 +81,10 @@ namespace sched::shop {
 
     JobShopSchedule schedule;
 
-    for (auto& task : tasks) {
-      auto job_index = to_index(task.operation.job);
+    for (JobShopTask task : tasks) {
+      const std::size_t job_index = to_index(task.operation.job);
       assert(job_index < job_count);
-      auto machine_index = to_index(task.machine);
+      const std::size_t machine_index = to_index(task.machine);
       assert(machine_index < machine_count);
 
       const Time start = std::max(jobs[job_index], machines[machine_index]);

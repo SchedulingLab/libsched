@@ -45,6 +45,8 @@ namespace sched::shop {
     std::vector<TransportationTask> m_transportation_tasks;
   };
 
+  SCHED_API bool is_schedule_valid(const JobShopTransportSchedule& schedule);
+
 }
 
 #endif // SCHED_SHOP_JOB_SHOP_TRANSPORT_SCHEDULE_H
