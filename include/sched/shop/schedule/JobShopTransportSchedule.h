@@ -46,6 +46,8 @@ namespace sched::shop {
   };
 
   SCHED_API bool is_schedule_valid(const JobShopTransportSchedule& schedule);
+  SCHED_API double compute_machine_waiting_time(const JobShopTransportSchedule& schedule);
+  SCHED_API double compute_vehicle_waiting_time(const JobShopTransportSchedule& schedule);
 
 }
 
