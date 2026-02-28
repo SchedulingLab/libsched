@@ -119,8 +119,7 @@ namespace sched::shop {
         | std::ranges::to<std::vector<JobShopTask>>();
 
       std::ranges::sort(processing_tasks, [](const JobShopTask& lhs, const JobShopTask& rhs) {
-        // also check operations to handle operations with processing time of 0 (like orb07)
-        return lhs.completion < rhs.completion;
+        return std::tie(lhs.start, lhs.completion) < std::tie(rhs.start, rhs.completion);
       });
 
       Time time = 0;
@@ -145,7 +144,7 @@ namespace sched::shop {
         | std::ranges::to<std::vector<TransportationTask>>();
 
       std::ranges::sort(transportation_tasks, [](const TransportationTask& lhs, const TransportationTask& rhs) {
-        return lhs.completion < rhs.completion;
+        return std::tie(lhs.start, lhs.completion) < std::tie(rhs.start, rhs.completion);
       });
 
       MachineId machine = NoMachine;
@@ -229,7 +228,7 @@ namespace sched::shop {
 
       std::ranges::sort(processing_tasks, [](const JobShopTask& lhs, const JobShopTask& rhs) {
         // also check operations to handle operations with processing time of 0 (like orb07)
-        return lhs.completion < rhs.completion;
+        return std::tie(lhs.start, lhs.completion) < std::tie(rhs.start, rhs.completion);
       });
 
       Time time = 0;
@@ -271,7 +270,7 @@ namespace sched::shop {
         | std::ranges::to<std::vector<TransportationTask>>();
 
       std::ranges::sort(transportation_tasks, [](const TransportationTask& lhs, const TransportationTask& rhs) {
-        return lhs.completion < rhs.completion;
+        return std::tie(lhs.start, lhs.completion) < std::tie(rhs.start, rhs.completion);
       });
 
       Time time = 0;
