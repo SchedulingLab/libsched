@@ -10,7 +10,9 @@
 #include <tuple>
 
 #include <sched/meta/Instance.h>
-#include "sched/Ids.h"
+#include <sched/support/Log.h>
+
+#include <sched/IdsFmt.h>
 
 namespace sched::shop {
 
@@ -49,6 +51,7 @@ namespace sched::shop {
         // check processing
 
         if (processing_iterator->start < time) {
+          Log::println("[JOB {}/{}] Overlapping: current time = {}, start time = {}", job, processing_iterator->operation.index, time, processing_iterator->start);
           return false;
         }
 
@@ -56,6 +59,7 @@ namespace sched::shop {
 
         if (machine != NoMachine) {
           if (processing_iterator->machine != machine) {
+            Log::println("[JOB {}/{}] Wrong machine: current machine = {}, assigned machine = {}", job, processing_iterator->operation.index, machine, processing_iterator->machine);
             return false;
           }
         } else {
@@ -63,6 +67,7 @@ namespace sched::shop {
         }
 
         if (processing_iterator->operation.index != index) {
+          Log::println("[JOB {}/{}] Wrong operation: current index = {}, operation index = {}", job, processing_iterator->operation.index, index, processing_iterator->operation.index);
           return false;
         }
 
@@ -83,16 +88,19 @@ namespace sched::shop {
 
         if (transportation_iterator == transportation_tasks.end()) {
           // the job need a transport but there is none
+          Log::println("[JOB {}] Missing transportation", job);
           return false;
         }
 
         if (transportation_iterator->origin != machine) {
+          Log::println("[JOB {}] Wrong machine: current machine = {}, origin machine = {}", job, machine, transportation_iterator->origin);
           return false;
         }
 
         machine = transportation_iterator->target;
 
         if (transportation_iterator->start < time) {
+          Log::println("[JOB {}] Overlapping: current time = {}, transport start time = {}", job, time, transportation_iterator->start);
           return false;
         }
 
@@ -120,6 +128,7 @@ namespace sched::shop {
       for (const JobShopTask& task :processing_tasks) {
 
         if (task.start < time) {
+          Log::println("[MACHINE {}] Overlapping: current time = {}, start time = {}", machine, time, task.start);
           return false;
         }
 
@@ -144,6 +153,7 @@ namespace sched::shop {
 
       for (const TransportationTask& task :transportation_tasks) {
         if (task.start < time) {
+          Log::println("[VEHICLE {}] Overlapping: current time = {}, start time = {}", vehicle, time, task.start);
           return false;
         }
 
@@ -151,6 +161,7 @@ namespace sched::shop {
 
         if (machine != NoMachine) {
           if (task.origin != machine) {
+            Log::println("[VEHICLE {}] Wrong machine: current machine = {}, origin machine = {}", vehicle, machine, task.origin);
             return false;
           }
         }
