@@ -6,7 +6,10 @@
 #include <fstream>
 #include <sstream>
 
+#include <nlohmann/json.hpp>
+
 #include <sched/types/ShopInstanceConcepts.h>
+#include <sched/support/Json.h>
 
 static_assert(sched::concepts::ShopInstance<sched::shop::FlexibleJobShopInstance>);
 
@@ -72,6 +75,30 @@ namespace sched::shop {
     }
 
     return { std::move(data) };
+  }
+
+  FlexibleJobShopInstance import_fjsp_json(const std::filesystem::path& filename)
+  {
+    FlexibleJobShopData data;
+
+    std::ifstream stream(filename);
+    Json root;
+    stream >> root;
+
+    root.get_to(data);
+
+    return data;
+  }
+
+  void export_fjsp_json(const std::filesystem::path& filename, const FlexibleJobShopInstance& instance)
+  {
+    FlexibleJobShopData data = instance.data();
+
+    Json root;
+    root = data;
+
+    std::ofstream stream(filename);
+    dump_json(stream, root);
   }
 
 }

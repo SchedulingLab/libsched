@@ -81,19 +81,24 @@ namespace sched::shop {
       return m_data.machines;
     }
 
+    const FlexibleJobShopData& data() const
+    {
+      return m_data;
+    }
+
   private:
     const FlexibleJobData& get_job(JobId id) const
     {
-      auto index = sched::to_index(id);
+      const std::size_t index = sched::to_index(id);
       assert(index < m_data.jobs.size());
       return m_data.jobs[index];
     }
 
     bool is_valid() const noexcept
     {
-      for (const auto& job : m_data.jobs) {
-        for (const auto& operation : job.operations) {
-          for (const auto& choice : operation.choices) {
+      for (const FlexibleJobData& job : m_data.jobs) {
+        for (const FlexibleOperationData& operation : job.operations) {
+          for (const OperationData& choice : operation.choices) {
             if (to_index(choice.machine) >= m_data.machines) {
               return false;
             }
@@ -108,6 +113,9 @@ namespace sched::shop {
   };
 
   SCHED_API FlexibleJobShopInstance import_fjsp_txt(const std::filesystem::path& filename);
+
+  SCHED_API FlexibleJobShopInstance import_fjsp_json(const std::filesystem::path& filename);
+  SCHED_API void export_fjsp_json(const std::filesystem::path& filename, const FlexibleJobShopInstance& instance);
 
 }
 

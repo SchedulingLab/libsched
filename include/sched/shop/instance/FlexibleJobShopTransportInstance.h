@@ -135,6 +135,11 @@ namespace sched::shop {
       return m_data.unload;
     }
 
+    std::size_t device_count() const
+    {
+      return m_data.machines + m_data.stations;
+    }
+
     const FlexibleJobShopTransportData& data() const
     {
       return m_data;
@@ -145,26 +150,21 @@ namespace sched::shop {
       return m_mode;
     }
 
-    std::size_t device_count() const
-    {
-      return m_data.machines + m_data.stations;
-    }
-
   private:
     const FlexibleJobData& get_job(JobId id) const
     {
-      auto index = sched::to_index(id);
+      const std::size_t index = sched::to_index(id);
       assert(index < m_data.jobs.size());
       return m_data.jobs[index];
     }
 
     bool valid() const noexcept
     {
-      std::size_t device_count = m_data.machines + m_data.stations;
+      const std::size_t device_count = m_data.machines + m_data.stations;
 
-      for (const auto& job : m_data.jobs) {
-        for (const auto& op : job.operations) {
-          for (const auto& choice : op.choices) {
+      for (const FlexibleJobData& job : m_data.jobs) {
+        for (const FlexibleOperationData& op : job.operations) {
+          for (const OperationData& choice : op.choices) {
             if (sched::to_index(choice.machine) >= device_count) {
               return false;
             }

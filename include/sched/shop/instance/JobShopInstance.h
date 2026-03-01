@@ -74,18 +74,23 @@ namespace sched::shop {
       return m_data.machines;
     }
 
+    const JobShopData& data() const
+    {
+      return m_data;
+    }
+
   private:
     const JobData& get_job(JobId id) const
     {
-      auto index = sched::to_index(id);
+      const std::size_t index = sched::to_index(id);
       assert(index < m_data.jobs.size());
       return m_data.jobs[index];
     }
 
     bool is_valid() const noexcept
     {
-      for (const auto& job : m_data.jobs) {
-        for (const auto& op : job.operations) {
+      for (const JobData& job : m_data.jobs) {
+        for (const OperationData& op : job.operations) {
           if (to_index(op.machine) >= m_data.machines) {
             return false;
           }
