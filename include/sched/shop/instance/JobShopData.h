@@ -14,6 +14,8 @@ namespace sched::shop {
   struct SCHED_API OperationData {
     MachineId machine = NoMachine;
     Time processing = 0;
+
+    bool operator==(const OperationData&) const = default;
   };
 
   SCHED_API void from_json(const Json& json, OperationData& data);
@@ -21,6 +23,8 @@ namespace sched::shop {
 
   struct SCHED_API JobData {
     std::vector<OperationData> operations;
+
+    bool operator==(const JobData&) const = default;
   };
 
   SCHED_API void from_json(const Json& json, JobData& data);
