@@ -2,6 +2,8 @@
 // Copyright (c) 2022-2025 Julien Bernard
 
 #include <cstdint>
+#include <cmath>
+
 #include <sched/shop/instance/JobShopInstanceGenerator.h>
 #include "sched/shop/instance/JobShopData.h"
 
@@ -57,8 +59,8 @@ namespace sched::shop {
 
     for (std::size_t job = 0; job < instance.jobs; ++job) {
       for (std::size_t machine = 0; machine < instance.machines; ++machine) {
-        const std::size_t other = taillard_uniform(machine_seed, static_cast<int32_t>(machine), static_cast<int32_t>(instance.machines));
-        std::swap(instance_data.jobs[job].operations[machine], instance_data.jobs[job].operations[other]);
+        const std::size_t other = taillard_uniform(machine_seed, static_cast<int32_t>(machine), static_cast<int32_t>(instance.machines - 1));
+        std::swap(instance_data.jobs[job].operations[machine].machine, instance_data.jobs[job].operations[other].machine);
       }
     }
 
