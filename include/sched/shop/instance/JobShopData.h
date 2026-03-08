@@ -29,6 +29,8 @@ namespace sched::shop {
   struct SCHED_API JobShopData {
     std::size_t machines = 0;
     std::vector<JobData> jobs;
+
+    bool operator==(const JobShopData&) const = default;
   };
 
   SCHED_API void from_json(const Json& json, JobShopData& data);
