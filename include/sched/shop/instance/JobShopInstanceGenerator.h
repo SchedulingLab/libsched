@@ -24,6 +24,14 @@ namespace sched::shop {
   constexpr std::size_t TaillardInstanceCount = 80;
   SCHED_API std::span<const TaillardInstance, TaillardInstanceCount> load_taillard_benchmark();
 
+  struct SCHED_API DemirkolMehtaUzsoyInstance {
+    std::size_t jobs;
+    std::size_t machines;
+    int32_t seed;
+  };
+
+  SCHED_API JobShopInstance compute_dmu_legacy_instance(const DemirkolMehtaUzsoyInstance& instance);
+
 
 }
 

@@ -9,6 +9,10 @@
 
 namespace sched::shop {
 
+  /*
+   * Taillard: adapted from https://people.brunel.ac.uk/~mastjjb/jeb/orlib/files/jobshop2.txt
+   */
+
   namespace {
 
     int32_t taillard_uniform(int32_t& seed, int32_t low, int32_t high)
@@ -158,5 +162,81 @@ namespace sched::shop {
   {
     return TaillardInstances;
   }
+
+  /*
+   * DMU: adapted from https://web.archive.org/web/20021208153456/http://palette.ecn.purdue.edu/~uzsoy2/benchmark/code/code.html
+   */
+
+  namespace {
+
+    float dmu_uniform(int32_t& seed)
+    {
+      static constexpr int64_t M = 2147483647;
+      static constexpr int64_t A = 16807;
+
+      const int64_t extended_seed = (seed * A) % M;
+      seed = static_cast<int32_t>(extended_seed);
+      return static_cast<float>(extended_seed) / static_cast<float>(M + 1);
+    }
+
+
+  }
+
+// float u16807d(iseed)
+// int *iseed;
+// {
+// 	*iseed = (int) fmod(*iseed * 16807.0, 2147483647.);
+// 	return( *iseed / 2147483648.);
+// } /* Random Number Generator End */
+//
+// /* Generating Classic Job Shop Information */
+// generatejobshop(njobs,nmachines,lowp,highp,iseed)
+// int njobs,nmachines,*iseed;
+// float lowp,highp;
+// {
+// 	int i,j,seq[30];
+// 	float rnumber[30];
+//
+// 	for(i=1;i<=njobs;++i)	{
+// 		for(j=1;j<=nmachines;++j)	{
+// 			rnumber[j] = u16807d(iseed);
+// 			seq[j] = j;
+// 		}
+// 		qsort(rnumber,seq,1,nmachines);
+// 		for(j=1;j<=nmachines;++j)	{
+// 			sequence[i][j] = seq[j];
+// 			processtime[i][j] = (int) (lowp + u16807d(iseed) * highp);
+// 		}
+// 	}
+//
+// } /* End Generating Information for Classic Job Shop */
+//
+// /* Generating Two Sets Job Shop Information */
+// generatetwosets(njobs,nmachines,lowp,highp,iseed)
+// int njobs,nmachines,*iseed;
+// float lowp,highp;
+// {
+// 	int i,j,seq[30],firstset,secondset;
+// 	float rnumber[30];
+//
+// 	firstset = nmachines / 2;
+// 	for(i=1;i<=njobs;++i)	{
+// 		for(j=1;j<=firstset;++j)	{
+// 			rnumber[j] = u16807d(iseed);
+// 			seq[j] = j;
+// 		}
+// 		qsort(rnumber,seq,1,firstset);
+// 		for(j=firstset+1;j<=nmachines;++j)	{
+// 			rnumber[j] = u16807d(iseed);
+// 			seq[j] = j;
+// 		}
+// 		qsort(rnumber,seq,firstset+1,nmachines);
+// 		for(j=1;j<=nmachines;++j)	{
+// 			sequence[i][j] = seq[j];
+// 			processtime[i][j] = (int) (lowp + u16807d(iseed) * highp);
+// 		}
+// 	}
+//
+// } /* End Generating Information for Two Sets Job Shop */
 
 }
