@@ -30,8 +30,12 @@ namespace sched::shop {
     int32_t seed;
   };
 
-  SCHED_API JobShopInstance compute_dmu_legacy_instance(const DemirkolMehtaUzsoyInstance& instance);
+  SCHED_API JobShopInstance compute_dmu_legacy_instance_1(const DemirkolMehtaUzsoyInstance& instance);
+  SCHED_API JobShopInstance compute_dmu_legacy_instance_2(const DemirkolMehtaUzsoyInstance& instance);
 
+  constexpr std::size_t DmuInstanceCount = 40;
+  SCHED_API std::span<const DemirkolMehtaUzsoyInstance, DmuInstanceCount> load_dmu_benchmark_1();
+  SCHED_API std::span<const DemirkolMehtaUzsoyInstance, DmuInstanceCount> load_dmu_benchmark_2();
 
 }
 
