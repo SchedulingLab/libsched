@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (c) 2022-2025 Julien Bernard
 
+#include <cfenv>
 #include <cstdint>
 #include <cmath>
 
@@ -186,8 +187,23 @@ namespace sched::shop {
 
   }
 
+  /*
+   * The original code run on a SUN SPARCserver 1000 Model 1104.
+   * It appears that the default floating point rounding mode was not
+   * FE_TONEAREST as when run with this mode (the default mode nowadays),
+   * dmu29 and dmu59 did not provided the exact same values. Adjusting
+   * the rounding mode to FE_DOWNWARD seems to fix the computation.
+   */
+
+  // #pragma STDC FENV_ACCESS ON
+
   JobShopInstance compute_dmu_legacy_instance_1(const DemirkolMehtaUzsoyInstance& instance)
   {
+    std::fenv_t env;
+    std::fegetenv(&env); // save the current environment
+
+    std::fesetround(FE_DOWNWARD);
+
     JobShopData instance_data;
     instance_data.machines = instance.machines;
 
@@ -222,11 +238,17 @@ namespace sched::shop {
       instance_data.jobs.push_back(std::move(job_data));
     }
 
+    std::fesetenv(&env); // restore the previous environment
     return instance_data;
   }
 
   JobShopInstance compute_dmu_legacy_instance_2(const DemirkolMehtaUzsoyInstance& instance)
   {
+    std::fenv_t env;
+    std::fegetenv(&env); // save the current environment
+
+    std::fesetround(FE_DOWNWARD);
+
     JobShopData instance_data;
     instance_data.machines = instance.machines;
 
@@ -263,6 +285,7 @@ namespace sched::shop {
       instance_data.jobs.push_back(std::move(job_data));
     }
 
+    std::fesetenv(&env); // restore the previous environment
     return instance_data;
   }
 
@@ -297,7 +320,7 @@ namespace sched::shop {
       { .jobs = 40, .machines = 20, .seed = 1510794207 },
       { .jobs = 40, .machines = 20, .seed = 1656193480 },
       { .jobs = 40, .machines = 20, .seed = 1020622462 },
-      { .jobs = 40, .machines = 20, .seed =  425341562 },
+      { .jobs = 40, .machines = 20, .seed =  425341562 }, // needs fpenv trick
       { .jobs = 40, .machines = 20, .seed = 1111362916 },
       { .jobs = 50, .machines = 15, .seed = 1140902718 },
       { .jobs = 50, .machines = 15, .seed =  319220731 },
@@ -330,7 +353,7 @@ namespace sched::shop {
       { .jobs = 30, .machines = 20, .seed = 1853446555 },
       { .jobs = 30, .machines = 20, .seed = 1696470024 },
       { .jobs = 30, .machines = 20, .seed =  852368975 },
-      { .jobs = 30, .machines = 20, .seed = 1122276408 },
+      { .jobs = 30, .machines = 20, .seed = 1122276408 }, // needs fpenv trick
       { .jobs = 30, .machines = 20, .seed =  169103059 },
       { .jobs = 40, .machines = 15, .seed = 1184095505 },
       { .jobs = 40, .machines = 15, .seed = 1032938603 },
