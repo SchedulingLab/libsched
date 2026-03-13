@@ -185,6 +185,28 @@ namespace sched::shop {
     constexpr int32_t DmuMinProcessingTime = 1;
     constexpr int32_t DmuProcessingTimeRange = 200;
 
+    class FPEnv {
+    public:
+      FPEnv()
+      {
+        std::fegetenv(&m_env);
+      }
+
+      FPEnv(const FPEnv&) = delete;
+      FPEnv(FPEnv&&) = delete;
+
+      ~FPEnv()
+      {
+        std::fesetenv(&m_env);
+      }
+
+      FPEnv& operator=(const FPEnv&) = delete;
+      FPEnv& operator=(FPEnv&&) = delete;
+
+    private:
+      std::fenv_t m_env = {};
+    };
+
   }
 
   /*
@@ -199,9 +221,7 @@ namespace sched::shop {
 
   JobShopInstance compute_dmu_legacy_instance_1(const DemirkolMehtaUzsoyInstance& instance)
   {
-    std::fenv_t env;
-    std::fegetenv(&env); // save the current environment
-
+    FPEnv keep;
     std::fesetround(FE_DOWNWARD);
 
     JobShopData instance_data;
@@ -238,15 +258,12 @@ namespace sched::shop {
       instance_data.jobs.push_back(std::move(job_data));
     }
 
-    std::fesetenv(&env); // restore the previous environment
     return instance_data;
   }
 
   JobShopInstance compute_dmu_legacy_instance_2(const DemirkolMehtaUzsoyInstance& instance)
   {
-    std::fenv_t env;
-    std::fegetenv(&env); // save the current environment
-
+    FPEnv keep;
     std::fesetround(FE_DOWNWARD);
 
     JobShopData instance_data;
@@ -285,7 +302,6 @@ namespace sched::shop {
       instance_data.jobs.push_back(std::move(job_data));
     }
 
-    std::fesetenv(&env); // restore the previous environment
     return instance_data;
   }
 
