@@ -35,7 +35,6 @@ namespace sched::shop {
 
       uint32_t index = 0;
       Time time = 0;
-      MachineId machine = NoMachine;
 
       for (const JobShopTask& task : processing_tasks) {
         // check processing
@@ -46,15 +45,6 @@ namespace sched::shop {
         }
 
         time = task.completion;
-
-        if (machine != NoMachine) {
-          if (task.machine != machine) {
-            Log::println("[JOB {}/{}] Wrong machine: current machine = {}, assigned machine = {}", job, task.operation.index, machine, task.machine);
-            return false;
-          }
-        } else {
-          machine = task.machine;
-        }
 
         if (task.operation.index != index) {
           Log::println("[JOB {}/{}] Wrong operation: current index = {}, operation index = {}", job, task.operation.index, index, task.operation.index);
