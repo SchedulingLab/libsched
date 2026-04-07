@@ -8,9 +8,93 @@
 #include <algorithm>
 #include <tuple>
 
+#include <sched/IdsFmt.h>
+#include <sched/meta/Instance.h>
+#include <sched/support/Log.h>
+#include <sched/shop/instance/FlexibleJobShopInstance.h>
+#include <sched/shop/instance/JobShopInstance.h>
+
 namespace sched::shop {
 
-  bool is_schedule_valid(const JobShopSchedule& schedule)
+  namespace {
+
+    bool is_schedule_valid_for_job(const JobShopSchedule& schedule, JobId job)
+    {
+      auto processing_tasks = schedule.tasks()
+        | std::views::filter([job](const JobShopTask& task) { return task.operation.job == job; })
+        | std::ranges::to<std::vector<JobShopTask>>();
+
+      if (processing_tasks.empty()) {
+        return false;
+      }
+
+      std::ranges::stable_sort(processing_tasks, [](const JobShopTask& lhs, const JobShopTask& rhs) {
+        // also check operations to handle operations with processing time of 0 (like orb07)
+        return std::tie(lhs.start, lhs.completion, lhs.operation.index) < std::tie(rhs.start, rhs.completion, rhs.operation.index);
+      });
+
+      uint32_t index = 0;
+      Time time = 0;
+      MachineId machine = NoMachine;
+
+      for (const JobShopTask& task : processing_tasks) {
+        // check processing
+
+        if (task.start < time) {
+          Log::println("[JOB {}/{}] Overlapping: current time = {}, start time = {}", job, task.operation.index, time, task.start);
+          return false;
+        }
+
+        time = task.completion;
+
+        if (machine != NoMachine) {
+          if (task.machine != machine) {
+            Log::println("[JOB {}/{}] Wrong machine: current machine = {}, assigned machine = {}", job, task.operation.index, machine, task.machine);
+            return false;
+          }
+        } else {
+          machine = task.machine;
+        }
+
+        if (task.operation.index != index) {
+          Log::println("[JOB {}/{}] Wrong operation: current index = {}, operation index = {}", job, task.operation.index, index, task.operation.index);
+          return false;
+        }
+
+        ++index;
+      }
+
+      return true;
+    }
+
+    bool is_schedule_valid_for_machine(const JobShopSchedule& schedule, MachineId machine)
+    {
+      auto processing_tasks = schedule.tasks()
+        | std::views::filter([machine](const JobShopTask& task) { return task.machine == machine; })
+        | std::ranges::to<std::vector<JobShopTask>>();
+
+      std::ranges::stable_sort(processing_tasks, [](const JobShopTask& lhs, const JobShopTask& rhs) {
+        return std::tie(lhs.start, lhs.completion) < std::tie(rhs.start, rhs.completion);
+      });
+
+      Time time = 0;
+
+      for (const JobShopTask& task :processing_tasks) {
+
+        if (task.start < time) {
+          Log::println("[MACHINE {}] Overlapping: current time = {}, start time = {}", machine, time, task.start);
+          return false;
+        }
+
+        time = task.completion;
+      }
+
+      return true;
+    }
+
+  }
+
+  bool is_schedule_valid(const JobShopSchedule& schedule, std::size_t job_count, std::size_t machine_count)
   {
     const JobShopSchedule::ConstTaskRange task_range = schedule.tasks();
     std::vector<JobShopTask> tasks(task_range.begin(), task_range.end());
@@ -20,42 +104,47 @@ namespace sched::shop {
       return std::tie(lhs.completion, lhs.operation.job, lhs.operation.index) < std::tie(rhs.completion, rhs.operation.job, rhs.operation.index);
     });
 
-    std::size_t machine_count = 0;
-    std::size_t job_count = 0;
-
-    for (const JobShopTask& task : tasks) {
-      machine_count = std::max(machine_count, to_index(task.machine) + 1);
-      job_count = std::max(job_count, to_index(task.operation.job) + 1);
+    if (job_count == 0) {
+      for (const JobShopTask& task : tasks) {
+        job_count = std::max(job_count, to_index(task.operation.job) + 1);
+      }
     }
 
-    struct JobState {
-      std::size_t operation = 0;
-      Time time = 0;
-    };
+    if (machine_count == 0) {
+      for (const JobShopTask& task : tasks) {
+        machine_count = std::max(machine_count, to_index(task.machine) + 1);
+      }
+    }
 
-    std::vector<JobState> jobs(job_count, JobState{});
-    std::vector<Time> machines(machine_count, Time{ 0 });
+    // check jobs
 
-    for (const JobShopTask& task : tasks) {
-      const std::size_t job_index = to_index(task.operation.job);
-      assert(job_index < job_count);
-      const std::size_t machine_index = to_index(task.machine);
-      assert(machine_index < machine_count);
-
-      if (task.start < jobs[job_index].time || task.start < machines[machine_index]) {
+    for (const JobId job : JobRange{ job_count }) {
+      if (!is_schedule_valid_for_job(schedule, job)) {
         return false;
       }
+    }
 
-      jobs[job_index].time = machines[machine_index] = task.completion;
+    // check machines
 
-      if (task.operation.index != jobs[job_index].operation) {
+    for (const MachineId machine : MachineRange{ machine_count }) { // NOLINT
+      if (!is_schedule_valid_for_machine(schedule, machine)) {
         return false;
       }
-
-      ++jobs[job_index].operation;
     }
 
     return true;
+  }
+
+  bool is_schedule_valid_for_instance(const JobShopSchedule& schedule, const JobShopInstance& instance)
+  {
+    // TODO: check all tasks relatively to instance
+    return is_schedule_valid(schedule, instance.job_count(), instance.machine_count());
+  }
+
+  bool is_schedule_valid_for_instance(const JobShopSchedule& schedule, const FlexibleJobShopInstance& instance)
+  {
+    // TODO: check all tasks relatively to instance
+    return is_schedule_valid(schedule, instance.job_count(), instance.machine_count());
   }
 
   JobShopSchedule make_schedule_active(const JobShopSchedule& original_schedule)

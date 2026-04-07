@@ -15,7 +15,8 @@
 
 namespace sched::shop {
 
-  struct SCHED_API JobShopInstance {
+  class SCHED_API JobShopInstance {
+  public:
     static constexpr bool Flexible = false;
 
     JobShopInstance() = default;

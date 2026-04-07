@@ -9,6 +9,8 @@
 #include <sched/Time.h>
 
 namespace sched::shop {
+  class FlexibleJobShopInstance;
+  class JobShopInstance;
 
   struct SCHED_API JobShopTask {
     OperationId operation;
@@ -19,7 +21,10 @@ namespace sched::shop {
 
   using JobShopSchedule = BasicSchedule<JobShopTask>;
 
-  SCHED_API bool is_schedule_valid(const JobShopSchedule& schedule);
+  SCHED_API bool is_schedule_valid(const JobShopSchedule& schedule, std::size_t job_count = 0, std::size_t machine_count = 0);
+
+  SCHED_API bool is_schedule_valid_for_instance(const JobShopSchedule& schedule, const JobShopInstance& instance);
+  SCHED_API bool is_schedule_valid_for_instance(const JobShopSchedule& schedule, const FlexibleJobShopInstance& instance);
 
   SCHED_API JobShopSchedule make_schedule_active(const JobShopSchedule& original_schedule);
 
