@@ -6,8 +6,9 @@
 #include <cassert>
 
 #include <algorithm>
-#include <vector>
+#include <ranges>
 #include <tuple>
+#include <vector>
 
 #include <sched/Ids.h>
 #include <sched/support/Range.h>
@@ -47,16 +48,21 @@ namespace sched::shop {
     bool has_pending_operations(const MachineOperations& machine_operations) const
     {
       assert(machine_operations.size() == machines.size());
-      return std::ranges::any_of(machines, [&](std::size_t index) { return index < machine_operations[index].size(); }, &MachineState::index);
+
+      for (auto [ machine_index, machine_state ] : std::views::enumerate(machines)) {
+        if (machine_state.index < machine_operations[machine_index].size()) {
+          return true;
+        }
+      }
+
+      return false;
     }
 
     void update_pending_operations(const MachineOperations& machine_operations)
     {
       assert(machine_operations.size() == machines.size());
 
-      for (std::size_t machine_index : over(machines)) {
-        MachineState& machine_state = machines[machine_index];
-
+      for (auto [ machine_index, machine_state ] : std::views::enumerate(machines)) {
         for (;;) {
           if (machine_state.index >= machine_operations[machine_index].size()) {
             break;
@@ -89,13 +95,11 @@ namespace sched::shop {
 
       std::vector<std::tuple<OperationId, MachineId>> schedulable_operations;
 
-      for (std::size_t machine_index : over(machines)) {
-        const MachineState& machine_state = machines[machine_index];
-
+      for (auto [ machine_index, machine_state ] : std::views::enumerate(machines)) {
         // check if the next operation is schedulable
 
         if (machine_state.index >= machine_operations[machine_index].size()) {
-          break;
+          continue;
         }
 
         const OperationId machine_operation = machine_operations[machine_index][machine_state.index];
