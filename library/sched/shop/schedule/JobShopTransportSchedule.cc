@@ -227,7 +227,6 @@ namespace sched::shop {
         | std::ranges::to<std::vector<JobShopTask>>();
 
       std::ranges::sort(processing_tasks, [](const JobShopTask& lhs, const JobShopTask& rhs) {
-        // also check operations to handle operations with processing time of 0 (like orb07)
         return std::tie(lhs.start, lhs.completion) < std::tie(rhs.start, rhs.completion);
       });
 
@@ -296,11 +295,105 @@ namespace sched::shop {
 
     Time waiting = 0;
 
-    for (const VehicleId vehicle :VehicleRange{ vehicle_count }) {
+    for (const VehicleId vehicle : VehicleRange{ vehicle_count }) {
       waiting += compute_waiting_time_for_vehicle(schedule, vehicle);
     }
 
     return static_cast<double>(waiting) / static_cast<double>(vehicle_count);
+  }
+
+  namespace {
+
+    std::size_t compute_job_count(const JobShopTransportSchedule& schedule)
+    {
+      std::size_t job_count = 0;
+
+      for (const JobShopTask& task : schedule.tasks()) {
+        job_count = std::max(job_count, static_cast<std::size_t>(task.operation.job) + 1);
+      }
+
+      return job_count;
+    }
+
+    std::tuple<Time, Time> compute_job_waiting_times_for_job(const JobShopTransportSchedule& schedule, JobId job)
+    {
+      auto processing_tasks = schedule.tasks()
+        | std::views::filter([job](const JobShopTask& task) { return task.operation.job == job; })
+        | std::ranges::to<std::vector<JobShopTask>>();
+
+      std::ranges::sort(processing_tasks, [](const JobShopTask& lhs, const JobShopTask& rhs) {
+        return lhs.operation.index < rhs.operation.index;
+      });
+
+      auto transportation_tasks = schedule.transportation_tasks()
+        | std::views::filter([job](const TransportationTask& task) { return task.job == job; })
+        | std::ranges::to<std::vector<TransportationTask>>();
+
+      std::ranges::sort(transportation_tasks, [](const TransportationTask& lhs, const TransportationTask& rhs) {
+        return std::tie(lhs.start, lhs.completion) < std::tie(rhs.start, rhs.completion);
+      });
+
+      Time time = 0;
+      Time machine_waiting = 0;
+      Time vehicle_waiting = 0;
+
+      auto processing_iterator = processing_tasks.begin();
+      auto transportation_iterator = transportation_tasks.begin();
+
+      for (;;) {
+        if (processing_iterator == processing_tasks.end()) {
+          // no more processing (and no more transportation)
+          assert(transportation_iterator == transportation_tasks.end());
+          break;
+        }
+
+        if (transportation_iterator == transportation_tasks.end()) {
+          // the remaining processing tasks don't need transport (they are on the same machine), so they won't wait on the machine after the current processing task
+          machine_waiting += processing_iterator->start - time;
+          break;
+        }
+
+        if (processing_iterator->start < transportation_iterator->start) {
+          machine_waiting += processing_iterator->start - time;
+          time = processing_iterator->completion;
+          ++processing_iterator;
+        } else {
+          vehicle_waiting += transportation_iterator->start - time;
+          time = transportation_iterator->completion;
+          ++transportation_iterator;
+        }
+      }
+
+      return { machine_waiting, vehicle_waiting };
+
+    }
+
+    std::tuple<double, double> compute_job_waiting_times(const JobShopTransportSchedule& schedule)
+    {
+      const std::size_t job_count = compute_job_count(schedule);
+
+      Time machine_waiting = 0;
+      Time vehicle_waiting = 0;
+
+      for (const JobId job : JobRange{ job_count }) {
+        const auto [ job_machine_waiting, job_vehicle_waiting ] = compute_job_waiting_times_for_job(schedule, job);
+        machine_waiting += job_machine_waiting;
+        vehicle_waiting += job_vehicle_waiting;
+      }
+
+      return { static_cast<double>(machine_waiting) / static_cast<double>(job_count), static_cast<double>(vehicle_waiting) / static_cast<double>(job_count) };
+    }
+
+  }
+
+  double compute_job_machine_waiting_time(const JobShopTransportSchedule& schedule)
+  {
+    return std::get<0>(compute_job_waiting_times(schedule));
+  }
+
+  double compute_job_vehicle_waiting_time(const JobShopTransportSchedule& schedule)
+  {
+    return std::get<1>(compute_job_waiting_times(schedule));
   }
 
 }
