@@ -17,7 +17,6 @@ namespace {
 
   constexpr std::string_view PuInstance = R"json(
 {
-  "unload": 0,
   "machines": 13,
   "operations": [
     { "processing": { "lo": 120            }, "machines": 1, "transport": 31 },
