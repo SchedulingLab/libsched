@@ -186,7 +186,7 @@ namespace sched::shop {
     }
 
     // fallback to swap
-    SwapNeighborhood fallback;
+    SwapInRowNeighborhood fallback;
     return fallback(input, schedule, random);
   }
 
