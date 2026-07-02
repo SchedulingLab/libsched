@@ -6,6 +6,7 @@
 #include <format>
 
 #include <sched/shop/instance/JobShopBenchmark.h>
+#include <sched/shop/instance/JobShopTransportBenchmark.h>
 #include <sched/shop/instance/FlexibleJobShopBenchmark.h>
 #include <sched/shop/instance/FlexibleJobShopTransportBenchmark.h>
 
@@ -15,6 +16,17 @@ struct std::formatter<sched::shop::JobShopBenchmark> : std::formatter<std::strin
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   template<typename Context>
   auto format(const sched::shop::JobShopBenchmark& benchmark, Context& ctx) const -> Context::iterator
+  {
+    return std::formatter<std::string>::format(benchmark.name, ctx);
+  }
+};
+
+template<>
+struct std::formatter<sched::shop::JobShopTransportBenchmark> : std::formatter<std::string>
+{
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  template<typename Context>
+  auto format(const sched::shop::JobShopTransportBenchmark& benchmark, Context& ctx) const -> Context::iterator
   {
     return std::formatter<std::string>::format(benchmark.name, ctx);
   }

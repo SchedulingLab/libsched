@@ -4,5 +4,6 @@
 #include <sched/shop/instance/BenchmarkFmt.h>
 
 static_assert(std::formattable<sched::shop::JobShopBenchmark, char>);
+static_assert(std::formattable<sched::shop::JobShopTransportBenchmark, char>);
 static_assert(std::formattable<sched::shop::FlexibleJobShopBenchmark, char>);
 static_assert(std::formattable<sched::shop::FlexibleJobShopTransportBenchmark, char>);
