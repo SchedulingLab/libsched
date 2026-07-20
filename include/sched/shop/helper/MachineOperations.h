@@ -9,7 +9,8 @@
 
 namespace sched::shop {
 
-  using MachineOperations = std::vector<std::vector<OperationId>>;
+  using Operations = std::vector<OperationId>;
+  using MachineOperations = std::vector<Operations>;
 
 }
 

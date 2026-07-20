@@ -24,15 +24,19 @@ namespace sched::shop {
     template<typename Instance>
     std::optional<JobShopTransportSchedule> operator()(const Instance& instance, const Input& input)
     {
-      auto machine_operations = to_machine_operations(instance, input.input0);
-      auto operation_priority = to_operation_priority(instance, input.input1);
-      auto assigned_vehicles = vehicle_assignment(instance, input.input2);
+      MachineOperations machine_operations = to_machine_operations(instance, input.input0);
+      const OperationPriority operation_priority = to_operation_priority(instance, input.input1);
+      const std::vector<VehicleId> assigned_vehicles = vehicle_assignment(instance, input.input2);
 
       auto operations_comparator = [&](OperationId lhs, OperationId rhs) {
-        return operation_priority[lhs] < operation_priority[rhs];
+        auto iterator_lhs = operation_priority.find(lhs);
+        assert(iterator_lhs != operation_priority.end());
+        auto iterator_rhs = operation_priority.find(rhs);
+        assert(iterator_rhs != operation_priority.end());
+        return iterator_lhs->second < iterator_rhs->second;
       };
 
-      for (auto& operations : machine_operations) {
+      for (Operations& operations : machine_operations) {
         std::ranges::sort(operations, operations_comparator);
       }
 
@@ -69,7 +73,7 @@ namespace sched::shop {
     {
       auto assigned_machines = machine_assignment(instance, input);
 
-      MachineOperations machine_operations(instance.machine_count());
+      MachineOperations machine_operations(instance.device_count());
 
       for (const JobId job : jobs(instance)) {
         for (const OperationId operation : operations(instance, job)) {

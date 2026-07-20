@@ -10,6 +10,7 @@
 #include <optional>
 
 #include <sched/shop/helper/MachineOperations.h>
+#include <sched/shop/helper/OperationPriority.h>
 #include <sched/meta/input/FloatListInput.h>
 #include <sched/shop/input/JobListInput.h>
 #include <sched/shop/input/MachineListInput.h>
@@ -59,7 +60,7 @@ namespace sched::shop {
     MachineListInput machine_list(instance.machine_count());
 
     for (const OperationId operation : operation_list) {
-      auto machine = instance.assigned_machine_for_operation(operation);
+      const MachineId machine = instance.assigned_machine_for_operation(operation);
       machine_list[to_index(machine)].push_back(operation);
     }
 
@@ -69,7 +70,7 @@ namespace sched::shop {
   template<typename Instance>
   MachineListInput to_machine_list(const JobListInput& job_list, const Instance& instance)
   {
-    auto operation_list = to_operation_list(job_list, instance);
+    const OperationListInput operation_list = to_operation_list(job_list, instance);
     return to_machine_list(operation_list, instance);
   }
 
@@ -115,12 +116,12 @@ namespace sched::shop {
   template<typename Instance>
   MachineOperations to_machine_operations(const Instance& instance)
   {
-    MachineOperations machine_operations(instance.machine_count());
+    MachineOperations machine_operations(instance.device_count());
 
     for (const JobId job : jobs(instance)) {
       for (const OperationId operation : operations(instance, job)) {
         if constexpr (Instance::Flexible) {
-          const auto available = instance.machines_for_operation(operation);
+          const std::vector<MachineId> available = instance.machines_for_operation(operation);
 
           for (const MachineId machine : available) {
             machine_operations[to_index(machine)].push_back(operation);
@@ -136,9 +137,9 @@ namespace sched::shop {
   }
 
   template<typename Instance>
-  std::map<OperationId, double> to_operation_priority(const Instance& instance, const FloatListInput& input)
+  OperationPriority to_operation_priority(const Instance& instance, const FloatListInput& input)
   {
-    std::map<OperationId, double> operation_priority;
+    OperationPriority operation_priority;
     std::size_t index = 0;
 
     for (const JobId job : jobs(instance)) {
