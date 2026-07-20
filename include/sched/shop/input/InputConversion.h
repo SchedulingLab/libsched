@@ -6,7 +6,6 @@
 #include <cassert>
 #include <cstdint>
 
-#include <map>
 #include <optional>
 
 #include <sched/shop/helper/MachineOperations.h>
@@ -17,6 +16,28 @@
 #include <sched/shop/input/OperationListInput.h>
 
 namespace sched::shop {
+
+  namespace details {
+
+    template<typename Instance>
+    std::vector<double> extract_float_list_for_job(const Instance& instance, const FloatListInput& input, std::size_t& index, JobId job)
+    {
+      const std::size_t count = instance.operation_count(job);
+      std::vector<double> float_list(count);
+
+      for (std::size_t i = 0; i < count; ++i) {
+        assert(index < input.size());
+        float_list[i] = input[index++];
+      }
+
+      // preserve the operation order to make the input feasible
+      std::ranges::sort(float_list);
+
+      return float_list;
+    }
+
+
+  }
 
   template<typename Instance>
   OperationListInput to_operation_list(const JobListInput& job_list, const Instance& instance)
@@ -87,20 +108,12 @@ namespace sched::shop {
     std::size_t index = 0;
 
     for (const JobId job : jobs(instance)) {
-      const std::size_t count = instance.operation_count(job);
-      std::vector<double> float_list_for_job(count);
-
-      for (std::size_t i = 0; i < count; ++i) {
-        assert(index < float_list.size());
-        float_list_for_job[i] = float_list[index++];
-      }
-
-      // preserve the operation order to make the input feasible
-      std::ranges::sort(float_list_for_job);
+      const std::vector<double> float_list_for_job = details::extract_float_list_for_job(instance, float_list, index, job);
 
       for (const OperationId operation : operations(instance, job)) {
-        const double element = float_list_for_job[operation.index];
-        operation_order.emplace_back(operation, element);
+        assert(operation.index < float_list_for_job.size());
+        const double value = float_list_for_job[operation.index];
+        operation_order.emplace_back(operation, value);
       }
     }
 
@@ -137,14 +150,18 @@ namespace sched::shop {
   }
 
   template<typename Instance>
-  OperationPriority to_operation_priority(const Instance& instance, const FloatListInput& input)
+  OperationPriority to_operation_priority(const Instance& instance, const FloatListInput& float_list)
   {
     OperationPriority operation_priority;
     std::size_t index = 0;
 
     for (const JobId job : jobs(instance)) {
+      const std::vector<double> float_list_for_job = details::extract_float_list_for_job(instance, float_list, index, job);
+
       for (const OperationId operation : operations(instance, job)) {
-        operation_priority.emplace(operation, input[index++]);
+        assert(operation.index < float_list_for_job.size());
+        const double value = float_list_for_job[operation.index];
+        operation_priority.emplace(operation, value);
       }
     }
 
