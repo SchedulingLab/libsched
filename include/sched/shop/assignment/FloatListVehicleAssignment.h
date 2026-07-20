@@ -24,7 +24,7 @@ namespace sched::shop {
       const std::size_t vehicle_count = instance.vehicle_count();
       std::vector<VehicleId> assignment;
 
-      for (auto value : input) {
+      for (const double value : input) {
         auto id = static_cast<std::size_t>(value * vehicle_count);
         assert(id < vehicle_count);
         assignment.push_back(to_vehicle(id));

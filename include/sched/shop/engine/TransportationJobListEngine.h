@@ -39,7 +39,7 @@ namespace sched::shop {
 
       for (const JobId job : input.input0) {
         assert(vehicle_index < assigned_vehicles.size());
-        const VehicleId vehicle = assigned_vehicles[vehicle_index];
+        const VehicleId vehicle = assigned_vehicles[vehicle_index++];
         const OperationId operation = states.next_operation(job);
 
         if constexpr (Instance::Flexible) {
@@ -77,8 +77,6 @@ namespace sched::shop {
             states.update_schedule(packet, schedule);
           }
         }
-
-        ++vehicle_index;
       }
 
       return schedule;

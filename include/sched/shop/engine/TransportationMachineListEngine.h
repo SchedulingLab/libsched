@@ -56,11 +56,14 @@ namespace sched::shop {
         std::vector<JobShopTask> tasks;
         std::vector<JobShopTransportTaskPacket> packets;
 
+        assert(vehicle_index < assigned_vehicles.size());
+        const VehicleId vehicle = assigned_vehicles[vehicle_index++];
+
         for (auto [ operation, machine ] : schedulable_operations) {
           if (operation.index == 0) {
             tasks.push_back(states.create_task(operation, machine));
           } else {
-            packets.push_back(states.create_packet(operation, machine, assigned_vehicles[vehicle_index++]));
+            packets.push_back(states.create_packet(operation, machine, vehicle));
           }
         }
 
