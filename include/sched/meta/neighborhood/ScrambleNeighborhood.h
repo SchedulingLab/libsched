@@ -12,6 +12,7 @@
 #include <sched/support/Random.h>
 #include <sched/meta/neighborhood/NeighborhoodHelper.h>
 #include <sched/types/InputConcepts.h>
+#include <sched/meta/neighborhood/NeighborhoodLimits.h>
 #include <sched/types/NeighborhoodTraits.h>
 
 namespace sched {
@@ -25,8 +26,9 @@ namespace sched {
 
       const std::size_t max = input.size() - 1;
       Input neighbor = input;
+      std::size_t attempts = 0;
 
-      while (neighbor == input) {
+      while (attempts < NeighborhoodSearchMaxAttempts && neighbor == input) {
         std::size_t endpoints[2] = { 0, 0 };
 
         while (endpoints[0] == endpoints[1]) {
@@ -39,6 +41,7 @@ namespace sched {
         }
 
         std::shuffle(&neighbor[endpoints[0]], &neighbor[endpoints[1]] + 1, random);
+        ++attempts;
       }
 
       return neighbor;

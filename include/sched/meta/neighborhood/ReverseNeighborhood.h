@@ -13,6 +13,7 @@
 #include <sched/meta/neighborhood/NeighborhoodHelper.h>
 #include <sched/types/InputConcepts.h>
 #include <sched/types/NeighborhoodTraits.h>
+#include <sched/meta/neighborhood/NeighborhoodLimits.h>
 #include <sched/meta/neighborhood/RowNeighborhood.h>
 
 namespace sched {
@@ -26,8 +27,9 @@ namespace sched {
 
       const std::size_t max = input.size() - 1;
       Input neighbor = input;
+      std::size_t attempts = 0;
 
-      while (neighbor == input) {
+      while (attempts < NeighborhoodSearchMaxAttempts && neighbor == input) {
         std::size_t endpoints[2] = { 0, 0 };
 
         while (endpoints[0] == endpoints[1]) {
@@ -40,6 +42,7 @@ namespace sched {
         }
 
         std::reverse(&neighbor[endpoints[0]], &neighbor[endpoints[1]] + 1);
+        ++attempts;
       }
 
       return neighbor;
@@ -75,8 +78,9 @@ namespace sched {
       const std::size_t max = input.size() - 1;
       const std::size_t cap = std::max(max / 5, std::size_t(5));
       Input neighbor = input;
+      std::size_t attempts = 0;
 
-      while (neighbor == input) {
+      while (attempts < NeighborhoodSearchMaxAttempts && neighbor == input) {
         std::size_t endpoints[2] = { 0, 0 };
 
         while (endpoints[0] == endpoints[1] || (endpoints[1] - endpoints[0] > cap)) {
@@ -89,6 +93,7 @@ namespace sched {
         }
 
         std::reverse(&neighbor[endpoints[0]], &neighbor[endpoints[1]] + 1);
+        ++attempts;
       }
 
       return neighbor;

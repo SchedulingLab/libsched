@@ -12,6 +12,7 @@
 #include <sched/meta/neighborhood/NeighborhoodHelper.h>
 #include <sched/types/InputConcepts.h>
 #include <sched/types/NeighborhoodTraits.h>
+#include <sched/meta/neighborhood/NeighborhoodLimits.h>
 #include <sched/meta/neighborhood/RowNeighborhood.h>
 
 namespace sched {
@@ -25,8 +26,9 @@ namespace sched {
 
       const std::size_t max = input.size() - 1;
       Input neighbor = input;
+      std::size_t attempts = 0;
 
-      while (neighbor == input) {
+      while (attempts < NeighborhoodSearchMaxAttempts && neighbor == input) {
         std::size_t orig = 0;
         std::size_t dest = 0;
 
@@ -48,6 +50,7 @@ namespace sched {
         }
 
         neighbor[dest] = val;
+        ++attempts;
       }
 
       return neighbor;

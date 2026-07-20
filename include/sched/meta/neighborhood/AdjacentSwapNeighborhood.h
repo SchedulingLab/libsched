@@ -13,6 +13,7 @@
 #include <sched/meta/neighborhood/NeighborhoodHelper.h>
 #include <sched/types/InputConcepts.h>
 #include <sched/types/NeighborhoodTraits.h>
+#include <sched/meta/neighborhood/NeighborhoodLimits.h>
 #include <sched/meta/neighborhood/RowNeighborhood.h>
 
 namespace sched {
@@ -27,10 +28,12 @@ namespace sched {
       const std::size_t max = input.size() - 1;
       std::size_t index = 0;
       assert(index < input.size() - 1);
+      std::size_t attempts = 0;
 
-      while (input[index] == input[index + 1]) {
+      while (attempts < NeighborhoodSearchMaxAttempts && input[index] == input[index + 1]) {
         index = random.compute_uniform_integer(std::size_t{ 0 }, max - 1);
         assert(index < input.size() - 1);
+        ++attempts;
       }
 
       Input mutant = input;
