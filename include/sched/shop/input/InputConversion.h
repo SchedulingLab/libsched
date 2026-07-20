@@ -4,10 +4,10 @@
 #define SCHED_SHOP_INPUT_CONVERSION_H
 
 #include <cassert>
+#include <cstdint>
 
 #include <map>
 #include <optional>
-#include <tuple>
 
 #include <sched/shop/helper/MachineOperations.h>
 #include <sched/meta/input/FloatListInput.h>
@@ -21,10 +21,10 @@ namespace sched::shop {
   OperationListInput to_operation_list(const JobListInput& job_list, const Instance& instance)
   {
     OperationListInput operation_list;
-    std::vector<std::size_t> job_state(instance.job_count(), 0);
+    std::vector<uint32_t> job_state(instance.job_count(), 0);
 
     for (const JobId job : job_list) {
-      const std::size_t index = job_state[to_index(job)]++;
+      const uint32_t index = job_state[to_index(job)]++;
       const OperationId operation = { .job = job, .index = index };
       operation_list.push_back(operation);
     }
@@ -76,29 +76,38 @@ namespace sched::shop {
   template<typename Instance>
   OperationListInput to_operation_list(const FloatListInput& float_list, const Instance& instance)
   {
-    std::vector<std::tuple<OperationId, double>> operation_order;
+    struct FloatOperation {
+      OperationId operation;
+      double value;
+    };
+
+    std::vector<FloatOperation> operation_order;
 
     std::size_t index = 0;
 
     for (const JobId job : jobs(instance)) {
-      for (const OperationId operation : operations(instance, job)) {
+      const std::size_t count = instance.operation_count(job);
+      std::vector<double> float_list_for_job(count);
+
+      for (std::size_t i = 0; i < count; ++i) {
         assert(index < float_list.size());
-        auto element = float_list[index++];
+        float_list_for_job[i] = float_list[index++];
+      }
+
+      // preserve the operation order to make the input feasible
+      std::ranges::sort(float_list_for_job);
+
+      for (const OperationId operation : operations(instance, job)) {
+        const double element = float_list_for_job[operation.index];
         operation_order.emplace_back(operation, element);
       }
     }
 
     assert(index == float_list.size());
-
-    std::ranges::sort(operation_order, [](const std::tuple<OperationId, double>& lhs, const std::tuple<OperationId, double>& rhs) {
-      return std::get<double>(lhs) < std::get<double>(rhs);
-    });
+    std::ranges::sort(operation_order, {}, &FloatOperation::value);
 
     OperationListInput operation_list;
-
-    std::ranges::transform(operation_order, std::back_inserter(operation_list), [](const std::tuple<OperationId, double> item) {
-      return std::get<OperationId>(item);
-    });
+    std::ranges::transform(operation_order, std::back_inserter(operation_list), &FloatOperation::operation);
 
     return operation_list;
   }

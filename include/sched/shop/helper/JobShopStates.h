@@ -148,7 +148,7 @@ namespace sched::shop {
 
     struct JobState {
       MachineId machine = NoMachine;
-      std::size_t operation = 0;
+      uint32_t operation = 0;
       Time time = 0;
     };
 

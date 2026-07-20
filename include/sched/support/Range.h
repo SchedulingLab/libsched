@@ -30,7 +30,7 @@ namespace sched {
         swap(index, other.index);
       }
 
-      reference operator*() noexcept
+      reference operator*() const noexcept
       {
         return Id{ static_cast<underlying_type>(index) };
       }
@@ -57,6 +57,13 @@ namespace sched {
       {
         --index;
         return *this;
+      }
+
+      Iterator operator--(int) noexcept
+      {
+        Iterator copy = *this;
+        --index;
+        return copy;
       }
 
       constexpr bool operator!=(const Iterator& other) const noexcept

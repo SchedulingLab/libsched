@@ -26,7 +26,7 @@ namespace sched {
     template<typename Instance>
     static FloatListInput generate_input(const Instance& instance)
     {
-      return { input_size_for(instance), 0.0 };
+      return FloatListInput(input_size_for(instance), 0.0);
     }
 
     template<typename Instance>
@@ -36,7 +36,7 @@ namespace sched {
 
       std::uniform_real_distribution<double> dist(0.0, 1.0);
 
-      for (auto& item : input) {
+      for (double& item : input) {
         item = dist(random);
       }
 
